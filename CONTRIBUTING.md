@@ -4,7 +4,7 @@ Hi! Thank you for considering contributing to this project.
 
 Please read the Rules and the Project Creation History to get an idea of how I see this project.
 
-If you want to help, **you can take a look at issues with the [looking-for-contributor-feedback](https://github.com/kitsumed/ShizuCallRecorder/issues?q=state%3Aopen%20label%3Alooking-for-contributor-feedback) tag**, where I may want other users points of view (not just *"yes, it’s nice"* feedback) or am directly asking for help with pull requests and resources. Of course, nothing stops you from interacting with other issues, but issues that have been tagged are the ones I would like to target or have help with as a higher priority.
+If you want to help, **you can take a look at issues with the [help wanted](https://github.com/kitsumed/ShizuCallRecorder/issues?q=state%3Aopen%20label%3A%22help%20wanted%22) tag**, where I may want other users points of view (not just *"yes, it’s nice"* feedback) or am directly asking for help with pull requests and resources. Of course, nothing stops you from interacting with other issues, but issues that have been tagged are the ones I would like to target or have help with as a higher priority.
 
 ## Rules
 
