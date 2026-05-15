@@ -1,0 +1,60 @@
+name: Feature Request
+description: Suggest an idea or enhancement for ShizuCallRecorder
+title: "[Feature]: "
+labels: ["enhancement", "Waiting For Contributors Review"]
+assignees: []
+
+body:
+  - type: checkboxes
+    id: prechecks
+    attributes:
+      label: Checklist
+      description: Please confirm the following before continuing
+      options:
+        - label: I have searched existing [issues](https://github.com/kitsumed/ShizuCallRecorder/issues) and [discussions](https://github.com/kitsumed/ShizuCallRecorder/discussions/categories/community-support) and this is not a duplicate.
+          required: true
+        - label: I am suggesting a feature or enhancement for ShizuCallRecorder itself, NOT for Shizuku or another app.
+          required: true
+        - label: I have read the project [README](https://github.com/kitsumed/ShizuCallRecorder/blob/main/README.md).
+          required: true
+        - label: I have read the project [CONTRIBUTING](https://github.com/kitsumed/ShizuCallRecorder/blob/main/CONTRIBUTING.md).
+          required: true
+        - label: I have read the application [docs](https://github.com/kitsumed/ShizuCallRecorder/blob/main/docs/SUPPORT.md).
+          required: true
+        - label: I am suggesting a new feature, not asking for help / support.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: A clear and concise description of what the problem is.
+      placeholder: Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+      placeholder: Ex. I would like a setting/button that [...]. Elaborate on the idea, give examples, use cases, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+      placeholder: Ex. I could use [App X] instead, but it doesn't integrate well...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context / Mockups
+      description: Add any other context, examples, or mockups (images) about the feature request here.
+    validations:
+      required: false
