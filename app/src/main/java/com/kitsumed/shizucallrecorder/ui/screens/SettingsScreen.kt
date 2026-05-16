@@ -59,6 +59,7 @@ import android.net.Uri
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -169,8 +170,6 @@ fun SettingsContent(
                 )
             }
             item { AboutSection(versionString = actions.getAppVersion(), onShowLicenses = { showLicensesDialog = true }) }
-            item { VisualSection(preferences, updateTrigger, actions) }
-            item { SecuritySection(preferences, updateTrigger, actions) }
             item {
                 RecordingSection(
                     preferences = preferences,
@@ -182,6 +181,8 @@ fun SettingsContent(
                 )
             }
             item { AudioSection(preferences, updateTrigger, actions) }
+            item { SecuritySection(preferences, updateTrigger, actions) }
+            item { VisualSection(preferences, updateTrigger, actions) }
             item { DebugSection(preferences, updateTrigger, actions, onExportLogs) }
         }
     }
@@ -543,7 +544,7 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
                 text     = desc,
                 style    = MaterialTheme.typography.labelSmall,
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
             )
         }
 
@@ -555,8 +556,18 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
             selected = codecOptions.find { it.key == audioCodec } 
                 ?: codecOptions.first(),
             options  = codecOptions,
-            onOptionSelected = { actions.setAudioCodec(it.key) }
+            onOptionSelected = { actions.setAudioCodec(it.key) },
         )
+        // Show the AAC recommendation if the user has issues.
+        // LocalInspectionMode.current is true in Android Preview, it prevents a preview compilation error.
+        if (!LocalInspectionMode.current && audioCodec != ScrcpyAudioCodec.AAC.cliKey) {
+            Text(
+                text     = stringResource(R.string.settings_audio_bitrate_recommendation),
+                style    = MaterialTheme.typography.labelSmall,
+                color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+            )
+        }
 
         val bitrateOptions = listOf(8000, 16000, 32000, 64000, 128000)
             .map { OptionItem(it.toString(), stringResource(R.string.audio_bitrate_kbps, it / 1000)) }
@@ -653,7 +664,8 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
         ToggleListItem(
             label           = stringResource(R.string.settings_debug_mode),
             checked         = isDebugEnabled,
-            onCheckedChange = { actions.setDebugEnabled(it) }
+            onCheckedChange = { actions.setDebugEnabled(it) },
+            description = stringResource(R.string.settings_debug_mode_description)
         )
         if (isDebugEnabled) {
             Column(

@@ -142,6 +142,7 @@
 
     <!-- Settings Screen: Audio Section -->
     <string name="settings_audio_codec">Audio codec</string>
+    <string name="settings_audio_bitrate_recommendation">If you have difficulties, try AAC, it is widely supported by OEMs.</string>
     <string name="audio_codec_opus">Opus</string>
     <string name="audio_codec_aac">AAC</string>
 
@@ -197,6 +198,7 @@
     <string name="settings_debug_logging_generate_report">Generate Report</string>
     <string name="settings_debug_logging_report_on_github">Report on GitHub</string>
     <string name="settings_debug_mode">Enable debug mode</string>
+    <string name="settings_debug_mode_description">Show developers options, disable log redaction.</string>
     <string name="settings_debug_caller_number">Debug phone number</string>
     <string name="settings_debug_action_ringing">Ringing</string>
     <string name="settings_debug_action_offhook">Off Hook</string>
