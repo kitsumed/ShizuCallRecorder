@@ -57,9 +57,9 @@ class AppPreferences(context: Context) {
         
         // --- Audio/Scrcpy Quality ---
         val AUDIO_SOURCE = ScrcpyAudioSource.VOICE_CALL.cliKey
-        val AUDIO_CODEC = ScrcpyAudioCodec.AAC.cliKey
+        val AUDIO_CODEC = ScrcpyAudioCodec.OPUS.cliKey
 
-        val AUDIO_BITRATE = ScrcpyAudioCodec.AAC.defaultBitRate
+        val AUDIO_BITRATE = ScrcpyAudioCodec.OPUS.defaultBitRate
 
         // --- UI & Appearance ---
         val THEME_MODE = ThemeMode.SYSTEM
