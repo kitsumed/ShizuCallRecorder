@@ -7,16 +7,16 @@ lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 
 # Compose
-kotlin = "2.3.20"
-composeBom = "2026.03.01"
+kotlin = "2.3.21"
+composeBom = "2026.05.00"
 
 # Shizuku
 shizuku-api = "13.1.5"
 shizuku-provider = "13.1.5"
 
 # Utility
-aboutlibraries = "14.0.0"
-libphonenumber = "9.0.28"
+aboutlibraries = "14.2.0"
+libphonenumber = "9.0.30"
 
 [libraries]
 # AndroidX Core & Lifecycle
