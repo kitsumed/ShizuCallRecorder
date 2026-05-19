@@ -35,7 +35,6 @@
     <string name="permission_call_log_description">Nécessaire pour que nous recevions le numéro de téléphone non censurée lors des événements liés à l\'état du téléphone.</string>
     <string name="permission_battery_label">Optimisation de la batterie</string>
     <string name="permission_battery_description">Permet de maintenir l\'application active lorsque cela est nécessaire et de contourner les éventuelles limitations de démarrage en arrière-plan.</string>
-    <string name="permission_storage_label">Dossier d\'enregistrement</string>
     <string name="permission_storage_description">Sélectionnez l\'emplacement où les enregistrements seront sauvegardés.</string>
     <string name="permission_shizuku_description">Nécessaire pour démarrer l\'enregistrement audio (ShellService) avec scrcpy.</string>
     <string name="permission_shizuku_not_running">Pas démarrez</string>
