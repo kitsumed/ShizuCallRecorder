@@ -123,4 +123,6 @@
     <string name="recording_error_start_failed">L\'enregistrement n\'a pas pu démarrer. Une erreur s\'est produite lors de l\'appel de ShellService binder method.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku s\'est déconnecté de manière inattendue, interrompant l\'enregistrement. (Le processus Shizuku-Server s\'est arrêté.)</string>
     <string name="recording_shizuku_not_started">Le processus Shizuku-Server est arrêté. Veuillez démarrer Shizuku et vous assurer qu\'il est toujours en cours d\'exécution lorsque l\'application souhaite enregistrer de l\'audio.</string>
+    <string name="recording_shizuku_permission_denied">Veuillez autoriser l\'application à utiliser Shizuku. L\'autorisation a été refusée.</string>
+    <string name="recording_shizuku_auth_key_missing">La clé d\'authentification Shizuku Intents est manquante. Veuillez la saisir dans les paramètres de l\'application.</string>
 </resources>
