@@ -1,3 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="general_close">Chiudi</string>
+    <string name="general_continue">Continua</string>
+    <string name="general_ok">OK</string>
+    <string name="general_cancel">Cancella</string>
+    <string name="general_settings">Impostazioni</string>
+    <string name="general_licenses">Licenze</string>
+    <string name="general_pause">Pausa</string>
+    <string name="general_resume">Riprendi</string>
+    <string name="general_incoming">in arrivo</string>
+    <string name="general_outgoing">in uscita</string>
+    <string name="general_system_limitation">Limitazioni di sistema</string>
+    <string name="disclaimer_title">Benvenuto in ShizuCallRecorder</string>
+    <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
+    <string name="disclaimer_wait">Attendi %1$ds</string>
+    <string name="disclaimer_must_read">È necessario leggere l\'informativa legale.</string>
+    <string name="permissions_title">Impostazioni Permessi</string>
+    <string name="general_copied_to_clipboard">Copiato negli appunti</string>
+    <string name="general_record">Registra</string>
 </resources>
