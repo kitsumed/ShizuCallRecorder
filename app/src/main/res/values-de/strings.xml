@@ -124,4 +124,27 @@
     <string name="audio_source_voice_performance_description">Hochgeschwindigkeits-Mikrofonmodus, konzipiert für Live-Musik und Echtzeit-Audioanwendungen.</string>
     <string name="settings_debug_mode_description">Entwickleroptionen anzeigen, Log-Redaktion deaktivieren.</string>
     <string name="settings_debug_caller_number">Telefonnummer debuggen</string>
+    <string name="settings_debug_action_ringing" translatable="false"></string>
+    <string name="audio_source_voice_comm" translatable="false"></string>
+    <string name="audio_codec_aac" translatable="false"></string>
+    <string name="audio_source_voice_call" translatable="false"></string>
+    <string name="audio_bitrate_kbps" translatable="false"></string>
+    <string name="permission_shizuku_label" translatable="false"></string>
+    <string name="audio_source_voice_call_downlink" translatable="false"></string>
+    <string name="audio_codec_opus" translatable="false"></string>
+    <string name="settings_scrcpy_server" translatable="false"></string>
+    <string name="audio_source_mic_camcorder" translatable="false"></string>
+    <string name="audio_source_mic_voice_recognition" translatable="false"></string>
+    <string name="audio_source_voice_call_uplink" translatable="false"></string>
+    <string name="audio_source_mic" translatable="false"></string>
+    <string name="audio_source_mic_unprocessed" translatable="false"></string>
+    <string name="settings_debug_action_idle" translatable="false"></string>
+    <string name="settings_debug_action_offhook" translatable="false"></string>
+    <string name="settings_language_system"></string>
+    <string name="audio_source_output" translatable="false"></string>
+    <string name="audio_source_voice_performance" translatable="false"></string>
+    <string name="disclaimer_body" translatable="false"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="audio_source_playback" translatable="false"></string>
+    <string name="settings_language"></string>
 </resources>
