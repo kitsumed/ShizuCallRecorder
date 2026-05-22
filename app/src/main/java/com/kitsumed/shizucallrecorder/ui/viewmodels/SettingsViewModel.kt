@@ -9,6 +9,8 @@
 package com.kitsumed.shizucallrecorder.ui.viewmodels
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kitsumed.shizucallrecorder.BuildConfig
@@ -58,6 +60,7 @@ interface SettingsActions {
     fun setThemeMode(mode: AppPreferences.ThemeMode)
     fun setDynamicColorEnabled(enabled: Boolean)
     fun setShowToastsEnabled(enabled: Boolean)
+    fun setAppLanguage(languageCode: String)
     fun setLoggingEnabled(enabled: Boolean)
     fun setDebugEnabled(enabled: Boolean)
     fun setDebugCallerNumber(number: String)
@@ -275,6 +278,20 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setShowToastsEnabled(enabled: Boolean) {
         preferences.setShowToastsEnabled(enabled)
+        refresh()
+    }
+
+    /** Saves the app language using AppCompat.
+     *
+     * @param languageCode The BCP-47 language tag describing the locale, or empty to follow system setting.
+     */
+    override fun setAppLanguage(languageCode: String) {
+        val localeList = if (languageCode.isEmpty()) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(languageCode)
+        }
+        AppCompatDelegate.setApplicationLocales(localeList)
         refresh()
     }
 

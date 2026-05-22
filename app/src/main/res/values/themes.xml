@@ -8,6 +8,7 @@
   -->
 
 <resources>
-
-    <style name="Theme.Shizucallrecorder" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--<style name="Theme.Shizucallrecorder" parent="android:Theme.Material.Light.NoActionBar" />  OLD, FOR ComponentActivity -->
+    <!-- Use AppCompat for better compatibility with older Android versions and to support features like Selecting the language. -->
+    <style name="Theme.Shizucallrecorder" parent="Theme.AppCompat.NoActionBar" />
 </resources>

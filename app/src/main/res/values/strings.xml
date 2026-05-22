@@ -131,6 +131,8 @@
     <string name="settings_select_contacts_outgoing">Select outgoing contacts</string>
 
     <!-- Settings Screen: Visual Section -->
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System Default</string>
     <string name="settings_theme_mode">Theme mode</string>
     <string name="settings_dynamic_color">Dynamic Theme Color</string>
     <string name="settings_show_toasts">Show Toast Notifications</string>

@@ -8,6 +8,7 @@
 
 package com.kitsumed.shizucallrecorder.ui.screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
@@ -57,14 +58,18 @@ import androidx.compose.ui.window.DialogProperties
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import androidx.activity.result.contract.ActivityResultContracts
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
+import org.xmlpull.v1.XmlPullParser
+import java.util.Locale
 
 /**
  * Stateful wrapper for the Settings screen that connects [SettingsViewModel] to [SettingsContent].
@@ -289,8 +294,54 @@ private fun VisualSection(preferences: AppPreferences, updateTrigger: Int, actio
     val isDynamicColorEnabled = remember(updateTrigger) { preferences.isDynamicColorEnabled() }
     val isShowToastsEnabled = remember(updateTrigger) { preferences.isShowToastsEnabled() }
     val isVibrationEnabled = remember(updateTrigger) { preferences.isVibrationEnabled() }
+    val context = LocalContext.current
+    val resources = LocalResources.current
+
+    // Read the current applied language without warnings
+    val currentLanguage = remember {
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentLocales.isEmpty) "" else currentLocales[0]?.toLanguageTag() ?: ""
+    }
+
+    // Fetch available languages from dynamically generated XML resource file.
+    val languageOptions = remember(context) {
+        val options = mutableListOf(OptionItem("", resources.getString(R.string.settings_language_system)))
+
+        // Suppress the warning right here since AGP create this file dynamically at compile time
+        @SuppressLint("DiscouragedApi")
+        val resId = resources.getIdentifier("_generated_res_locale_config", "xml", context.packageName)
+
+        try {
+            val parser = resources.getXml(resId)
+            var eventType = parser.eventType
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && parser.name == "locale") {
+                    val localeName = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "name")
+                    if (localeName != null) {
+                        val locale = Locale.forLanguageTag(localeName)
+                        val displayName = locale.getDisplayName(locale).replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(locale) else it.toString()
+                        }
+                        options.add(OptionItem(localeName, displayName))
+                    }
+                }
+                eventType = parser.next()
+            }
+        } catch (_: Exception) {
+            options.add(OptionItem("en", "English (Provided as fallback)"))
+        }
+        options.distinctBy { it.key }
+    }
 
     SettingsSection(title = stringResource(R.string.settings_section_visual)) {
+        M3DropdownField(
+            label = stringResource(R.string.settings_language),
+            selected = languageOptions.find { it.key == currentLanguage } ?: languageOptions.first(),
+            options = languageOptions,
+            onOptionSelected = { actions.setAppLanguage(it.key) }
+        )
+
         val themeOptions = AppPreferences.ThemeMode.entries.map { mode ->
             val labelRes = when (mode) {
                 AppPreferences.ThemeMode.SYSTEM -> R.string.settings_theme_mode_system
@@ -848,6 +899,7 @@ private fun SettingsScreenPreview() {
             override fun setThemeMode(mode: AppPreferences.ThemeMode) {}
             override fun setDynamicColorEnabled(enabled: Boolean) {}
             override fun setShowToastsEnabled(enabled: Boolean) {}
+            override fun setAppLanguage(languageCode: String) {}
             override fun setLoggingEnabled(enabled: Boolean) {}
             override fun setDebugEnabled(enabled: Boolean) {}
             override fun setDebugCallerNumber(number: String) {}

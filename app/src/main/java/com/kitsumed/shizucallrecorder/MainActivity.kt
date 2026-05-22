@@ -9,8 +9,8 @@
 package com.kitsumed.shizucallrecorder
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * MainActivity is the single Android Activity entry point for ShizuCallRecorder.
@@ -19,7 +19,7 @@ import androidx.activity.compose.setContent
  * Its **only** responsibility is to attach the Compose content tree to the window.
  *
  */
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
