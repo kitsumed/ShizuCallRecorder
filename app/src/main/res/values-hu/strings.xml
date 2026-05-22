@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_cancel">Mégsem</string>
+    <string name="general_settings">Beállítások</string>
+    <string name="general_licenses">Licencek</string>
+    <string name="general_continue">Folytatás</string>
+    <string name="general_ok">OK</string>
+    <string name="general_copied_to_clipboard">A vágólapra másolva</string>
+    <string name="general_record">Rögzítés</string>
+    <string name="general_pause">Szünet</string>
+    <string name="general_incoming">bejövő</string>
+    <string name="general_outgoing">kimenő</string>
+    <string name="general_system_limitation">Rendszerkorlát</string>
+    <string name="disclaimer_title">Üdvözöljük a ShizuCallRecorder alkalmazásban</string>
+    <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
+</resources>

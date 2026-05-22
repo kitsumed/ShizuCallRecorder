@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_close">Cerrar</string>
+    <string name="general_continue">Continuar</string>
+    <string name="general_ok">OK</string>
+    <string name="general_cancel">Cancelar</string>
+    <string name="general_settings">Configuraciones</string>
+    <string name="general_licenses">Licencias</string>
+    <string name="general_copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="general_record">Grabar</string>
+    <string name="general_pause">Pause</string>
+    <string name="general_resume">Resumen</string>
+    <string name="general_outgoing">Saliente</string>
+    <string name="general_system_limitation">Limitación del Sistema</string>
+    <string name="general_system_limitation_message">ShizuCallRecorder no funcionará en este dispositivo ya que su aplicación de shell no tiene los permisos necesarios:\n\n%1$s\n\nNo hay nada que puedas hacer al respecto; la aplicación no puede funcionar y se cerrará.</string>
+    <string name="disclaimer_title">Bienvenido a ShizuCallRecorder</string>
+    <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
+    <string name="disclaimer_introduction">Por favor, abre y lee las instrucciones de configuración en nuestra Wiki antes de continuar. Luego, lee el aviso legal a continuación.</string>
+    <string name="disclaimer_checkbox_label">He leído el descargo de responsabilidad y comprendo los requisitos legales, las responsabilidades y las limitaciones técnicas de este software.</string>
+    <string name="disclaimer_wait">Espere %1$ds</string>
+    <string name="disclaimer_must_read">Debes leer el descargo de responsabilidad.</string>
+    <string name="permissions_title">Configuración de permisos</string>
+    <string name="permissions_intro">Necesitamos algunos permisos para comenzar a grabar. Toca Otorgar acceso y aprueba cada elemento.</string>
+    <string name="permissions_grant_access">Autorizar el acceso</string>
+    <string name="permissions_status_granted">Autorizado</string>
+    <string name="permissions_status_required">Requerido</string>
+    <string name="permission_notifications_label">Notificaciones</string>
+    <string name="permission_notifications_description">Se utiliza para registrar el estado y las alertas de error.</string>
+    <string name="permission_contacts_label">Contactos</string>
+    <string name="permission_contacts_description">Se utiliza para filtrar los contactos conocidos y aplicarles reglas de exclusión.</string>
+</resources>
