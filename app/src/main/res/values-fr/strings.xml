@@ -13,7 +13,7 @@
     <string name="general_incoming">Entrant</string>
     <string name="general_outgoing">Sortant</string>
     <string name="general_system_limitation">Limitation Système</string>
-    <string name="general_system_limitation_message">ShizuCallRecorder ne fonctionnera pas sur cet appareil car votre application shell ne dispose pas des autorisations requises :\n\n%1$s\n\nVous ne pouvez rien y faire, l’application ne peut pas fonctionner et va se fermer.</string>
+    <string name="general_system_limitation_message">ShizuCallRecorder ne fonctionnera pas sur cet appareil car votre application shell ne dispose pas des autorisations requises :\n\n%1$s\n\nVous ne pouvez rien y faire, l’application ne peut pas fonctionner et va se fermer.</string>
     <string name="disclaimer_title">Bienvenue sur ShizuCallRecorder</string>
     <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
     <string name="disclaimer_introduction">Veuillez consulter les instructions d\'installation sur notre Wiki avant de continuer. Ensuite, lisez l\'avertissement ci-dessous.</string>
@@ -90,7 +90,7 @@
     <string name="settings_debug_logging_enabled">Activer l\'enregistrement des journaux</string>
     <string name="settings_debug_logging_enabled_description">Pour signaler un bug, activez cette option, redémarrez l\'application et reproduisez le problème.</string>
     <string name="settings_debug_logging_title">Étapes de signalement des bogues</string>
-    <string name="settings_debug_logging_steps">1. Vérifiez si votre problème a déjà été signalé sur GitHub. Si ce n\'est pas le cas, poursuivez.\n 2. Reproduisez le bug en activant l\'enregistrement des journaux.\n 3. Appuyez sur « Générer un rapport » ci-dessous pour enregistrer les journaux sur votre téléphone.\n 4. Appuyez sur « Signaler sur GitHub » pour créer un nouveau ticket, remplissez les champs et joignez le fichier journal.</string>
+    <string name="settings_debug_logging_steps">1. Vérifiez si votre problème a déjà été signalé sur GitHub. Si ce n\'est pas le cas, poursuivez.\n 2. Reproduisez le bug en activant l\'enregistrement des journaux.\n 3. Appuyez sur « Générer un rapport » ci-dessous pour enregistrer les journaux sur votre téléphone.\n 4. Appuyez sur « Signaler sur GitHub » pour créer un nouveau ticket, remplissez les champs et joignez le fichier journal.</string>
     <string name="settings_debug_logging_step_warning">Vérifier que le fichier généré ne contient pas d\'informations sensibles avant de le partager. Désactivez l\'enregistrement des journaux une fois l\'opération terminée.</string>
     <string name="settings_debug_logging_step_warning_no_redaction">⚠️ Le mode débogage est ACTIVÉ. La rédaction des journaux est désactivée.</string>
     <string name="settings_debug_logging_generate_report">Générer un rapport</string>
@@ -124,4 +124,6 @@
     <string name="recording_shizuku_not_started">Le processus Shizuku-Server est arrêté. Veuillez démarrer Shizuku et vous assurer qu\'il est toujours en cours d\'exécution lorsque l\'application souhaite enregistrer de l\'audio.</string>
     <string name="recording_shizuku_permission_denied">Veuillez autoriser l\'application à utiliser Shizuku. L\'autorisation a été refusée.</string>
     <string name="recording_shizuku_auth_key_missing">La clé d\'authentification Shizuku Intents est manquante. Veuillez la saisir dans les paramètres de l\'application.</string>
+    <string name="settings_language_system">Langue du système</string>
+    <string name="settings_language">Langue</string>
 </resources>
