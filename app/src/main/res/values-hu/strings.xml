@@ -13,4 +13,138 @@
     <string name="general_system_limitation">Rendszerkorlát</string>
     <string name="disclaimer_title">Üdvözöljük a ShizuCallRecorder alkalmazásban</string>
     <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
+    <string name="settings_dynamic_color"></string>
+    <string name="settings_debug_action_ringing" translatable="false"></string>
+    <string name="permission_contacts_label"></string>
+    <string name="audio_source_output_description"></string>
+    <string name="recording_notification_press_to_start"></string>
+    <string name="settings_debug_logging_generate_report"></string>
+    <string name="permission_shizuku_not_running"></string>
+    <string name="audio_source_voice_comm" translatable="false"></string>
+    <string name="settings_debug_logging_report_on_github"></string>
+    <string name="settings_show_toasts"></string>
+    <string name="permission_contacts_description"></string>
+    <string name="audio_codec_aac" translatable="false"></string>
+    <string name="audio_source_voice_call_uplink_description"></string>
+    <string name="audio_source_voice_call" translatable="false"></string>
+    <string name="recording_notification_cross_country_tip"></string>
+    <string name="recording_toast_resumed"></string>
+    <string name="settings_theme_mode_light"></string>
+    <string name="permission_battery_label"></string>
+    <string name="recording_shizuku_not_started"></string>
+    <string name="audio_bitrate_kbps" translatable="false"></string>
+    <string name="settings_open_github"></string>
+    <string name="permissions_intro"></string>
+    <string name="recording_shizuku_auth_key_missing"></string>
+    <string name="permissions_status_required"></string>
+    <string name="recording_notification_waiting_shizuku"></string>
+    <string name="permission_shizuku_label" translatable="false"></string>
+    <string name="recording_started"></string>
+    <string name="general_resume"></string>
+    <string name="recording_error_file_creation"></string>
+    <string name="settings_debug_logging_title"></string>
+    <string name="audio_source_mic_unprocessed_description"></string>
+    <string name="audio_source_mic_camcorder_description"></string>
+    <string name="disclaimer_checkbox_label"></string>
+    <string name="audio_source_voice_call_downlink" translatable="false"></string>
+    <string name="audio_codec_opus" translatable="false"></string>
+    <string name="settings_ignore_contacts_all"></string>
+    <string name="settings_shizuku_start_on_record_desc"></string>
+    <string name="settings_scrcpy_server" translatable="false"></string>
+    <string name="audio_source_mic_description"></string>
+    <string name="permissions_grant_access"></string>
+    <string name="recording_error_server_missing"></string>
+    <string name="settings_shizuku_auto_manage"></string>
+    <string name="permission_battery_description"></string>
+    <string name="settings_ignore_cross_country_outgoing"></string>
+    <string name="settings_section_visual"></string>
+    <string name="settings_shizuku_start_on_record"></string>
+    <string name="permission_phone_state_label"></string>
+    <string name="permission_storage_description"></string>
+    <string name="settings_section_about"></string>
+    <string name="audio_source_mic_camcorder" translatable="false"></string>
+    <string name="permission_notifications_label"></string>
+    <string name="settings_ignore_anonymous_incoming"></string>
+    <string name="settings_debug_logging_steps"></string>
+    <string name="permissions_title"></string>
+    <string name="audio_source_mic_voice_recognition" translatable="false"></string>
+    <string name="settings_select_contacts_outgoing"></string>
+    <string name="audio_source_voice_performance_description"></string>
+    <string name="settings_debug_mode_description"></string>
+    <string name="audio_source_voice_call_uplink" translatable="false"></string>
+    <string name="audio_source_playback_description"></string>
+    <string name="settings_select_contacts"></string>
+    <string name="settings_debug_logging_enabled_description"></string>
+    <string name="recording_error_folder_missing"></string>
+    <string name="audio_source_mic" translatable="false"></string>
+    <string name="audio_source_voice_call_downlink_description"></string>
+    <string name="settings_select_contacts_incoming"></string>
+    <string name="recording_error_title"></string>
+    <string name="settings_audio_bitrate"></string>
+    <string name="permission_call_log_label"></string>
+    <string name="settings_ignore_contacts_incoming"></string>
+    <string name="disclaimer_must_read"></string>
+    <string name="settings_ignore_contacts_none"></string>
+    <string name="settings_debug_mode"></string>
+    <string name="settings_auto_record_incoming"></string>
+    <string name="audio_source_mic_unprocessed" translatable="false"></string>
+    <string name="permission_phone_state_description"></string>
+    <string name="recording_toast_ended"></string>
+    <string name="audio_source_mic_voice_recognition_description"></string>
+    <string name="settings_debug_logging_step_warning_no_redaction"></string>
+    <string name="settings_debug_action_idle" translatable="false"></string>
+    <string name="recording_toast_paused"></string>
+    <string name="settings_debug_action_offhook" translatable="false"></string>
+    <string name="settings_theme_mode_system"></string>
+    <string name="settings_ignore_contacts_selected"></string>
+    <string name="recording_notification_press_to_resume"></string>
+    <string name="settings_audio_codec"></string>
+    <string name="settings_language_system"></string>
+    <string name="audio_source_voice_call_description"></string>
+    <string name="recording_shizuku_permission_denied"></string>
+    <string name="settings_section_security"></string>
+    <string name="settings_debug_logging_enabled"></string>
+    <string name="settings_theme_mode"></string>
+    <string name="disclaimer_wait"></string>
+    <string name="settings_theme_mode_dark"></string>
+    <string name="audio_source_output" translatable="false"></string>
+    <string name="audio_source_voice_comm_description"></string>
+    <string name="general_close"></string>
+    <string name="recording_standby_notification_title"></string>
+    <string name="settings_tap_to_select_folder"></string>
+    <string name="recording_notification_current_country_tip"></string>
+    <string name="general_system_limitation_message"></string>
+    <string name="settings_vibration_enabled"></string>
+    <string name="permission_shizuku_open"></string>
+    <string name="settings_copy_version"></string>
+    <string name="settings_ignore_cross_country_incoming"></string>
+    <string name="contact_search_hint"></string>
+    <string name="settings_section_audio"></string>
+    <string name="settings_section_recording"></string>
+    <string name="permission_notifications_description"></string>
+    <string name="settings_audio_bitrate_recommendation"></string>
+    <string name="recording_notification_title"></string>
+    <string name="disclaimer_introduction"></string>
+    <string name="audio_source_voice_performance" translatable="false"></string>
+    <string name="settings_debug_logging_step_warning"></string>
+    <string name="recording_error_shizuku_disconnected_unexpectedly"></string>
+    <string name="disclaimer_body" translatable="false"></string>
+    <string name="settings_view_licenses"></string>
+    <string name="recording_notification_press_to_pause"></string>
+    <string name="settings_audio_source"></string>
+    <string name="settings_section_debug"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="settings_shizuku_auto_manage_desc"></string>
+    <string name="settings_recording_folder_label"></string>
+    <string name="settings_debug_caller_number"></string>
+    <string name="permissions_status_granted"></string>
+    <string name="audio_source_playback" translatable="false"></string>
+    <string name="settings_ignore_contacts_outgoing"></string>
+    <string name="settings_auto_record_outgoing"></string>
+    <string name="permission_call_log_description"></string>
+    <string name="settings_shizuku_auth_key"></string>
+    <string name="settings_language"></string>
+    <string name="recording_toast_standby"></string>
+    <string name="permission_shizuku_description"></string>
+    <string name="recording_error_start_failed"></string>
 </resources>
