@@ -153,7 +153,7 @@
 
     <string name="settings_audio_source">Audio source</string>
     <string name="audio_source_voice_comm" translatable="false">Voice communication mic</string>
-    <string name="audio_source_voice_comm_description">Optimized for clear voice recording with built-in echo cancellation.</string>
+    <string name="audio_source_voice_comm_description">Microphone audio source tuned for voice communications. Built-in echo cancellation.</string>
 
     <string name="audio_source_mic" translatable="false">Standard microphone</string>
     <string name="audio_source_mic_description">Captures audio directly from the device main microphone. Minor noise reduction.</string>
@@ -214,6 +214,8 @@
 
     <!-- ContactSelection Dialog -->
     <string name="contact_search_hint">Search by name or number...</string>
+    <string name="contact_select_all">Select all</string>
+    <string name="contact_unselect_all">Unselect all</string>
 
     <!-- ========================================== -->
     <!-- SERVICES & BACKGROUND                      -->

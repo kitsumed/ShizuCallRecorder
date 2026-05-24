@@ -191,19 +191,43 @@ fun ContactSelectionContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = onDismiss) {
-                    Text(stringResource(R.string.general_cancel))
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
+                val isAllSelected = contacts.isNotEmpty() && contacts.all { selectedNumbers.contains(it.number) }
+                TextButton(
                     onClick = {
-                        // Convert the observable list back to an immutable Set for the callback.
-                        onConfirm(selectedNumbers.toSet())
+                        if (isAllSelected) {
+                            selectedNumbers.clear()
+                        } else {
+                            selectedNumbers.clear()
+                            selectedNumbers.addAll(contacts.map { it.number })
+                        }
                     }
                 ) {
-                    Text(stringResource(R.string.general_ok))
+                    Text(
+                        stringResource(
+                            if (isAllSelected) R.string.contact_unselect_all
+                            else R.string.contact_select_all
+                        )
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(stringResource(R.string.general_cancel))
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            // Convert the observable list back to an immutable Set for the callback.
+                            onConfirm(selectedNumbers.toSet())
+                        }
+                    ) {
+                        Text(stringResource(R.string.general_ok))
+                    }
                 }
             }
         }
