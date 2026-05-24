@@ -76,7 +76,7 @@
     <string name="settings_audio_bitrate_recommendation">Si vous avez des difficultés, essayez AAC, il est mieux pris en charge par les OEMs.</string>
     <string name="settings_audio_bitrate">Débit binaire audio</string>
     <string name="settings_audio_source">Source audio</string>
-    <string name="audio_source_voice_comm_description">Optimisé pour un enregistrement vocal clair grâce à l\'annulation d\'écho intégrée.</string>
+    <string name="audio_source_voice_comm_description">Source Microphone optimisée pour les communications vocales. Annulation d\'écho intégrée.</string>
     <string name="audio_source_mic_description">Capture audio directement depuis le microphone principal de l\'appareil. Légère réduction du bruit.</string>
     <string name="audio_source_voice_call_description">Enregistre les deux côtés d\'un appel téléphonique. L\'audio brut, avec la tonalité du téléphone.</string>
     <string name="audio_source_playback_description">Capturez l\'audio provenant d\'autres applications, à l\'exception de celles qui restreignent l\'enregistrement (respectez les opt-out flags).</string>
@@ -126,4 +126,6 @@
     <string name="recording_shizuku_auth_key_missing">La clé d\'authentification Shizuku Intents est manquante. Veuillez la saisir dans les paramètres de l\'application.</string>
     <string name="settings_language_system">Langue du système</string>
     <string name="settings_language">Langue</string>
+    <string name="contact_select_all">Tout sélectionner</string>
+    <string name="contact_unselect_all">Tout désélectionner</string>
 </resources>
