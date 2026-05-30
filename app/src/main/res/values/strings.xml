@@ -113,6 +113,8 @@
     <string name="settings_shizuku_auth_key">Shizuku Intents Auth Key</string>
     <string name="settings_shizuku_start_on_record">Start only when recording</string>
     <string name="settings_shizuku_start_on_record_desc">Shizuku will only start when you press record or an auto-recording rule matches</string>
+    <string name="settings_shizuku_keep_alive">Keep Shizuku alive</string>
+    <string name="settings_shizuku_keep_alive_desc">Do not send the stop intent</string>
 
     <!-- Settings Screen: Recording Section -->
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>

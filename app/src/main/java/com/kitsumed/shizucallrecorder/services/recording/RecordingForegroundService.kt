@@ -284,7 +284,7 @@ class RecordingForegroundService : Service() {
         serviceScope.cancel()
         stopRecordingSessionAndService()
         shizukuManager.unbind()
-        if (appPreferences.isShizukuAutoManageEnabled()) {
+        if (appPreferences.isShizukuAutoManageEnabled() && !appPreferences.isShizukuKeepAliveEnabled()) {
             ShizukuConnectionManager.stopServer(this, appPreferences.getShizukuAuthKey())
         }
         super.onDestroy()

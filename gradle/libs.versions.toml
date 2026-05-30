@@ -16,7 +16,7 @@ shizuku-api = "13.1.5"
 shizuku-provider = "13.1.5"
 
 # Utility
-aboutlibraries = "14.2.0"
+aboutlibraries = "14.2.1"
 libphonenumber = "9.0.31"
 
 [libraries]

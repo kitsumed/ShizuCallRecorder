@@ -71,6 +71,7 @@ class AppPreferences(context: Context) {
         // --- Security ---
         const val SHIZUKU_AUTO_MANAGE = false
         const val SHIZUKU_START_ON_RECORD = false
+        const val SHIZUKU_KEEP_ALIVE = false
         const val SHIZUKU_AUTH_KEY = ""
     }
 
@@ -118,6 +119,7 @@ class AppPreferences(context: Context) {
         SHOW_TOASTS("show_toasts"),
         SHIZUKU_AUTO_MANAGE("shizuku_auto_manage"),
         SHIZUKU_START_ON_RECORD("shizuku_start_on_record"),
+        SHIZUKU_KEEP_ALIVE("shizuku_keep_alive"),
         SHIZUKU_AUTH_KEY("shizuku_auth_key");
     }
 
@@ -352,6 +354,12 @@ class AppPreferences(context: Context) {
 
     /** Sets whether Shizuku should only start when recording starts. */
     fun setShizukuStartOnRecordEnabled(enabled: Boolean) = setBoolean(Key.SHIZUKU_START_ON_RECORD, enabled)
+
+    /** Checks if Shizuku should be kept alive when no longer needed. */
+    fun isShizukuKeepAliveEnabled() = getBoolean(Key.SHIZUKU_KEEP_ALIVE, DefaultsValue.SHIZUKU_KEEP_ALIVE)
+
+    /** Sets whether Shizuku should be kept alive when no longer needed. */
+    fun setShizukuKeepAliveEnabled(enabled: Boolean) = setBoolean(Key.SHIZUKU_KEEP_ALIVE, enabled)
 
     /** Gets the Shizuku auth key. */
     fun getShizukuAuthKey() = getString(Key.SHIZUKU_AUTH_KEY, DefaultsValue.SHIZUKU_AUTH_KEY) ?: DefaultsValue.SHIZUKU_AUTH_KEY
