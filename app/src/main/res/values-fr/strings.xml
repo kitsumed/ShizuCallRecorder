@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="general_continue">Continuer</string>
-    <string name="general_close">Fermer</string>
+    <string name="general_close">Fermer 2</string>
     <string name="general_ok">OK</string>
     <string name="general_cancel">Annuler</string>
     <string name="general_settings">Paramètres</string>
