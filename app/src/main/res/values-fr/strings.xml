@@ -128,4 +128,16 @@
     <string name="settings_language">Langue</string>
     <string name="contact_select_all">Tout sélectionner</string>
     <string name="contact_unselect_all">Tout désélectionner</string>
+    <string name="general_reset">Réinitialiser</string>
+    <string name="settings_file_name_template">Format de nom de fichier</string>
+    <string name="settings_file_name_template_placeholders">Texte réservés :</string>
+    <string name="settings_file_name_template_placeholders_preview">Aperçu : %1$s</string>
+    <string name="placeholder_date_desc">La date et l\'heure actuelles</string>
+    <string name="placeholder_direction_desc">Sens de l\'appel (in/out)</string>
+    <string name="placeholder_phone_number_desc">Le numéro de téléphone</string>
+    <string name="placeholder_contact_name_desc">Le nom du contact, si trouvez</string>
+    <string name="placeholder_cross_country_desc">Indique si l\'appel est international (true/false)</string>
+    <string name="recording_unexpected_error">Une erreur inattendue s\'est produite lors de l\'enregistrement. Veuillez la signaler en précisant les étapes pour la reproduire et en joignant les journaux de l\'application.</string>
+    <string name="settings_shizuku_keep_alive">Ne pas arrêter Shizuku</string>
+    <string name="settings_shizuku_keep_alive_desc">N\'envoie pas l\'intent d\'arrêt</string>
 </resources>
