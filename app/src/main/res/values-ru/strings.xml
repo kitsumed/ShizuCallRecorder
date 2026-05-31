@@ -15,12 +15,12 @@
     <string name="disclaimer_wiki_link_KEYWORD">Вики</string>
     <string name="disclaimer_introduction">Пожалуйста откройте и прочитайте инструкцию по установке на нашей Вики, прежде чем продолжить. Затем прочитайте дисклеймер приведённый ниже.</string>
     <string name="disclaimer_checkbox_label">Я ознакомился с дисклеймером и понимаю юридические требования, ответственность и технические ограничения данного программного обеспечения.</string>
-    <string name="disclaimer_wait">Подождите%1$dсек</string>
+    <string name="disclaimer_wait">Подождите %1$d сек</string>
     <string name="disclaimer_must_read">Вы должны прочитать дисклеймер.</string>
     <string name="permissions_title">Настройка разрешений</string>
     <string name="permissions_intro">Нужно получить несколько разрешений, чтобы начать запись. Нажмите \"Предоставить доступ\" для каждого разрешения.</string>
     <string name="permissions_grant_access">Предоставить доступ</string>
-    <string name="permissions_status_granted">Предоставлено</string>
+    <string name="permissions_status_granted">Получено</string>
     <string name="permissions_status_required">Требуется</string>
     <string name="permission_notifications_label">Уведомления</string>
     <string name="permission_notifications_description">Используется для отображения статуса записи и оповещений об ошибках.</string>
@@ -74,7 +74,7 @@
     <string name="settings_audio_bitrate_recommendation">Если вы испытываете трудности, то попробуйте AAC, он имеет более широкую поддержку от производителей.</string>
     <string name="settings_audio_bitrate">Аудио битрейт</string>
     <string name="settings_audio_source">Источник аудио</string>
-    <string name="audio_source_voice_comm_description">Оптимизирован для чёткой записи голоса со встроенным эхоподавлением.</string>
+    <string name="audio_source_voice_comm_description">Источник звука микрофона оптимизирован для голосового общения. Встроена функция эхоподавления.</string>
     <string name="audio_source_mic_description">Запись звука осуществляется непосредственно с основного микрофона устройства. Незначительное шумоподавление.</string>
     <string name="audio_source_voice_call_description">Записывает обе стороны телефонного разговора. Необработанный звук с телефонными гудками.</string>
     <string name="audio_source_playback_description">Захват аудио из других приложений, за исключением тех, где установлен флаг запрета на запись.</string>
@@ -126,4 +126,6 @@
     <string name="general_system_limitation_message">Приложение ShizuCallRecorder не будет работать на этом устройстве, так как у вашей системной оболочки (shell) нет необходимых разрешений:\n\n%1$s\n\nВы ничего не можете с этим поделать – приложение не может функционировать и сейчас закроется.</string>
     <string name="disclaimer_title">Добро пожаловать в ShizukuCallRecorder</string>
     <string name="settings_section_about">О приложении</string>
+    <string name="contact_select_all">Выбрать все</string>
+    <string name="contact_unselect_all">Отменить выбор всех</string>
 </resources>
