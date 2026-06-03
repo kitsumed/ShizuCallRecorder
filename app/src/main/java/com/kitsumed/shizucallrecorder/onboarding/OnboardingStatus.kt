@@ -31,6 +31,7 @@ object OnboardingStatus {
      * @param phoneStateGranted         True if READ_PHONE_STATE is granted.
      * @param callLogGranted            True if the app has permission to access the call log.
      * @param batteryExempted           True if the app is on the battery-optimisation whitelist.
+     * @param manageOngoingCallsGranted True if the app has the AppOps permission to manage ongoing calls.
      * @param storageSelected           True if a valid SAF recording folder has been chosen.
      * @param shizukuRunning            True if the Shizuku service is currently active.
      * @param shizukuPermissionGranted  True if the user has granted Shizuku permission to this app.
@@ -42,6 +43,7 @@ object OnboardingStatus {
         val phoneStateGranted: Boolean,
         val callLogGranted: Boolean,
         val batteryExempted: Boolean,
+        val manageOngoingCallsGranted: Boolean,
         val storageSelected: Boolean,
         val shizukuRunning: Boolean,
         val shizukuPermissionGranted: Boolean
@@ -56,6 +58,7 @@ object OnboardingStatus {
                 phoneStateGranted &&
                 callLogGranted &&
                 batteryExempted &&
+                manageOngoingCallsGranted &&
                 storageSelected &&
                 shizukuRunning &&
                 shizukuPermissionGranted
@@ -78,6 +81,7 @@ object OnboardingStatus {
             phoneStateGranted        = PermissionChecks.hasPhoneStatePermission(context),
             callLogGranted           = PermissionChecks.hasCallLogPermission(context),
             batteryExempted          = PermissionChecks.hasBatteryExemption(context),
+            manageOngoingCallsGranted = PermissionChecks.hasManageOngoingCallsAppOps(context),
             storageSelected          = SafHelper.isFolderValid(context, storageUri),
             // Special check here, if the auto-manage option was enabled, users already passed this check, and we can assume app will be able to start/stop Shizuku as needed.
             shizukuRunning           = ShizukuConnectionManager.isAvailable() || preferences.isShizukuAutoManageEnabled(),

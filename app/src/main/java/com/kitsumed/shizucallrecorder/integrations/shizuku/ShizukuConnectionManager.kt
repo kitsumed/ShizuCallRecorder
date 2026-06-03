@@ -205,6 +205,43 @@ class ShizukuConnectionManager(
         }
 
         /**
+         * Grants an app op permission to this app package via the Shizuku server.
+         *
+         * @param context The application context.
+         * @param permissionName The name of the permission to grant, e.g. "MANAGE_ONGOING_CALLS" or [android.Manifest.permission.MANAGE_ONGOING_CALLS].
+         * @return True if the command was ran and return exit code 0, false if it failed, or if server is not available.
+         */
+        suspend fun grantAppOp(context: Context, permissionName: String): Boolean {
+            // Handle manifest "permission.MANAGE_ONGOING_CALLS" style
+            val parsedPermissionName = permissionName.substringAfterLast('.')
+            val shizukuConnectionManager = ShizukuConnectionManager(context)
+            try {
+                if (!isAvailable()) {
+                    AppLogger.w(TAG, "Cannot grant AppOps $parsedPermissionName, Shizuku server is not available")
+                    return false
+                }
+                val shellService = shizukuConnectionManager.getShellService()
+                val result = shellService.grantAppOps(context.packageName, parsedPermissionName, getCurrentUserProfileId())
+                AppLogger.i(TAG, "Tried to grant AppOps $parsedPermissionName to ${context.packageName} via ShellService. Result: $result")
+                return result
+            } catch (e: Exception) {
+                AppLogger.e(TAG, "Failed to grant AppOps $parsedPermissionName via ShellService", e)
+                return false
+            } finally {
+                shizukuConnectionManager.unbind()
+            }
+        }
+
+        /**
+         * Helper function to get the current user profile ID, since some users may be user multiple profiles on their device.
+         */
+        private fun getCurrentUserProfileId(): Int {
+            // Process.myUserHandle() returns the UserHandle of the current profile space.
+            // Calling hashCode() on it returns the actual numerical integer ID (e.g., 0, 10, 95).
+            return android.os.Process.myUserHandle().hashCode()
+        }
+
+        /**
          * Suspends and waits for the Shizuku server to become available, up to a specified timeout.
          * Useful after starting the server via broadcast.
          *

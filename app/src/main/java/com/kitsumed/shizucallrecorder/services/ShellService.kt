@@ -329,6 +329,22 @@ class ShellService : IShellService.Stub {
     /** Returns whether a recording session is currently active (thread-safe via AtomicBoolean). */
     override fun isRecording(): Boolean = isRecordingActive.get()
 
+    override fun grantAppOps(packageName: String, opName: String, userProfileId: Int): Boolean {
+        try {
+            AppLogger.i(TAG, "Executing AppOps set --user $userProfileId $packageName $opName allow")
+            val process = ProcessBuilder("appops", "set", "--user", userProfileId.toString(), packageName, opName, "allow").start()
+            val errorOutput = process.errorStream.bufferedReader().readText().trim()
+            val exitCode = process.waitFor()
+            if (exitCode != 0) {
+                AppLogger.w(TAG, "grantAppOps failed with exit code $exitCode. Error: $errorOutput")
+            }
+            return exitCode == 0
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Error granting AppOps $opName to $packageName: ${e.message}", e)
+        }
+        return false
+    }
+
     /**
      * Called by Shizuku when it wants to shut down this user service.
      * MUST call [exitProcess] so the entire shell process is terminated; otherwise Shizuku may

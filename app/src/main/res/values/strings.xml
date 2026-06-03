@@ -88,6 +88,9 @@
     <string name="permission_call_log_label">Call Log</string>
     <string name="permission_call_log_description">Required so we receive the unredacted phone number on phone state events.</string>
 
+    <string name="permission_manage_ongoing_calls_label">Manage Ongoing Calls</string>
+    <string name="permission_manage_ongoing_calls_description">AppOps permission automatically granted with Shizuku. Required to detect calls with InCallService.</string>
+
     <string name="permission_battery_label">Battery Optimization</string>
     <string name="permission_battery_description">Keeps the app alive when it needs and allow to bypass possible background startup limitations.</string>
 

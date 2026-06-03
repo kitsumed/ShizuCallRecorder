@@ -14,6 +14,10 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
 import com.kitsumed.shizucallrecorder.onboarding.OnboardingStatus
@@ -61,6 +65,17 @@ class PermissionsViewModel(application: Application) : AndroidViewModel(applicat
             !status.contactsGranted          -> requestRuntimePermission(Manifest.permission.READ_CONTACTS)
             !status.phoneStateGranted        -> requestRuntimePermission(Manifest.permission.READ_PHONE_STATE)
             !status.callLogGranted           -> requestRuntimePermission(Manifest.permission.READ_CALL_LOG)
+            !status.manageOngoingCallsGranted -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val appOpsGranted = ShizukuConnectionManager.grantAppOp(appContext, Manifest.permission.MANAGE_ONGOING_CALLS)
+                    if (appOpsGranted) {
+                        // Go back on the UI thread to trigger a refresh and show the new permission state.
+                        withContext(Dispatchers.Main) {
+                            onPermissionGranted()
+                        }
+                    }
+                }
+            }
             !status.batteryExempted          -> {
                 appContext.startActivity(
                     Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {

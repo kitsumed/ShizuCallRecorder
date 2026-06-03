@@ -9,12 +9,14 @@
 package com.kitsumed.shizucallrecorder.system.permissions
 
 import android.Manifest
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import android.os.Process
 
 /**
  * PermissionChecks centralises all runtime permission queries used throughout the app.
@@ -96,5 +98,28 @@ object PermissionChecks {
     fun hasBatteryExemption(context: Context): Boolean {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         return powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    /**
+     * Returns true if MANAGE_ONGOING_CALLS appops is granted.
+     * This permission is required only starting from Android 12 (API 31).
+     *
+     * @param context The app context.
+     * @return true if the permission is granted or not required.
+     */
+    fun hasManageOngoingCallsAppOps(context: Context): Boolean {
+        // Android 12+ check
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+
+            val mode = appOps.checkOpNoThrow(
+                "android:manage_ongoing_calls", // AppOpsManager.OPSTR_MANAGE_ONGOING_CALLS - https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/app/AppOpsManager.java;l=2202
+                Process.myUid(),
+                context.packageName
+            )
+            mode == AppOpsManager.MODE_ALLOWED
+        } else {
+            true
+        }
     }
 }
