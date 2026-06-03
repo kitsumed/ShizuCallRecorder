@@ -200,7 +200,7 @@ fun PermissionsContent(
                     Triple(stringResource(R.string.permission_contacts_label), stringResource(R.string.permission_contacts_description), status.contactsGranted to Icons.Default.RecentActors),
                     Triple(stringResource(R.string.permission_phone_state_label), stringResource(R.string.permission_phone_state_description), status.phoneStateGranted to Icons.Default.Phone),
                     Triple(stringResource(R.string.permission_call_log_label), stringResource(R.string.permission_call_log_description), status.callLogGranted to Icons.Default.History),
-                    Triple(stringResource(R.string.permission_manage_ongoing_calls_label), stringResource(R.string.permission_manage_ongoing_calls_description), status.manageOngoingCallsGranted to Icons.Default.Call),
+                    Triple(stringResource(R.string.permission_manage_ongoing_calls_label), stringResource(R.string.permission_manage_ongoing_calls_description), status.manageOngoingCallsGranted to Icons.Default.ImportantDevices),
                     Triple(stringResource(R.string.permission_battery_label), stringResource(R.string.permission_battery_description), status.batteryExempted to Icons.Default.BatterySaver),
                     Triple(stringResource(R.string.settings_recording_folder_label), stringResource(R.string.permission_storage_description), status.storageSelected to Icons.Default.Folder)
                 )
