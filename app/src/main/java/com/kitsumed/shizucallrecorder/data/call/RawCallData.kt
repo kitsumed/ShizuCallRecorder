@@ -13,6 +13,10 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Represents the raw metadata about a call, as received from the OS or third-party.
+ *
+ * @param rawPhoneNumber The unprocessed phone number string, which may be null or in various formats.
+ * @param direction The direction of the call (incoming or outgoing).
+ * @param osProvidedContactName An optional contact name provided by the OS, if any.
  */
 @Parcelize
 data class RawCallData(

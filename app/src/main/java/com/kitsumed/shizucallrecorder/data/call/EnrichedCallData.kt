@@ -21,6 +21,11 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Carries the enriched metadata associated with a single call that is being (or will be) recorded.
+ * @param rawPhoneNumber The original phone number string as provided by the OS, which may be in any format or even null/blank.
+ * @param formattedE164Number The standardized E.164 format of the phone number, if parsing and formatting were successful.
+ * @param direction Whether the call is incoming or outgoing.
+ * @param isCrossCountry Whether the call is cross-country.
+ * @param contactName The contact name associated with the phone number / call, if available.
  */
 @Parcelize
 data class EnrichedCallData(
