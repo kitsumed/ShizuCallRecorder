@@ -16,7 +16,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingMetadata
+import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioMuxer
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
@@ -58,7 +58,7 @@ class AudioRecordingEngine {
     var scrcpyAudioMuxer: ScrcpyAudioMuxer? = null
 
     /** Metadata captured during the [startPipeline] and locked. Used for checks in [release] if we need to query call logs for the final file name if phone number is empty. */
-    var initializationMetadata: RecordingMetadata? = null
+    var initializationMetadata: EnrichedCallData? = null
         set(value) {
             if (field == null) {
                 field = value
@@ -115,7 +115,7 @@ class AudioRecordingEngine {
      * Orchestrates the initialization and connection of the entire recording pipeline.
      * @throws PipelineInitializationException if any step of the initialization fails, with details for user-friendly and technical error reporting.
      */
-    fun startPipeline(context: Service, service: IShellService, metadata: RecordingMetadata) {
+    fun startPipeline(context: Service, service: IShellService, metadata: EnrichedCallData) {
         initializationMetadata = metadata
         val preferences = AppPreferences(context)
         val folderUri = preferences.getRecordingFolderUri()

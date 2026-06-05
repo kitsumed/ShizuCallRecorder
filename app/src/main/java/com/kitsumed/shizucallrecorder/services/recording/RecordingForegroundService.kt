@@ -21,8 +21,8 @@ import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionMana
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingDirection
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingMetadata
+import com.kitsumed.shizucallrecorder.data.call.CallDirection
+import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import com.kitsumed.shizucallrecorder.utils.PhoneNumberManager
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
@@ -160,12 +160,12 @@ class RecordingForegroundService : Service() {
         if (intent != null) {
             val newMetadata = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(
-                    RecordingMetadata.EXTRA_METADATA,
-                    RecordingMetadata::class.java
+                    EnrichedCallData.EXTRA_METADATA,
+                    EnrichedCallData::class.java
                 )
             } else {
                 @Suppress("DEPRECATION")
-                intent.getParcelableExtra(RecordingMetadata.EXTRA_METADATA)
+                intent.getParcelableExtra(EnrichedCallData.EXTRA_METADATA)
             }
             if (newMetadata != null) {
                 currentMeta = newMetadata
@@ -296,7 +296,7 @@ class RecordingForegroundService : Service() {
      * Creates a new [AudioRecordingEngine], starts the I/O pipeline, updates the visible notification,
      * and handles fatal [PipelineInitializationException].
      */
-    private fun startNewRecordingSession(service: IShellService, metadata: RecordingMetadata) {
+    private fun startNewRecordingSession(service: IShellService, metadata: EnrichedCallData) {
         if (hasSession) {
             AppLogger.w(TAG, "startNewRecordingSession() called while already active – ignoring")
             return
@@ -393,12 +393,12 @@ class RecordingForegroundService : Service() {
      */
     private suspend fun tryGetFinalNumberFromLog(
         context: Context,
-        direction: RecordingDirection?
+        direction: CallDirection?
     ): String? {
         val typeSelection = when (direction) {
             // We do not want to include missed or rejected calls here since they are useless to us, and in a Dual-call scenario could lead to picking the wrong number.
-            RecordingDirection.INCOMING -> "${CallLog.Calls.TYPE} = ${CallLog.Calls.INCOMING_TYPE}"
-            RecordingDirection.OUTGOING -> "${CallLog.Calls.TYPE} = ${CallLog.Calls.OUTGOING_TYPE}"
+            CallDirection.INCOMING -> "${CallLog.Calls.TYPE} = ${CallLog.Calls.INCOMING_TYPE}"
+            CallDirection.OUTGOING -> "${CallLog.Calls.TYPE} = ${CallLog.Calls.OUTGOING_TYPE}"
             else -> null
         }
         // Try multiples times with a delay in case the OS didn't write the call log entry yet (only written after the call ended).

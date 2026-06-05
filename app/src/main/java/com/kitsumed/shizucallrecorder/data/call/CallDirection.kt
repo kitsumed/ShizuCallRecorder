@@ -6,8 +6,9 @@
  *  This software is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package com.kitsumed.shizucallrecorder.data.recordings
+package com.kitsumed.shizucallrecorder.data.call
 
+import android.telephony.TelephonyManager
 import com.kitsumed.shizucallrecorder.R
 
 /**
@@ -16,7 +17,7 @@ import com.kitsumed.shizucallrecorder.R
  * @param token The string token used when sending the direction as Intent extras.
  * @param labelResId The string resource ID for the human-readable label of this direction (e.g. "Incoming" or "Outgoing").
  */
-enum class RecordingDirection(val token: String, val labelResId: Int) {
+enum class CallDirection(val token: String, val labelResId: Int) {
     /** The call was received by the device (someone called us). */
     INCOMING("incoming", R.string.general_incoming),
 
@@ -28,26 +29,26 @@ enum class RecordingDirection(val token: String, val labelResId: Int) {
          * Determines the direction of a call based on the initial TelephonyManager call state.
          *
          * @param callState The mapped `TelephonyManager.CALL_STATE_*` value.
-         * @return The corresponding [RecordingDirection], or null if the state doesn't imply a direction.
+         * @return The corresponding [CallDirection], or null if the state doesn't imply a direction.
          */
-        fun fromCallStateOrNull(callState: Int): RecordingDirection? {
+        fun fromCallStateOrNull(callState: Int): CallDirection? {
             // We use the first non-IDLE state transition to determine direction.
             // RINGING obviously means it's coming in.
             // A direct transition to OFFHOOK usually implies the user initiated the call.
             return when (callState) {
-                android.telephony.TelephonyManager.CALL_STATE_RINGING -> INCOMING
-                android.telephony.TelephonyManager.CALL_STATE_OFFHOOK -> OUTGOING
+                TelephonyManager.CALL_STATE_RINGING -> INCOMING
+                TelephonyManager.CALL_STATE_OFFHOOK -> OUTGOING
                 else -> null
             }
         }
 
         /**
-         * Looks up a [RecordingDirection] by its [token] string.
+         * Looks up a [CallDirection] by its [token] string.
          *
          * @param token The token string (e.g. "incoming" or "outgoing"), or null.
-         * @return The matching [RecordingDirection], or null if the token is unrecognized.
+         * @return The matching [CallDirection], or null if the token is unrecognized.
          */
-        fun fromToken(token: String?): RecordingDirection? =
+        fun fromToken(token: String?): CallDirection? =
             entries.firstOrNull { it.token == token }
     }
 }

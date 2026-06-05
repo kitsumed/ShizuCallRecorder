@@ -9,16 +9,13 @@
 package com.kitsumed.shizucallrecorder.utils
 
 import android.content.Context
-import android.net.Uri
-import android.provider.ContactsContract
+import android.icu.text.SimpleDateFormat
 import androidx.annotation.StringRes
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingDirection
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingMetadata
 import com.kitsumed.shizucallrecorder.data.AppPreferences
+import com.kitsumed.shizucallrecorder.data.call.CallDirection
+import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
-import com.kitsumed.shizucallrecorder.system.permissions.PermissionChecks
-import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
@@ -55,7 +52,7 @@ object RecordingFileNameFormatter {
      */
     fun formatFileName(
         context: Context,
-        metadata: RecordingMetadata,
+        metadata: EnrichedCallData,
         codec: ScrcpyAudioCodec,
         customFormat: String? = null
     ): String {
@@ -64,15 +61,15 @@ object RecordingFileNameFormatter {
         val dateStr = SimpleDateFormat("yyyyMMdd_HHmmss.SSSZ", Locale.CANADA).format(Date())
 
         val directionStr = when (metadata.direction) {
-            RecordingDirection.INCOMING -> "in"
-            RecordingDirection.OUTGOING -> "out"
+            CallDirection.INCOMING -> "in"
+            CallDirection.OUTGOING -> "out"
         }
 
         val phoneStr = metadata.getBestNumber() ?: ""
         var contactStr = ""
 
         if (template.contains(FileNamePlaceholder.CONTACT_NAME.tag) && phoneStr.isNotEmpty()) {
-            contactStr = getContactName(context, phoneStr) ?: ""
+            contactStr = metadata.contactName ?: ""
         }
 
         val crossCountryStr = metadata.isCrossCountry.toString()
@@ -86,21 +83,5 @@ object RecordingFileNameFormatter {
 
         AppLogger.v(TAG, "Formatted base filename: '$baseName' with template '$template'")
         return "$baseName${codec.containerExtension}"
-    }
-
-    private fun getContactName(context: Context, phoneNumber: String): String? {
-        if (!PermissionChecks.hasContactsPermission(context)) return null
-
-        val lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber))
-        val projection = arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME)
-
-        return context.contentResolver.query(lookupUri, projection, null, null, null)?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val nameIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)
-                if (nameIndex != -1) {
-                    cursor.getString(nameIndex)
-                } else null
-            } else null
-        }
     }
 }
