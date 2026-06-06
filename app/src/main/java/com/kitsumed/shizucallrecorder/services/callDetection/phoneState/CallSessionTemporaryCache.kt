@@ -6,7 +6,7 @@
  *  This software is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package com.kitsumed.shizucallrecorder.services.call
+package com.kitsumed.shizucallrecorder.services.callDetection.phoneState
 
 import android.content.Context
 import androidx.core.content.edit

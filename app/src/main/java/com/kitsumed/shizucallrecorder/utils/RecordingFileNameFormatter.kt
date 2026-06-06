@@ -65,7 +65,7 @@ object RecordingFileNameFormatter {
             CallDirection.OUTGOING -> "out"
         }
 
-        val phoneStr = metadata.getBestNumber() ?: ""
+        val phoneStr = metadata.getBestNumber()
         var contactStr = ""
 
         if (template.contains(FileNamePlaceholder.CONTACT_NAME.tag) && phoneStr.isNotEmpty()) {

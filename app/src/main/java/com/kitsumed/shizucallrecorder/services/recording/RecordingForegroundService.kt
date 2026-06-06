@@ -347,14 +347,13 @@ class RecordingForegroundService : Service() {
 
         // If the initialization metadata do not contain a phone number, we attempt to query the call log as a fallback.
         // TODO: Remove this fallback logic once we have a more reliable way to get phone number (using Shizuku and hidden api)
-        if (originalMetadata != null && originalMetadata.rawPhoneNumber.isNullOrBlank() && uriToRename != null) {
+        if (originalMetadata != null && originalMetadata.normalisedPhoneNumber.isNullOrBlank() && uriToRename != null) {
             AppLogger.d(TAG, "Recording ended without a phone number. Querying CallLog as a fallback to get more information...")
             // We use GlobalScope/IO because the Service's scope might be cancelled immediately in onDestroy.
             // Android gives the process some time to live, so this is safe for a few seconds.
             CoroutineScope(Dispatchers.IO).launch {
-                val rawNumber =
-                    tryGetFinalNumberFromLog(applicationContext, originalMetadata.direction)
-                val sanitizedRaw = PhoneNumberManager.sanitizeOemNumber(rawNumber) ?: ""
+                val rawNumber = tryGetFinalNumberFromLog(applicationContext, originalMetadata.direction) ?: ""
+                val sanitizedRaw = PhoneNumberManager.normalisePhoneNumber(rawNumber)
 
                 val finalNumber = if (sanitizedRaw.isNotBlank()) {
                     val parsed = phoneNumberManager.parsePhoneNumber(sanitizedRaw)
@@ -367,7 +366,7 @@ class RecordingForegroundService : Service() {
                 }
 
                 if (finalNumber.isNotBlank()) {
-                    val updatedMeta = originalMetadata.copy(rawPhoneNumber = finalNumber)
+                    val updatedMeta = originalMetadata.copy(normalisedPhoneNumber = finalNumber)
                     val newName = RecordingFileNameFormatter.formatFileName(applicationContext, updatedMeta, activeSession.currentCodecEnum)
                     try {
                         DocumentFile.fromSingleUri(applicationContext, uriToRename)

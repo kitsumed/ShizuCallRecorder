@@ -59,26 +59,20 @@ class PhoneNumberManager private constructor(context: Context) {
         }
 
         /**
-         * Sanitizes the OEM phone number received from the OS. From online research, it seems OEM send phone number in different
-         * formats. This method performs changes to:
-         * 1. Trim whitespace and converting to lowercase for uniformity.
-         * 2. Checking against a list of known/potential anonymous tokens (e.g., "unknown", "private", "+anonymous")
-         * @return A sanitized phone number string, or null if the input is considered anonymous/unknown.
-         */
-        fun sanitizeOemNumber(number: String?): String? {
-            if (number == null) return null
-            val lower = number.trim().lowercase()
-            val anonymousTokens = listOf("+anonymous", "anonymous", "unknown", "private", "+", "#", "")
-            if (anonymousTokens.contains(lower)) return null
-            return number
-        }
-
-        /**
          * Normalizes a phone number by removing all non-digit characters, while preserving a leading '+' if present.
          * Example: "+1 (202) 555-0173" would become "+12025550173", and "202-555-0173" would become "2025550173".
+         *
+         * Also performs a very basic check for anonymous tokens, I have yet to personally see them, but I have read online about it.
+         * When it matches one, it returns an empty string since that's how we expect to see anonymous numbers.
          */
         fun normalisePhoneNumber(phoneNumber: String): String {
-            val trimmed = phoneNumber.trim()
+            val trimmed = phoneNumber.trim().lowercase()
+
+            val anonymousTokens = listOf("unknown", "private", "anonymous", "+anonymous", "+", "#")
+            if (trimmed in anonymousTokens) {
+                return ""
+            }
+
             val digits  = trimmed.filter { it.isDigit() }
             return if (trimmed.startsWith("+")) "+$digits" else digits
         }
@@ -105,7 +99,7 @@ class PhoneNumberManager private constructor(context: Context) {
     }
 
     /**
-     * Parses a raw phone number string into a structured [Phonenumber.PhoneNumber] object using the specified default region.
+     * Parses a phone number string into a structured [Phonenumber.PhoneNumber] object using the specified default region.
      * @param rawNumber The raw phone number string to parse (e.g., "202-555-0173").
      * @param defaultRegion The default region ISO code to use for parsing (e.g., "US"). If not provided, it will default to the device's country ISO.
      * @return A [Phonenumber.PhoneNumber] object if parsing is successful, or null if parsing fails.

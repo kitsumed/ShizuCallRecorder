@@ -21,7 +21,7 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Carries the enriched metadata associated with a single call that is being (or will be) recorded.
- * @param rawPhoneNumber The original phone number string as provided by the OS, which may be in any format or even null/blank.
+ * @param normalisedPhoneNumber The normalized original phone number string [PhoneNumberManager.normalisePhoneNumber], which may be in an empty string if anonymous.
  * @param formattedE164Number The standardized E.164 format of the phone number, if parsing and formatting were successful.
  * @param direction Whether the call is incoming or outgoing.
  * @param isCrossCountry Whether the call is cross-country.
@@ -29,7 +29,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class EnrichedCallData(
-    val rawPhoneNumber: String?,
+    val normalisedPhoneNumber: String,
     val formattedE164Number: String? = null,
     val direction: CallDirection,
     val isCrossCountry: Boolean = false,
@@ -37,9 +37,9 @@ data class EnrichedCallData(
 ) : Parcelable {
     /**
      * Returns the best available phone number for display and filename purposes.
-     * Try the standardized E.164 number first, then fall back to the raw phone number if necessary.
+     * Try the standardized E.164 number first, then fall back to the normalized phone number if necessary.
      */
-    fun getBestNumber() = formattedE164Number ?: rawPhoneNumber
+    fun getBestNumber() = formattedE164Number ?: normalisedPhoneNumber
 
     companion object {
         const val TAG = "SCR:EnrichedCallData"
@@ -56,10 +56,10 @@ data class EnrichedCallData(
             withContext(Dispatchers.Default) {
                 val raw = base.rawPhoneNumber
 
-                // Null or blank phone number is a common occurrence (ex: anonymous caller, third-party VoIP apps)
-                if (raw.isNullOrBlank()) {
+                // Blank phone number is a common occurrence (ex: anonymous caller, third-party VoIP apps)
+                if (raw.isBlank()) {
                     return@withContext EnrichedCallData(
-                        rawPhoneNumber = raw,
+                        normalisedPhoneNumber = "",
                         direction = base.direction,
                         isCrossCountry = true, // We should assume it's cross-country to be safe, since we don't know where its from.
                         contactName = base.osProvidedContactName
@@ -71,7 +71,7 @@ data class EnrichedCallData(
                 // If parsing failed
                 if (parsedNumber == null) {
                     return@withContext EnrichedCallData(
-                        rawPhoneNumber = raw,
+                        normalisedPhoneNumber = PhoneNumberManager.normalisePhoneNumber(raw), // Safety normalizing, the number should already have been.
                         direction = base.direction,
                         isCrossCountry = true, // If we can't parse the number, we should assume it's cross-country to be safe, since we don't know where it's from.
                         contactName = base.osProvidedContactName
@@ -92,9 +92,9 @@ data class EnrichedCallData(
                     }
                 }
 
-                AppLogger.i(TAG, "Enriched metadata for number: raw='$raw', standardized='$standardized', crossCountry=$crossCountry")
+                AppLogger.v(TAG, "Enriched metadata for number: raw='$raw', standardized='$standardized', crossCountry=$crossCountry, contactName='$contactName'")
                 return@withContext EnrichedCallData(
-                    rawPhoneNumber = raw,
+                    normalisedPhoneNumber = PhoneNumberManager.normalisePhoneNumber(raw), // Safety normalizing, the number should already have been.
                     formattedE164Number = standardized,
                     direction = base.direction,
                     isCrossCountry = crossCountry,

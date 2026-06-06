@@ -61,7 +61,7 @@ fun FileNameFormatDialog(
 
     val previewState = remember(text) {
         val fakeMetadata = EnrichedCallData(
-            rawPhoneNumber = "+1234567890",
+            normalisedPhoneNumber = "+1234567890",
             direction = CallDirection.INCOMING,
             formattedE164Number = "+1234567890",
             isCrossCountry = false,

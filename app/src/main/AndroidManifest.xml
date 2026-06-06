@@ -34,6 +34,8 @@
     <!-- Android 11+ Onwards () -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
+    <uses-permission android:name="android.permission.MANAGE_ONGOING_CALLS" />
+
     <application
         android:name=".ShizuApplication"
         android:allowBackup="true"
@@ -56,6 +58,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- The InCallService implementation, will be registered as an IN_CALL_SERVICE_TYPE_NON_UI later on by the OS -->
+        <service
+            android:name=".services.callDetection.incall.InCallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE"
+            android:exported="true">
+            <!-- Tell the InCallController that we are not creating any custom UI (false) -->
+            <!-- Android 16 Ex: https://cs.android.com/android/platform/superproject/+/android16-release:packages/services/Telecomm/src/com/android/server/telecom/InCallController.java;l=2531-2533 -->
+            <meta-data android:name="android.telecom.IN_CALL_SERVICE_UI" android:value="false" />
+            <intent-filter>
+                <action android:name="android.telecom.InCallService"/>
+            </intent-filter>
+        </service>
 
         <!-- Support different languages on Android 11 and 12 https://developer.android.com/guide/topics/resources/app-languages#api-implementation:~:text=Support%20Android%2012%20and%20lower -->
         <service
@@ -82,7 +97,7 @@
         </service>
 
         <receiver
-            android:name=".services.call.PhoneStateReceiver"
+            android:name=".services.callDetection.phoneState.PhoneStateReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

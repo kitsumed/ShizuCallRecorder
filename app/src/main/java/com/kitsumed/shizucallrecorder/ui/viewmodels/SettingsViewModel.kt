@@ -14,7 +14,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kitsumed.shizucallrecorder.BuildConfig
-import com.kitsumed.shizucallrecorder.services.call.CallSessionManager
+import com.kitsumed.shizucallrecorder.services.callDetection.phoneState.CallSessionManager
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import kotlinx.coroutines.flow.MutableStateFlow
