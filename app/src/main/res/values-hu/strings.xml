@@ -13,7 +13,7 @@
     <string name="general_system_limitation">Rendszerkorlát</string>
     <string name="disclaimer_title">Üdvözöljük a ShizuCallRecorder alkalmazásban</string>
     <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
-    <string name="general_close">Közeli</string>
+    <string name="general_close">Bezár</string>
     <string name="general_resume">Folytatás</string>
     <string name="general_reset">Visszaállít</string>
     <string name="general_system_limitation_message">ShizuCallRecorder nem tud működni ezen a készüléken mivel a shell alkalmazás nem rendelkezik a megfelelő jogosultságokkal.\n\n%1$s\n\nA helyzettel nem lehet mit csinálni, az alkalmazás nem tud működni és most bezáródik.</string>
@@ -138,4 +138,5 @@
     <string name="recording_shizuku_permission_denied">Kérjük engedélyezd az alkalmazás számára a Shizuku használatát. Az engedély el lett elutasítotva.</string>
     <string name="recording_shizuku_auth_key_missing">Hiányzik a Shizuku Intents kulcs. Kérjük,add meg az alkalmazás beállításaiban (megj.: a kulcsot a Shizuku alkalmazában találod).</string>
     <string name="settings_file_name_template_placeholders">Kitöltők:</string>
+    <string name="settings_shizuku_keep_alive">A Shizuku életben tartása</string>
 </resources>
