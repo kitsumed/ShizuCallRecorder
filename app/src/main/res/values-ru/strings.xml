@@ -128,4 +128,15 @@
     <string name="settings_section_about">О приложении</string>
     <string name="contact_select_all">Выбрать все</string>
     <string name="contact_unselect_all">Отменить выбор всех</string>
+    <string name="general_reset">Сброс</string>
+    <string name="settings_shizuku_keep_alive">Оставлять Shizuku активным</string>
+    <string name="settings_file_name_template">Шаблон имени файла</string>
+    <string name="settings_file_name_template_placeholders">Заполнители:</string>
+    <string name="settings_file_name_template_placeholders_preview">Представительный просмотр: %1$s</string>
+    <string name="placeholder_date_desc">Текущая дата и время</string>
+    <string name="placeholder_direction_desc">Направление звонка(входящий/исходящий)</string>
+    <string name="placeholder_phone_number_desc">Телефонный номер</string>
+    <string name="placeholder_contact_name_desc">Имя контакта, если доступно</string>
+    <string name="placeholder_cross_country_desc">Указывает, является ли вызов международным (да/нет)</string>
+    <string name="recording_unexpected_error">Во время записи произошла непредвиденная ошибка. Пожалуйста, сообщите об этом вместе с инструкциями по воспроизведению и логами из приложения.</string>
 </resources>

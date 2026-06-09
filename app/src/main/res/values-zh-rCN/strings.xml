@@ -49,8 +49,8 @@
     <string name="settings_file_name_template_placeholders">占位符：</string>
     <string name="settings_auto_record_incoming">被叫自动录音</string>
     <string name="settings_auto_record_outgoing">主叫自动录音</string>
-    <string name="settings_ignore_anonymous_incoming">如果对方隐藏了来电显示（仅部分国家运营商支持）则不录音</string>
-    <string name="settings_ignore_cross_country_incoming">不要录制境外被叫</string>
+    <string name="settings_ignore_anonymous_incoming">仅录制有来电显示的通话（部分国家的运营商允许匿名拨号）</string>
+    <string name="settings_ignore_cross_country_incoming">不要录制境外来电</string>
     <string name="settings_ignore_cross_country_outgoing">不要录制国际I-D-D主叫</string>
     <string name="settings_ignore_contacts_incoming">不要录制联系人被叫</string>
     <string name="settings_ignore_contacts_outgoing">不要录制联系人主叫</string>
@@ -100,7 +100,7 @@
     <string name="settings_debug_mode">开启调试模式</string>
     <string name="settings_debug_mode_description">将显示开发者选项，并停止对日志进行隐私优化。</string>
     <string name="settings_debug_caller_number">请输入用于调试的电话号码</string>
-    <string name="settings_copy_version">复制S-S版本号</string>
+    <string name="settings_copy_version">复制S-S版本</string>
     <string name="settings_view_licenses">阅读许可协议</string>
     <string name="settings_open_github">打开GitHub仓库</string>
     <string name="contact_search_hint">输入姓名或电话号码来搜索…</string>
