@@ -68,6 +68,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
 import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
@@ -468,6 +469,7 @@ private fun RecordingSection(
     
     // Evaluate these here so they are fetched on every recomposition.
     val recordingFolderLabel = remember(updateTrigger) { SafHelper.getFolderDisplayNameOrNull(context, preferences.getRecordingFolderUri()) }
+    val callDetectionMode = remember(updateTrigger) { preferences.getCallDetectionMode() }
     val fileNameFormat = remember(updateTrigger) { preferences.getFileNameTemplate() }
     val autoRecordIncoming = remember(updateTrigger) { preferences.isAutoRecordIncomingEnabled() }
     val autoRecordOutgoing = remember(updateTrigger) { preferences.isAutoRecordOutgoingEnabled() }
@@ -482,6 +484,29 @@ private fun RecordingSection(
     var showFileNameFormatDialog by remember { mutableStateOf(false) }
 
     SettingsSection(title = stringResource(R.string.settings_section_recording)) {
+        // ── 1. CALL DETECTION METHOD DROPDOWN ─────────────────────────────────
+        val detectionOptions = CallDetectionMode.entries.map { mode ->
+            OptionItem(
+                key = mode.key,
+                label = stringResource(mode.titleResId),
+                description = stringResource(mode.descriptionResId),
+                // Automatically grays out option if the user device's OS API level is incompatible
+                enabled = mode.isSupportedOnCurrentApi()
+            )
+        }
+
+        M3DropdownField(
+            label = stringResource(R.string.settings_call_detection_method),
+            selected = detectionOptions.find { it.key == callDetectionMode.key } ?: detectionOptions.first(),
+            options = detectionOptions,
+            onOptionSelected = { selectedItem ->
+                val chosenMode = CallDetectionMode.fromKey(selectedItem.key)
+                actions.setCallDetectionMode(chosenMode)
+            }
+        )
+
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
+
         ListItem(
             modifier = Modifier.clickable { onSelectFolder() },
             headlineContent = { Text(stringResource(R.string.settings_recording_folder_label)) },
@@ -627,15 +652,6 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
             options  = audioSourceOptions,
             onOptionSelected = { actions.setAudioSource(it.key) }
         )
-        // Show the description of the currently selected audio source below the dropdown.
-        selectedAudio.description?.let { desc ->
-            Text(
-                text     = desc,
-                style    = MaterialTheme.typography.labelSmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
-            )
-        }
 
         val codecOptions = ScrcpyAudioCodec.entries
             .map { OptionItem(it.cliKey, stringResource(it.titleResId)) }
@@ -948,6 +964,7 @@ private fun SettingsScreenPreview() {
             override fun setShizukuKeepAliveEnabled(enabled: Boolean) {}
             override fun setShizukuAuthKey(key: String) {}
             override fun setFileNameTemplate(template: String) {}
+            override fun setCallDetectionMode(mode: CallDetectionMode) {}
         }
 
         // File name template selection dialog

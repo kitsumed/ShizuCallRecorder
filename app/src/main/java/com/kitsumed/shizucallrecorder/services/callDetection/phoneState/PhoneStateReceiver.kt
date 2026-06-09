@@ -16,7 +16,7 @@ import com.kitsumed.shizucallrecorder.utils.AppLogger
 
 /**
  * PhoneStateReceiver is a [BroadcastReceiver] that listens for phone call state changes INTENTS.
- * It extracts the relevant extras from the intent and forwards them to [CallSessionManager], which owns the recording decision logic.
+ * It extracts the relevant extras from the intent and forwards them to [PhoneStateSessionManager], which owns the recording decision logic.
  *
  * It is registered in AndroidManifest.xml to receive [TelephonyManager.ACTION_PHONE_STATE_CHANGED]
  * broadcasts. Android delivers this broadcast whenever a call starts ringing, is answered, or ends.
@@ -60,7 +60,7 @@ class PhoneStateReceiver : BroadcastReceiver() {
         AppLogger.v(TAG, "Raw broadcast received: state=$state number=$number")
 
         // Forward the phone state and number to the session manager.
-        // We now forward everything (including null) to let the CallSessionManager handle the Verification Window.
-        CallSessionManager.getInstance(context).handlePhoneState(state, number)
+        // We now forward everything (including null) to let the PhoneStateSessionManager handle the Verification Window.
+        PhoneStateSessionManager.getInstance(context).handlePhoneState(state, number)
     }
 }

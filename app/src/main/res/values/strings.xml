@@ -120,6 +120,12 @@
     <string name="settings_shizuku_keep_alive_desc">Do not send the stop intent</string>
 
     <!-- Settings Screen: Recording Section -->
+    <string name="settings_call_detection_method">Call Detection Method</string>
+    <string name="call_detection_mode_phonestate_title">Phone State</string>
+    <string name="call_detection_mode_phonestate_description">Use the legacy phone state broadcast with deprecated fields. This mode is a very prone to race conditions and give us a limited amount of informations.</string>
+    <string name="call_detection_mode_incallservice_title">InCallService</string>
+    <string name="call_detection_mode_incallservice_description">Use the modern InCallService API. This mode is more efficient and should provide better detection with a lot of informations.</string>
+
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>
 

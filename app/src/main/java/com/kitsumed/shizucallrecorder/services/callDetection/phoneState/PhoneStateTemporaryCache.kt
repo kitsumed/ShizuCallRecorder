@@ -21,7 +21,7 @@ import com.kitsumed.shizucallrecorder.utils.AppLogger
  * This workaround could cause some edges cases. The user receving a ringing call, the app die, the user make an outgoing call, but the app restore the ringing state.
  * The "fix" is to only keep a direction valid for a short period of time [MAX_AGE_MS]. It reduces the chances of this happening.
  */
-class CallSessionTemporaryCache(private val context: Context) {
+class PhoneStateTemporaryCache(private val context: Context) {
 
     companion object {
         private const val TAG = "SCR:CallSessionTemporaryCache"

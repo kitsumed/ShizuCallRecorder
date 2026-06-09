@@ -9,11 +9,9 @@
 package com.kitsumed.shizucallrecorder.services.callDetection.phoneState
 
 import android.content.Context
-import android.content.Intent
 import android.telephony.TelephonyManager
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
-import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.data.call.RawCallData
 import com.kitsumed.shizucallrecorder.services.RecordingDecisionEngine
 import com.kitsumed.shizucallrecorder.services.recording.RecordingForegroundService
@@ -28,30 +26,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * CallSessionManager role is to receive telephony state changes, determine call session information (like its direction and metadata),
+ * PhoneStateSessionManager role is to receive telephony state changes, determine call session information (like its direction and metadata),
  * and decide how to start the [RecordingForegroundService] based on user preferences and contact filtering.
  *
  * It is implemented as a singleton that should live until the app process itself die.
  */
-class CallSessionManager private constructor(context: Context) {
+class PhoneStateSessionManager private constructor(context: Context) {
 
     // Constants accessible globally
     companion object {
-        private const val TAG = "SCR:CallSessionManager"
+        private const val TAG = "SCR:PhoneStateSessionManager"
 
         // Singleton instance management
         @Volatile
-        private var INSTANCE: CallSessionManager? = null
+        private var INSTANCE: PhoneStateSessionManager? = null
 
         /**
-         * Provides a thread-safe singleton instance of [CallSessionManager].
+         * Provides a thread-safe singleton instance of [PhoneStateSessionManager].
          * The first call initializes the instance with the provided context, and subsequent calls return the same instance.
          */
-        fun getInstance(context: Context): CallSessionManager {
+        fun getInstance(context: Context): PhoneStateSessionManager {
             return INSTANCE ?: synchronized(this) {
                 // We use applicationContext so we don't accidentally leak an Activity or Service context, causing memory leaks.
                 val safeContext = context.applicationContext
-                INSTANCE ?: CallSessionManager(safeContext).also { INSTANCE = it }
+                INSTANCE ?: PhoneStateSessionManager(safeContext).also { INSTANCE = it }
             }
         }
 
@@ -138,7 +136,7 @@ class CallSessionManager private constructor(context: Context) {
     private val appContext: Context = context.applicationContext
     private val preferences = AppPreferences(appContext)
 
-    private val temporaryCache = CallSessionTemporaryCache(appContext)
+    private val temporaryCache = PhoneStateTemporaryCache(appContext)
 
     private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -149,7 +147,7 @@ class CallSessionManager private constructor(context: Context) {
 
 
     init {
-        AppLogger.d(TAG, "CallSessionManager initialised")
+        AppLogger.d(TAG, "PhoneStateSessionManager initialised")
     }
 
     // Public API

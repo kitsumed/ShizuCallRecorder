@@ -9,6 +9,7 @@
 package com.kitsumed.shizucallrecorder
 
 import android.app.Application
+import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionOrchestrator
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 
 /**
@@ -18,5 +19,7 @@ class ShizuApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         AppLogger.init(applicationContext)
+        // Sync configurations down to PackageManager mapping immediately on launch
+        CallDetectionOrchestrator(applicationContext).syncComponents()
     }
 }
