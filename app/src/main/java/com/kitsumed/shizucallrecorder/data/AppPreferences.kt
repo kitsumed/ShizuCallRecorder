@@ -41,7 +41,6 @@ class AppPreferences(context: Context) {
         // --- Storage & General ---
         val RECORDING_FOLDER_URI: String? = null
         const val VIBRATION_ENABLED = true
-
         val CALL_DETECTION_MODE = CallDetectionMode.getDefaultModeForDevice().key
         
         // --- Automation ---
