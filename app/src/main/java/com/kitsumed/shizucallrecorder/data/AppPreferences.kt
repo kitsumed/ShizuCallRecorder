@@ -42,6 +42,7 @@ class AppPreferences(context: Context) {
         val RECORDING_FOLDER_URI: String? = null
         const val VIBRATION_ENABLED = true
         val CALL_DETECTION_MODE = CallDetectionMode.getDefaultModeForDevice().key
+        val RECORD_THIRD_PARTY_CALLS = false
         
         // --- Automation ---
         const val AUTO_RECORD_INCOMING = false
@@ -114,8 +115,8 @@ class AppPreferences(context: Context) {
         SHIZUKU_START_ON_RECORD("shizuku_start_on_record"),
         SHIZUKU_KEEP_ALIVE("shizuku_keep_alive"),
         SHIZUKU_AUTH_KEY("shizuku_auth_key"),
-
-        CALL_DETECTION_MODE("call_detection_mode");
+        CALL_DETECTION_MODE("call_detection_mode"),
+        RECORD_THIRD_PARTY_CALLS("record_third_party_calls");
     }
 
     // -------- Nested enums
@@ -242,6 +243,11 @@ class AppPreferences(context: Context) {
         }
         setString(Key.CALL_DETECTION_MODE, mode.key)
     }
+
+    /** Checks if recording of calls from third-party apps (e.g. WhatsApp, Signal) is enabled. */
+    fun isRecordThirdPartyCallsEnabled() = getBoolean(Key.RECORD_THIRD_PARTY_CALLS, DefaultsValue.RECORD_THIRD_PARTY_CALLS)
+    /** Sets whether recording of calls from third-party apps is enabled. */
+    fun setRecordThirdPartyCallsEnabled(enabled: Boolean) = setBoolean(Key.RECORD_THIRD_PARTY_CALLS, enabled)
 
     // -------- Automation --------
 

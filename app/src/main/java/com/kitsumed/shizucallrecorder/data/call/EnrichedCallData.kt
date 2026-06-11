@@ -25,7 +25,7 @@ import kotlinx.parcelize.Parcelize
  * @param formattedE164Number The standardized E.164 format of the phone number, if parsing and formatting were successful.
  * @param direction Whether the call is incoming or outgoing.
  * @param isCrossCountry Whether the call is cross-country.
- * @param contactName The contact name associated with the phone number / call, if available.
+ * @param contactName The contact name associated with the phone number in the user contacts, then fallback to Telecom/CallerID name, if available.
  */
 @Parcelize
 data class EnrichedCallData(

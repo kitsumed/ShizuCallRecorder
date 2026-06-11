@@ -121,10 +121,15 @@
 
     <!-- Settings Screen: Recording Section -->
     <string name="settings_call_detection_method">Call Detection Method</string>
+    <string name="settings_call_detection_method_warning_title">Limited Support Notice</string>
     <string name="call_detection_mode_phonestate_title">Phone State</string>
     <string name="call_detection_mode_phonestate_description">Use the legacy phone state broadcast with deprecated fields. This mode is a very prone to race conditions and give us a limited amount of informations.</string>
+    <string name="call_detection_mode_phonestate_limited_support">This call detection method is unreliable. We retrieve a deprecated value when receiving phone state updates, and the detection logic is prone to race conditions. We also cannot differentiate between carrier calls and third-party calls. However, you can work around this limitation by ignoring anonymous calls.</string>
     <string name="call_detection_mode_incallservice_title">InCallService</string>
     <string name="call_detection_mode_incallservice_description">Use the modern InCallService API. This mode is more efficient and should provide better detection with a lot of informations.</string>
+
+    <string name="settings_record_third_party_calls">Record third-party apps</string>>
+    <string name="settings_record_third_party_calls_description">Record calls from third-party that integrate with Android telecom system. May result in silent or one-sided recordings.</string>
 
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>

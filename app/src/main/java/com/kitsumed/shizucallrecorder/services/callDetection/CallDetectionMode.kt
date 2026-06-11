@@ -47,7 +47,7 @@ enum class CallDetectionMode(
     );
 
     /**
-     * Checks if this specific mode is valid for the running device's operating system version.
+     * Checks if this specific mode is valid for the running Android device version.
      */
     fun isSupportedOnCurrentApi(): Boolean {
         val currentApi = Build.VERSION.SDK_INT

@@ -17,11 +17,13 @@ import kotlinx.parcelize.Parcelize
  * @param rawPhoneNumber The phone number string given by the OS, **which may be an empty string, when it's anonymous or unknown**.
  * @param direction The direction of the call (incoming or outgoing).
  * @param osProvidedContactName An optional contact name provided by the OS, if any.
+ * @param packageName An optional package name of the app associated with the call, if any. This can be used for special handling of calls from specific apps.
  */
 @Parcelize
 data class RawCallData(
     val rawPhoneNumber: String,
     val direction: CallDirection,
-    val osProvidedContactName: String? = null
+    val osProvidedContactName: String? = null,
+    val packageName: String? = null
 ) : Parcelable
 

@@ -62,6 +62,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalResources
@@ -470,6 +473,7 @@ private fun RecordingSection(
     // Evaluate these here so they are fetched on every recomposition.
     val recordingFolderLabel = remember(updateTrigger) { SafHelper.getFolderDisplayNameOrNull(context, preferences.getRecordingFolderUri()) }
     val callDetectionMode = remember(updateTrigger) { preferences.getCallDetectionMode() }
+    val recordThirdPartyCalls = remember(updateTrigger) { preferences.isRecordThirdPartyCallsEnabled() }
     val fileNameFormat = remember(updateTrigger) { preferences.getFileNameTemplate() }
     val autoRecordIncoming = remember(updateTrigger) { preferences.isAutoRecordIncomingEnabled() }
     val autoRecordOutgoing = remember(updateTrigger) { preferences.isAutoRecordOutgoingEnabled() }
@@ -484,7 +488,6 @@ private fun RecordingSection(
     var showFileNameFormatDialog by remember { mutableStateOf(false) }
 
     SettingsSection(title = stringResource(R.string.settings_section_recording)) {
-        // ── 1. CALL DETECTION METHOD DROPDOWN ─────────────────────────────────
         val detectionOptions = CallDetectionMode.entries.map { mode ->
             OptionItem(
                 key = mode.key,
@@ -504,6 +507,22 @@ private fun RecordingSection(
                 actions.setCallDetectionMode(chosenMode)
             }
         )
+
+        // These settings are only working with InCallService detection mode.
+        if (callDetectionMode == CallDetectionMode.InCallService) {
+            ToggleListItem(
+                label           = stringResource(R.string.settings_record_third_party_calls),
+                description     = stringResource(R.string.settings_record_third_party_calls_description),
+                checked         = recordThirdPartyCalls,
+                onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
+            )
+        } else { // Show a  warning for PhoneState broadcast method
+             WarningCard(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                title = stringResource(R.string.settings_call_detection_method_warning_title),
+                message = stringResource(R.string.call_detection_mode_phonestate_limited_support))
+        }
+
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
 
@@ -901,6 +920,62 @@ private fun IgnoreContactsOptions(
     }
 }
 
+/**
+ * A red warning card used to highlight important information or potential issues in the settings.
+ * @param message The main warning message to display.
+ * @param modifier Modifier for styling the card.
+ * @param title An optional title for the warning, shown in bold red text above the main message.
+ */
+@Composable
+fun WarningCard(
+    message: String,
+    modifier: Modifier = Modifier,
+    title: String? = null
+) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.45f),
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        ),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) {
+            // Warning Icon aligned to the top of text lines
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning Indicator",
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 2.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // Text Content Block
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                if (title != null) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
+
 /** A row of buttons for simulating different call events during testing.
  *
  * @param actions Called via proxy for each button press.
@@ -965,6 +1040,7 @@ private fun SettingsScreenPreview() {
             override fun setShizukuAuthKey(key: String) {}
             override fun setFileNameTemplate(template: String) {}
             override fun setCallDetectionMode(mode: CallDetectionMode) {}
+            override fun setRecordThirdPartyCalls(enabled: Boolean) {}
         }
 
         // File name template selection dialog

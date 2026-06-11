@@ -75,6 +75,7 @@ interface SettingsActions {
     fun setShizukuAuthKey(key: String)
     fun setFileNameTemplate(template: String)
     fun setCallDetectionMode(mode: CallDetectionMode)
+    fun setRecordThirdPartyCalls(enabled: Boolean)
 }
 
 /**
@@ -403,9 +404,20 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    /**
+     * Sets the call detection mode, which determines how the app detects when calls start and end.
+     */
     override fun setCallDetectionMode(mode: CallDetectionMode) {
         preferences.setCallDetectionMode(mode)
         CallDetectionOrchestrator(appContext).syncComponents() // Sync the PackageManager state to reflect the new call detection mode immediately
+        refresh()
+    }
+
+    /**
+     * Enables or disables recording of third-party calls (e.g. WhatsApp, Telegram).
+     */
+    override fun setRecordThirdPartyCalls(enabled: Boolean) {
+        preferences.setRecordThirdPartyCallsEnabled(enabled)
         refresh()
     }
 }
