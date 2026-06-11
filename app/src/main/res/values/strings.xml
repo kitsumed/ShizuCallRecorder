@@ -135,13 +135,14 @@
     <string name="settings_recording_folder_label">Recording Folder</string>
 
     <string name="settings_file_name_template">File Name Template</string>
-    <string name="settings_file_name_template_placeholders">Placeholders:</string>
+    <string name="settings_file_name_template_placeholders">Placeholders for %s :</string>
     <string name="settings_file_name_template_placeholders_preview">Preview: %1$s</string>
     <string name="placeholder_date_desc">The current date and time</string>
     <string name="placeholder_direction_desc">The call direction (in/out)</string>
     <string name="placeholder_phone_number_desc">The phone number</string>
-    <string name="placeholder_contact_name_desc">The contact name, if available</string>
+    <string name="placeholder_caller_name_desc">The name of the caller, look at the contacts list first, fallback to telecom CallerID when available</string>
     <string name="placeholder_cross_country_desc">Indicates if the call is cross-country (true/false)</string>
+    <string name="placeholder_package_name_desc">The name or package name of the app that initiated the call.</string>
 
     <string name="settings_auto_record_incoming">Automatically record incoming calls</string>
     <string name="settings_auto_record_outgoing">Automatically record outgoing calls</string>

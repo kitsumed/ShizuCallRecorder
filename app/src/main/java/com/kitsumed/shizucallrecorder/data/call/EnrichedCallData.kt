@@ -25,7 +25,7 @@ import kotlinx.parcelize.Parcelize
  * @param formattedE164Number The standardized E.164 format of the phone number, if parsing and formatting were successful.
  * @param direction Whether the call is incoming or outgoing.
  * @param isCrossCountry Whether the call is cross-country.
- * @param contactName The contact name associated with the phone number in the user contacts, then fallback to Telecom/CallerID name, if available.
+ * @param callerName The caller/contact name associated with the phone number in the user contacts, then fallback to Telecom/CallerID name, if available.
  */
 @Parcelize
 data class EnrichedCallData(
@@ -33,7 +33,8 @@ data class EnrichedCallData(
     val formattedE164Number: String? = null,
     val direction: CallDirection,
     val isCrossCountry: Boolean = false,
-    val contactName: String? = null
+    val callerName: String? = null,
+    val packageName: String? = null
 ) : Parcelable {
     /**
      * Returns the best available phone number for display and filename purposes.
@@ -62,7 +63,8 @@ data class EnrichedCallData(
                         normalisedPhoneNumber = "",
                         direction = base.direction,
                         isCrossCountry = true, // We should assume it's cross-country to be safe, since we don't know where its from.
-                        contactName = base.osProvidedContactName
+                        callerName = base.osProvidedCallerName,
+                        packageName = base.packageName
                     )
                 }
 
@@ -74,31 +76,33 @@ data class EnrichedCallData(
                         normalisedPhoneNumber = PhoneNumberManager.normalisePhoneNumber(raw), // Safety normalizing, the number should already have been.
                         direction = base.direction,
                         isCrossCountry = true, // If we can't parse the number, we should assume it's cross-country to be safe, since we don't know where it's from.
-                        contactName = base.osProvidedContactName
+                        callerName = base.osProvidedCallerName,
+                        packageName = base.packageName
                     )
                 }
 
                 // Perform Enrichment & Fetch missing data when possible
                 val standardized = phoneNumberManager.formatToE164(parsedNumber)
                 val crossCountry = phoneNumberManager.isNumberFromDifferentCountry(parsedNumber)
-                var contactName = base.osProvidedContactName
+                var callerName = base.osProvidedCallerName
                 // If the raw call data did not provide us with a contact name, we attempt a lookup ourselves.
-                if (base.osProvidedContactName.isNullOrBlank()) {
-                    contactName = getContactName(context, raw)
-                    if (contactName != null) {
-                        AppLogger.v(TAG, "Found contact name '$contactName' for number '$raw'")
+                if (base.osProvidedCallerName.isNullOrBlank()) {
+                    callerName = getContactName(context, raw)
+                    if (callerName != null) {
+                        AppLogger.v(TAG, "Found contact name '$callerName' for number '$raw'")
                     } else {
                         AppLogger.v(TAG, "No contact name found for number '$raw'")
                     }
                 }
 
-                AppLogger.v(TAG, "Enriched metadata for number: raw='$raw', standardized='$standardized', crossCountry=$crossCountry, contactName='$contactName'")
+                AppLogger.v(TAG, "Enriched metadata for number: raw='$raw', standardized='$standardized', crossCountry=$crossCountry, callerName='$callerName'")
                 return@withContext EnrichedCallData(
                     normalisedPhoneNumber = PhoneNumberManager.normalisePhoneNumber(raw), // Safety normalizing, the number should already have been.
                     formattedE164Number = standardized,
                     direction = base.direction,
                     isCrossCountry = crossCountry,
-                    contactName = contactName
+                    callerName = callerName,
+                    packageName = base.packageName
                 )
             }
 

@@ -148,14 +148,14 @@ class InCallService : InCallService() {
 
             // First attempt to get the name from the user contacts list, then fallback to the telecom-provided caller name
             // (which may be defined by the caller or a third-party app)
-            val osContactName = details.contactDisplayName ?: details.callerDisplayName
+            val oscallerName = details.contactDisplayName ?: details.callerDisplayName
             // Name of the app package responsible for this call (e.g. system dialer, default dialer, or a third-party app)
             val packageName = details.accountHandle.componentName.packageName
 
             val rawCallData = RawCallData(
                 rawPhoneNumber = PhoneNumberManager.normalisePhoneNumber(rawNumber),
                 direction = direction,
-                osProvidedContactName = osContactName,
+                osProvidedCallerName = oscallerName,
                 packageName = packageName
             )
 

@@ -41,18 +41,21 @@ import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
+import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 
 /**
  * Dialog for selecting file name format.
  * @param initialFormat The format string to show when the dialog opens, usually the currently saved user preference.
+ * @param activeMode The currently active CallDetectionMode, used to filter and indicate which placeholders are supported/expected to work in the current mode.
  * @param onConfirm Called with the new format string when the user taps "OK".
  * @param onDismiss Called when the user taps "Cancel" or outside the dialog.
  */
 @Composable
 fun FileNameFormatDialog(
     initialFormat: String,
+    activeMode: CallDetectionMode,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -65,7 +68,7 @@ fun FileNameFormatDialog(
             direction = CallDirection.INCOMING,
             formattedE164Number = "+1234567890",
             isCrossCountry = false,
-            contactName = "John Doe"
+            callerName = "John Doe"
         )
         val result = RecordingFileNameFormatter.formatFileName(
             context, fakeMetadata, ScrcpyAudioCodec.OPUS, customFormat = text
@@ -73,7 +76,10 @@ fun FileNameFormatDialog(
         result
     }
 
-    val placeholders = RecordingFileNameFormatter.FileNamePlaceholder.entries
+    val placeholders = remember(activeMode) {
+        RecordingFileNameFormatter.FileNamePlaceholder.entries
+            .filter { activeMode in it.supportedModes }
+    }
     val descriptionsTexts = placeholders.map { stringResource(it.descriptionResId) }
 
     val descriptions = buildAnnotatedString {
@@ -101,7 +107,7 @@ fun FileNameFormatDialog(
                 )
 
                 Text(
-                    text = stringResource(R.string.settings_file_name_template_placeholders),
+                    text = stringResource(R.string.settings_file_name_template_placeholders, stringResource(activeMode.titleResId)),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -156,6 +162,7 @@ private fun SettingsScreenPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             FileNameFormatDialog(
                 initialFormat = AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE,
+                activeMode = CallDetectionMode.InCallService,
                 onConfirm = {},
                 onDismiss = {}
             )

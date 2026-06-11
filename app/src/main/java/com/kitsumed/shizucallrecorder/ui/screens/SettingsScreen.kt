@@ -616,6 +616,7 @@ private fun RecordingSection(
     if (showFileNameFormatDialog) {
         FileNameFormatDialog(
             initialFormat = fileNameFormat,
+            activeMode = preferences.getCallDetectionMode(),
             onConfirm = { format ->
                 actions.setFileNameTemplate(format)
                 showFileNameFormatDialog = false
