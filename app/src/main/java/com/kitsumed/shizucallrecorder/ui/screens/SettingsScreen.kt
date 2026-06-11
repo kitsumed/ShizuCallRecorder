@@ -516,7 +516,7 @@ private fun RecordingSection(
                 checked         = recordThirdPartyCalls,
                 onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
             )
-        } else { // Show a  warning for PhoneState broadcast method
+        } else { // Show a warning for PhoneState broadcast method
              WarningCard(
                 modifier = Modifier.padding(horizontal = 12.dp),
                 title = stringResource(R.string.settings_call_detection_method_warning_title),

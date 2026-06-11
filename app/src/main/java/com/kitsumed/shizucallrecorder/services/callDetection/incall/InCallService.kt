@@ -160,6 +160,10 @@ class InCallService : InCallService() {
             )
 
             AppLogger.i(TAG, "Primary call became ACTIVE. Triggering Decision Engine Pipeline.")
+            val isSelfManaged = details.hasProperty(Call.Details.PROPERTY_SELF_MANAGED)
+            val isVoip = details.hasProperty(Call.Details.PROPERTY_VOIP_AUDIO_MODE)
+            val isWifiCall = details.hasProperty(Call.Details.PROPERTY_WIFI)
+            AppLogger.d(TAG, "Primary call details - isSelfManaged: $isSelfManaged, isVoip: $isVoip, isWifiCall: $isWifiCall")
 
             serviceScope.launch {
                 val intentSentSuccessfully = RecordingDecisionEngine.getInstance(this@InCallService).executeDecisionPipeline(rawCallData)
