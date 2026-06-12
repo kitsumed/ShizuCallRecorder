@@ -146,11 +146,13 @@ class ScrcpyAudioMuxer(
         // Missing/Large Gap detection: if the gap between this packet and the last one is huge,
         // it means we paused the recording or dropped a massive amount of packets. We subtract this
         // dead time from our internal timeline so the final output file doesn't have a huge silence.
+        // TODO: This code was added to fix most phone audio player behaving badly with the large silence, ideally we would like to keep the silence and not corrupt the file by doing so.
         if (firstPacketTimeNanos == -1L) {
             firstPacketTimeNanos = nowNanos
             lastPacketWallClockNanos = nowNanos
             AppLogger.d(TAG, "First audio frame: wall-clock origin set, pts=0")
         } else {
+            // This is the "temporary" fix for the pause feature (audio silence) we just fully cut it out to prevent corrupting the file.
             val gapNanos = nowNanos - lastPacketWallClockNanos
             if (gapNanos > GAP_THRESHOLD_NANOS) {
                 val ignoredNanos = gapNanos - GAP_SLACK_NANOS

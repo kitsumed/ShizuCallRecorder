@@ -216,10 +216,11 @@ object AppLogger {
      */
     fun exportReport(context: Context, destinationUri: Uri) {
         val file = logFile ?: return
+        val prefs = AppPreferences(context)
         context.contentResolver.openOutputStream(destinationUri, "w")?.use { outputStream ->
             PrintWriter(OutputStreamWriter(outputStream, Charsets.UTF_8)).use { writer ->
                 writer.println("=== ShizuCallRecorder AppLogger Export ===")
-                writer.println("Generated: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US).format(Date())}")
+                writer.println("Generated: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.CANADA).format(Date())}")
                 writer.println("App Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
                 writer.println("Shizuku Supported Server API: ${Shizuku.getLatestServiceVersion()}")
                 writer.println("Scrcpy Server: ${ScrcpyConfig.SCRCPY_VERSION}")
@@ -229,6 +230,8 @@ object AppLogger {
                 writer.println("Product: ${Build.PRODUCT}")
                 writer.println("Android Version: ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
                 writer.println("Device Country Iso Estimation: ${PhoneNumberManager.getInstance(context).getDeviceCountryIso()}")
+                writer.println("Log Redaction Disabled / Debug Mode : ${prefs.isDebugEnabled()}")
+                writer.println("Call Detection Method: ${prefs.getCallDetectionMode().key}")
                 writer.println("===========================================")
                 writer.println()
                 writer.flush()
