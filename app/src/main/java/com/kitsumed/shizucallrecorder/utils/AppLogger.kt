@@ -9,8 +9,16 @@
 package com.kitsumed.shizucallrecorder.utils
 
 import android.content.Context
+import android.net.Uri
+import android.os.Build
 import android.util.Log
+import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.ILogCallback
+import com.kitsumed.shizucallrecorder.data.AppPreferences
+import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
+import com.kitsumed.shizucallrecorder.utils.AppLogger.init
+import com.kitsumed.shizucallrecorder.utils.AppLogger.initAsRemote
+import com.kitsumed.shizucallrecorder.utils.AppLogger.redact
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,20 +26,15 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import rikka.shizuku.Shizuku
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.net.Uri
-import android.os.Build
-import com.kitsumed.shizucallrecorder.BuildConfig
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
-import com.kitsumed.shizucallrecorder.data.AppPreferences
-import rikka.shizuku.Shizuku
 
 /**
  * A unified, thread-safe, and asynchronous logging utility with built-in log rotation and redaction capabilities.

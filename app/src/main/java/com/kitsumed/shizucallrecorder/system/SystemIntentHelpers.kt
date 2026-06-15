@@ -9,20 +9,14 @@
 package com.kitsumed.shizucallrecorder.system
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import com.kitsumed.shizucallrecorder.AppUrls
 import com.kitsumed.shizucallrecorder.BuildConfig
-import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 
@@ -97,24 +91,18 @@ fun Context.openGithub() {
     launchSmartIntent(Intent(Intent.ACTION_VIEW).apply { data = AppUrls.GITHUB_REPOSITORY.toUri() })
 }
 
+/** Opens the Github wiki/documentation page in the browser. */
+fun Context.openGithubWiki() {
+    launchSmartIntent(Intent(Intent.ACTION_VIEW).apply { data = AppUrls.GITHUB_WIKI.toUri() })
+}
+
 /** Opens the Github report issue page in the browser. */
 fun Context.openGithubReportIssue() {
     launchSmartIntent(Intent(Intent.ACTION_VIEW).apply { data = AppUrls.GITHUB_NEW_ISSUE.toUri() })
 }
 
-/**
- * Copies [text] to the clipboard and shows a short confirmation message.
- * Safe to call from any thread.
- *
- * @param label A short name for the copied item (shown in clipboard managers).
- * @param text  The text to copy.
- */
-fun Context.copyToClipboard(label: String, text: String) {
-    val clipboard = getSystemService(ClipboardManager::class.java)
-    clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
-    Handler(Looper.getMainLooper()).post {
-        Toast.makeText(this, getString(R.string.general_copied_to_clipboard), Toast.LENGTH_SHORT).show()
-    }
+fun Context.openGithubSponsor() {
+    launchSmartIntent(Intent(Intent.ACTION_VIEW).apply { data = AppUrls.GITHUB_SPONSOR.toUri() })
 }
 
 /**

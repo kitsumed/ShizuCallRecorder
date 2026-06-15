@@ -14,9 +14,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
+import android.os.Process
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import android.os.Process
 
 /**
  * PermissionChecks centralises all runtime permission queries used throughout the app.

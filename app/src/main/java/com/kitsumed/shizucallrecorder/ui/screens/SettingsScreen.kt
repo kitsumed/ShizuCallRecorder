@@ -9,70 +9,69 @@
 package com.kitsumed.shizucallrecorder.ui.screens
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.system.PersistentFolderPickerContract
-import com.kitsumed.shizucallrecorder.system.copyToClipboard
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
+import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
+import com.kitsumed.shizucallrecorder.system.PersistentFolderPickerContract
+import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
+import com.kitsumed.shizucallrecorder.system.openGithubWiki
 import com.kitsumed.shizucallrecorder.system.storage.SafHelper
-import com.kitsumed.shizucallrecorder.system.openGithub
 import com.kitsumed.shizucallrecorder.system.takePersistableFolderPermission
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kitsumed.shizucallrecorder.ui.common.ContactSelectionDialog
 import com.kitsumed.shizucallrecorder.ui.common.FileNameFormatDialog
 import com.kitsumed.shizucallrecorder.ui.common.M3DropdownField
 import com.kitsumed.shizucallrecorder.ui.common.OptionItem
 import com.kitsumed.shizucallrecorder.ui.common.ToggleListItem
+import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerState
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerType
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerViewModel
 import com.kitsumed.shizucallrecorder.ui.viewmodels.DebugAction
 import com.kitsumed.shizucallrecorder.ui.viewmodels.SettingsActions
 import com.kitsumed.shizucallrecorder.ui.viewmodels.SettingsViewModel
-import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerState
-import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
-import androidx.activity.result.contract.ActivityResultContracts
-import android.net.Uri
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.ui.BiasAbsoluteAlignment
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
-import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
+import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
 
@@ -160,8 +159,6 @@ fun SettingsContent(
     onExportLogs: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showLicensesDialog by remember { mutableStateOf(false) }
-
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -180,7 +177,7 @@ fun SettingsContent(
                     fontWeight = FontWeight.Bold
                 )
             }
-            item { AboutSection(versionString = actions.getAppVersion(), onShowLicenses = { showLicensesDialog = true }) }
+            item { AboutSection(versionString = actions.getAppVersion()) }
             item {
                 RecordingSection(
                     preferences = preferences,
@@ -198,6 +195,78 @@ fun SettingsContent(
         }
     }
 
+    // The contact-picker dialog sits on top of the settings content.
+    contactPickerState?.let { picker ->
+        ContactSelectionDialog(
+            title = when (picker.type) {
+                ContactPickerType.INCOMING -> stringResource(R.string.settings_select_contacts_incoming)
+                ContactPickerType.OUTGOING -> stringResource(R.string.settings_select_contacts_outgoing)
+            },
+            contacts = picker.contacts,
+            initialSelection = picker.selectedNumbers,
+            onConfirm = onConfirmContacts,
+            onDismiss = onDismissContacts
+        )
+    }
+}
+
+// ── Settings sections ──────────────────────────────────────────────────────────────────────
+
+/** Shows the app version, server version, clipboard buttons, and a GitHub link.
+ */
+@Composable
+private fun AboutSection(versionString: String) {
+    val context = LocalContext.current
+    val serverVersion = ScrcpyConfig.SCRCPY_VERSION
+
+    var showLicensesDialog by remember() { mutableStateOf(false) }
+    var showSponsorScreen by remember() { mutableStateOf(false) }
+
+    SettingsSection(title = stringResource(R.string.settings_section_about)) {
+        ListItem(
+            headlineContent = { Text(versionString) },
+            supportingContent = {
+                Text(stringResource(R.string.settings_scrcpy_server, serverVersion))
+            },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+        )
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(
+                onClick = { context.openGithubWiki() },
+                modifier = Modifier.weight(1f)
+            ) { Text(stringResource(R.string.settings_open_github_Wiki)) }
+            OutlinedButton(
+                onClick = { showLicensesDialog = true },
+                modifier = Modifier.weight(1f)
+            ) { Text(stringResource(R.string.settings_view_licenses)) }
+        }
+        Button(
+            onClick = { showSponsorScreen = true },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+        ) { Text(stringResource(R.string.sponsor_title)) }
+    }
+
+    if (showSponsorScreen) {
+        Dialog(
+            onDismissRequest = { showSponsorScreen = false },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false, // False for edge-to-edge, since our SponsorScreen take full screen
+                decorFitsSystemWindows = false,
+                dismissOnClickOutside = false,
+                dismissOnBackPress = true,
+
+            )
+        ) {
+            SponsorScreen(onDismiss = { showSponsorScreen = false })
+        }
+    }
+
+    // Handle license dialog
     if (showLicensesDialog) {
         Dialog(
             onDismissRequest = { showLicensesDialog = false },
@@ -233,59 +302,6 @@ fun SettingsContent(
                 }
             }
         }
-    }
-
-    // The contact-picker dialog sits on top of the settings content.
-    contactPickerState?.let { picker ->
-        ContactSelectionDialog(
-            title = when (picker.type) {
-                ContactPickerType.INCOMING -> stringResource(R.string.settings_select_contacts_incoming)
-                ContactPickerType.OUTGOING -> stringResource(R.string.settings_select_contacts_outgoing)
-            },
-            contacts = picker.contacts,
-            initialSelection = picker.selectedNumbers,
-            onConfirm = onConfirmContacts,
-            onDismiss = onDismissContacts
-        )
-    }
-}
-
-// ── Settings sections ──────────────────────────────────────────────────────────────────────
-
-/** Shows the app version, server version, clipboard buttons, and a GitHub link.
- */
-@Composable
-private fun AboutSection(versionString: String, onShowLicenses: () -> Unit) {
-    val context = LocalContext.current
-    val serverVersion = ScrcpyConfig.SCRCPY_VERSION
-
-    SettingsSection(title = stringResource(R.string.settings_section_about)) {
-        ListItem(
-            headlineContent = { Text(versionString) },
-            supportingContent = {
-                Text(stringResource(R.string.settings_scrcpy_server, serverVersion))
-            },
-            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
-        )
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedButton(
-                onClick = { context.copyToClipboard("Scrcpy-Server Version", ScrcpyConfig.SCRCPY_VERSION) },
-                modifier = Modifier.weight(1f)
-            ) { Text(stringResource(R.string.settings_copy_version)) }
-            OutlinedButton(
-                onClick = onShowLicenses,
-                modifier = Modifier.weight(1f)
-            ) { Text(stringResource(R.string.settings_view_licenses)) }
-        }
-        Button(
-            onClick = { context.openGithub() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp)
-        ) { Text(stringResource(R.string.settings_open_github)) }
     }
 }
 
@@ -1010,7 +1026,7 @@ private fun DebugActionGrid(actions: SettingsActions) {
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
-    MaterialTheme {
+    ShizucallrecorderTheme(darkTheme = false, dynamicColor = false) {
         val mockContext = LocalContext.current
         val dummyPreferences = AppPreferences(mockContext)
         val dummyActions = object : SettingsActions {

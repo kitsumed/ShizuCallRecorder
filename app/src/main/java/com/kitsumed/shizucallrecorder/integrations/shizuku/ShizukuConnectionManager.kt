@@ -23,8 +23,8 @@ import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.services.ShellService
 import com.kitsumed.shizucallrecorder.utils.AppLogger
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.suspendCancellableCoroutine
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuProvider
 import kotlin.coroutines.resume

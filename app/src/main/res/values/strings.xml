@@ -69,6 +69,31 @@
     <string name="disclaimer_wait">Wait %1$ds</string>
     <string name="disclaimer_must_read">You must read the disclaimer.</string>
 
+    <!-- Sponsor Screen -->
+    <string name="sponsor_title">Support the Project</string>
+    <string name="sponsor_body_title">Hi, I\'m kitsumed (Med)! 👋</string>
+    <string name="sponsor_body">I\'ve been into technologies and computers since I was young. Most of my projects come from finding solutions for my own physical or mental disabilities, while others are just random sparks of inspiration.\n\nI spend a lot of my free time learning, building, and maintaining open-source software. Your support directly helps me in my daily life financially and motivates me to keep creating high-quality tools for the community.\n\nI believe in keeping my apps free of aggressive ads and privacy-invasive tracking. If my tools have been useful in your daily life, please consider supporting!</string>
+    <string name="sponsor_days_used">You\'ve been using ShizuCallRecorder for %1$d days!</string>
+
+    <string name="sponsor_way_to_help">Ways you can help:</string>
+    <string name="sponsor_way_github_sponsor_title">Become a GitHub Sponsor</string>
+    <string name="sponsor_way_github_sponsor_description">Earn the Public Sponsor achievement, get your profile on my page, and sustain my open-source work.</string>
+    <string name="sponsor_way_github_star_title">Star it on GitHub</string>
+    <string name="sponsor_way_github_star_description">Boost the project\'s visibility so others can find it.</string>
+    <string name="sponsor_way_contribute_title">Contribute</string>
+    <string name="sponsor_way_contribute_description">Help with code, bug reports, or translations.</string>
+    <string name="sponsor_way_share_title">Share the App</string>
+    <string name="sponsor_way_share_description">Tell your friends or community about ShizuCallRecorder.</string>
+
+    <string name="sponsor_github_sponsor_button">Sponsor on GitHub</string>
+    <string name="sponsor_github_star_button">Star Repo</string>
+    <string name="sponsor_maybe_later_button">Maybe Later</string>
+
+    <string name="sponsor_notification_body">This project is free, open-source, and contains zero ads. If this tool helped you in your daily life, consider checking out ways to support the project development!</string>
+    <string name="sponsor_notification_action">View Support Options</string>
+    <string name="sponsor_notification_call_to_action_title">Enjoying ShizuCallRecorder?</string>
+    <string name="sponsor_notification_call_to_action">We need your help!</string>
+
     <!-- Permissions Screen -->
     <string name="permissions_title">Permissions Setup</string>
     <string name="permissions_intro">We need a few permissions to start recoding. Tap "Grant Access" and approve each item.</string>
@@ -238,7 +263,7 @@
     <string name="settings_copy_version">Copy Version</string>
     <string name="settings_view_licenses">View Licenses</string>
     <string name="settings_scrcpy_server" translatable="false">Scrcpy-Server: %1$s</string>
-    <string name="settings_open_github">Open GitHub Repository</string>
+    <string name="settings_open_github_Wiki">Open Wiki</string>
 
     <!-- ContactSelection Dialog -->
     <string name="contact_search_hint">Search by name or number...</string>
