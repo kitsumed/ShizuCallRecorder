@@ -44,3 +44,11 @@
   <li>Contribute to the project on GitHub: <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/CONTRIBUTING.md">Contributing Guide</a></li>
   <li>Support ongoing development via GitHub Sponsors: <a href="https://github.com/sponsors/kitsumed">Sponsor kitsumed</a></li>
 </ul>
+
+<p><b>Disclaimer</b></p>
+
+<p><b>Recording phone calls may be subject to complex and varying laws in different countries and jurisdictions.</b> For example, you may need to <b>ensure you have consent</b> from all parties before recording conversations. The <b>developers and contributors are not responsible</b> for any misuse or legal consequences arising from the use of this application.</p>
+
+<p>You can <b>learn more on Wikipedia at</b>: <a href="https://en.wikipedia.org/wiki/Telephone_call_recording_laws">Telephone call recording laws</a>.</p>
+
+<p><b>If you are legally required to inform or ask someone for consent before recording</b>, please note that the application <b>DOES NOT handle this for you</b>. In some cases, certain features, like automatic call recording, may not be legally allowed. It is your responsibility to ensure compliance with applicable laws. <b>This is not legal advice</b>. Please <b>consult a legal professional for guidance</b> regarding your specific situation.</p>
