@@ -27,6 +27,12 @@ val libphonenumberMetadataDir = layout.buildDirectory.dir("generated/libphonenum
 // Detect if we're running in a CI environment (e.g., GitHub Actions).
 val isEnvironmentGithubCI = providers.environmentVariable("GITHUB_ACTIONS").isPresent
 
+// Detect if we want to bypass signing checks
+val shouldSkipSigning = providers.environmentVariable("SKIP_SIGNING")
+    .map { it.toBoolean() }
+    .orElse(false)
+    .get()
+
 abstract class DownloadAssetTask : DefaultTask() {
     @get:Input
     abstract val url: Property<String>
@@ -132,12 +138,11 @@ android {
     signingConfigs {
         // Signing config for CI environments.
         create("ci-release") {
-            if (isEnvironmentGithubCI) {
+            if (isEnvironmentGithubCI && !shouldSkipSigning) {
                 storeFile = file(System.getenv("KEYSTORE_FILE") ?: throw GradleException("Keystore file not provided for release signing. env variable: KEYSTORE_FILE"))
                 storePassword = System.getenv("KEYSTORE_PASSWORD") ?: throw GradleException("Keystore password not provided for release signing. env variable: KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("KEY_ALIAS") ?: throw GradleException("Key alias not provided for release signing. env variable: KEY_ALIAS")
                 keyPassword = System.getenv("KEY_PASSWORD") ?:throw GradleException("Key password not provided for release signing. env variable: KEY_PASSWORD")
-
             }
         }
     }

@@ -259,7 +259,6 @@
     <string name="settings_debug_action_idle" translatable="false">Idle / End</string>
 
     <!-- Settings Screen: About/Server Section -->
-    <string name="settings_copy_version">Copy Version</string>
     <string name="settings_view_licenses">View Licenses</string>
     <string name="settings_scrcpy_server" translatable="false">Scrcpy-Server: %1$s</string>
     <string name="settings_open_github_Wiki">Open Wiki</string>
