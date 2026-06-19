@@ -104,7 +104,7 @@ jobs:
       # Build Debug APK (for Debug Asset type)
       - name: Build Debug APK
         if: ${{ steps.set-output.outputs.BUILD_TYPE == 'debug' }}
-        run: ./gradlew assembleDebug -PversionName=${{ inputs.version }} -PversionCode=${{ github.run_number }} -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
+        run: gradlew assembleDebug -PversionName=${{ inputs.version }} -PversionCode=${{ github.run_number }} -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
 
       # Build Release APK (for Release/Pre-Release types)
       # Uses signing configuration from secrets
@@ -115,7 +115,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease -PversionName=${{ inputs.version }} -PversionCode=${{ github.run_number }} -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
+        run: gradlew assembleRelease -PversionName=${{ inputs.version }} -PversionCode=${{ github.run_number }} -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
 
       # Rename and move APK with version for clarity
       - name: Prepare APK Artifact
