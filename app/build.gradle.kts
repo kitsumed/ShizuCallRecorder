@@ -52,12 +52,12 @@ abstract class DownloadAssetTask : DefaultTask() {
 
         // Internal check to skip if already correct
         if (targetFile.exists() && calculateSha256(targetFile).equals(sha256.get(), ignoreCase = true)) {
-            println("${assetName.get()} is already up-to-date.")
+            logger.info("${assetName.get()} is already up-to-date.")
             return
         }
 
         targetFile.parentFile.mkdirs()
-        println("Downloading ${assetName.get()}...")
+        logger.lifecycle("Downloading ${assetName.get()}...")
 
         URI(url.get()).toURL().openStream().use { input ->
             targetFile.outputStream().use { output ->
@@ -114,9 +114,60 @@ val extractLibphonenumberMetadata = tasks.register<ExtractMetadataTask>("extract
     into(outputDir)
 }
 
-val ciVersionCode = providers.gradleProperty("versionCode").map { it.toIntOrNull() }.orElse(1)
-val ciVersionName = providers.gradleProperty("versionName").orElse("1.0.0")
-val ciBuildNumber = providers.gradleProperty("ciBuildNumber").orElse("Local")
+/**
+ * Create a unique incremental version code from a version name string.
+ * @param versionName The version name string (e.g., "1.0.2").
+ * @throws IllegalArgumentException If the version format is invalid or components are out of bounds.
+ * @throws ArithmeticException If the resulting version code overflows Int.MAX_VALUE.
+ */
+fun generateVersionCode(versionName: String): Int {
+    if (versionName.isBlank()) {
+        val errorMsg = "Version name cannot be blank or empty."
+        logger.error("[ERROR] $errorMsg")
+        throw IllegalArgumentException(errorMsg)
+    }
+
+    val parts = versionName.split(".")
+
+    if (parts.size > 3 || parts.isEmpty()) {
+        val errorMsg = "Invalid version format '$versionName'. Expected 1 to 3 dot-separated segments (e.g., '1.0.2')."
+        logger.error("[ERROR] $errorMsg")
+        throw IllegalArgumentException(errorMsg)
+    }
+
+    val major = parts.getOrNull(0)?.toIntOrNull() ?: throw IllegalArgumentException("[ERROR] Missing or invalid Major version in '$versionName'")
+    val minor = parts.getOrNull(1)?.toIntOrNull() ?: throw IllegalArgumentException("[ERROR] Missing or invalid Minor version in '$versionName'")
+    val patch = parts.getOrNull(2)?.toIntOrNull() ?: throw IllegalArgumentException("[ERROR] Missing or invalid Patch version in '$versionName'")
+
+    if (minor > 999 || patch > 9999) {
+        val errorMsg = "Version component out of bounds. Minor max is 999 (got $minor), Patch max is 9999 (got $patch)."
+        logger.error("[ERROR] $errorMsg")
+        throw IllegalArgumentException(errorMsg)
+    }
+
+    if (major > 214) {
+        val errorMsg = "Major version $major is too large and will cause an Int overflow. Max allowed is 214."
+        logger.error("[ERROR] $errorMsg")
+        throw ArithmeticException(errorMsg)
+    }
+
+    // Scale: Major * 10,000,000 + Minor * 10,000 + Patch
+    val versionCode = (major * 10_000_000) + (minor * 10_000) + patch
+
+    logger.lifecycle("[INFO] Successfully generated version code: $versionCode from '$versionName'")
+    return versionCode
+}
+
+
+val ciVersionName = providers.gradleProperty("versionName").getOrNull() ?: run {
+    logger.lifecycle("[INFO] 'versionName' not defined. Defaulting to '1.0.0'")
+    "1.0.0"
+}
+val ciVersionCode = generateVersionCode(ciVersionName)
+val ciBuildNumber = providers.gradleProperty("ciBuildNumber").getOrNull() ?: run {
+    logger.lifecycle("[INFO] 'ciBuildNumber' not defined. Defaulting to 'Local'")
+    "Local"
+}
 
 android {
     namespace = "com.kitsumed.shizucallrecorder"
@@ -126,10 +177,10 @@ android {
         applicationId = "com.kitsumed.shizucallrecorder"
         minSdk = 30
         targetSdk = 36
-        versionCode = ciVersionCode.get()
-        versionName = ciVersionName.get()
+        versionCode = ciVersionCode
+        versionName = ciVersionName
 
-        buildConfigField("String", "CI_BUILD_NUMBER", "\"${ciBuildNumber.get()}\"")
+        buildConfigField("String", "CI_BUILD_NUMBER", "\"${ciBuildNumber}\"")
 
         buildConfigField("String", "SCRCPY_VERSION", "\"$scrcpyVersion\"")
         buildConfigField("String", "SCRCPY_SERVER_SHA256", "\"$scrcpyServerSha256\"")
@@ -155,9 +206,9 @@ android {
                 "proguard-rules.pro"
             )
             if (isEnvironmentGithubCI) {
-                println("Configuring release build for CI environment. Official release signing keys will be used.")
+                logger.lifecycle("Configuring release build for CI environment. Official release signing keys will be used.")
                 if (shouldSkipSigning) {
-                    println("WARNING: SKIP_SIGNING is set. The build will NOT be signed, which may cause installation to fail on Android Devices. Do not set SKIP_SIGNING when BUILDING the apk! You can for other tasks.")
+                    logger.warn("WARNING: SKIP_SIGNING is set. The build will NOT be signed, which may cause installation to fail on Android Devices. Do not set SKIP_SIGNING when BUILDING the apk! You can for other tasks.")
                 } else
                 {
                     signingConfig = signingConfigs.getByName("ci-release")
