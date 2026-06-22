@@ -162,6 +162,12 @@
     <string name="settings_file_name_template_placeholders">Placeholders for %s :</string>
     <string name="settings_file_name_template_placeholders_preview">Preview: %1$s</string>
     <string name="placeholder_date_desc">The current date and time</string>
+    <string name="placeholder_date_year_desc">The current year (e.g. 2026)</string>
+    <string name="placeholder_date_month_desc">The current month, zero-padded (01-12)</string>
+    <string name="placeholder_date_day_desc">The current day of the month, zero-padded (01-31)</string>
+    <string name="placeholder_date_hours_desc">The current hour, 24-hour and zero-padded (00-23)</string>
+    <string name="placeholder_date_minutes_desc">The current minutes, zero-padded (00-59)</string>
+    <string name="placeholder_date_seconds_desc">The current seconds, zero-padded (00-59)</string>
     <string name="placeholder_direction_desc">The call direction (in/out)</string>
     <string name="placeholder_phone_number_desc">The phone number</string>
     <string name="placeholder_caller_name_desc">The name of the caller, look at the contacts list first, fallback to telecom CallerID when available</string>

@@ -32,6 +32,12 @@ object RecordingFileNameFormatter {
      */
     enum class FileNamePlaceholder(val tag: String, @param:StringRes val descriptionResId: Int, val supportedModes: Set<CallDetectionMode>)  {
         DATE("{date}", R.string.placeholder_date_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_YEAR("{date:year}", R.string.placeholder_date_year_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_MONTH("{date:month}", R.string.placeholder_date_month_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_DAY("{date:day}", R.string.placeholder_date_day_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_HOURS("{date:hours}", R.string.placeholder_date_hours_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_MINUTES("{date:minutes}", R.string.placeholder_date_minutes_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
+        DATE_SECONDS("{date:seconds}", R.string.placeholder_date_seconds_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
         DIRECTION("{direction}", R.string.placeholder_direction_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
         PHONE_NUMBER("{phone_number}", R.string.placeholder_phone_number_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
         CALLER_NAME("{caller_name}", R.string.placeholder_caller_name_desc, setOf(CallDetectionMode.PhoneState, CallDetectionMode.InCallService)),
@@ -57,7 +63,17 @@ object RecordingFileNameFormatter {
     ): String {
         val template = customFormat ?: AppPreferences(context).getFileNameTemplate()
 
-        val dateStr = SimpleDateFormat("yyyyMMdd_HHmmss.SSSZ", Locale.CANADA).format(Date())
+        // Capture a single instant so that {date} and the granular {date:...} sub-fields all describe the same moment.
+        val now = Date()
+        val dateStr = SimpleDateFormat("yyyyMMdd_HHmmss.SSSZ", Locale.CANADA).format(now)
+
+        // Granular date sub-fields, each backed by a minimal SimpleDateFormat pattern applied to the same instant.
+        val dateYearStr = SimpleDateFormat("yyyy", Locale.CANADA).format(now)
+        val dateMonthStr = SimpleDateFormat("MM", Locale.CANADA).format(now)
+        val dateDayStr = SimpleDateFormat("dd", Locale.CANADA).format(now)
+        val dateHoursStr = SimpleDateFormat("HH", Locale.CANADA).format(now)
+        val dateMinutesStr = SimpleDateFormat("mm", Locale.CANADA).format(now)
+        val dateSecondsStr = SimpleDateFormat("ss", Locale.CANADA).format(now)
 
         val directionStr = when (metadata.direction) {
             CallDirection.INCOMING -> "in"
@@ -82,6 +98,14 @@ object RecordingFileNameFormatter {
         }
 
         val baseName = template
+            // Replace the granular date sub-fields before {date}; their tags include the closing brace,
+            // so {date} never partially matches {date:...} and the two stay independent.
+            .replace(FileNamePlaceholder.DATE_YEAR.tag, dateYearStr)
+            .replace(FileNamePlaceholder.DATE_MONTH.tag, dateMonthStr)
+            .replace(FileNamePlaceholder.DATE_DAY.tag, dateDayStr)
+            .replace(FileNamePlaceholder.DATE_HOURS.tag, dateHoursStr)
+            .replace(FileNamePlaceholder.DATE_MINUTES.tag, dateMinutesStr)
+            .replace(FileNamePlaceholder.DATE_SECONDS.tag, dateSecondsStr)
             .replace(FileNamePlaceholder.DATE.tag, dateStr)
             .replace(FileNamePlaceholder.DIRECTION.tag, directionStr)
             .replace(FileNamePlaceholder.PHONE_NUMBER.tag, phoneStr)
