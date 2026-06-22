@@ -21,7 +21,6 @@ pluginManagement {
 }
 plugins {
     // Disable foojay as required by https://codeberg.org/IzzyOnDroid/repodata/issues/266 and https://gitlab.com/fdroid/rfp/-/work_items/4032
-    //id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
