@@ -28,10 +28,7 @@ val libphonenumberMetadataDir = layout.buildDirectory.dir("generated/libphonenum
 val isEnvironmentGithubCI = providers.environmentVariable("GITHUB_ACTIONS").isPresent
 
 // Detect if we want to bypass signing checks
-val shouldSkipSigning = providers.environmentVariable("SKIP_SIGNING")
-    .map { it.toBoolean() }
-    .orElse(false)
-    .get()
+val shouldSkipSigning = providers.environmentVariable("SKIP_SIGNING").orNull?.toBoolean() ?: false
 
 abstract class DownloadAssetTask : DefaultTask() {
     @get:Input

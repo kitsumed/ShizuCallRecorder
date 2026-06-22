@@ -89,7 +89,7 @@ jobs:
           SKIP_SIGNING: true
         run: |
           # Run the task to generate the file
-          ./gradlew writeVersionForCi --no-daemon
+          ./gradlew writeVersionForCi
           # Read the exact string from the generated file
           VERSION=$(cat app/build/outputs/version.txt)
           # Export it to GitHub Actions outputs
@@ -123,7 +123,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew assembleDebug -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
+        run: ./gradlew assembleDebug -PciBuildNumber=${{ github.run_id }} --stacktrace
 
       # Build Release APK (for Release/Pre-Release types)
       # Uses signing configuration from secrets
@@ -134,7 +134,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
+        run: ./gradlew assembleRelease -PciBuildNumber=${{ github.run_id }} --stacktrace
 
       # Rename and move APK with version for clarity
       - name: Prepare APK Artifact
