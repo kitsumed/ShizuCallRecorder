@@ -6,7 +6,6 @@
     <string name="general_cancel">Abbrechen</string>
     <string name="general_settings">Einstellungen</string>
     <string name="general_licenses">Lizenzen</string>
-    <string name="general_copied_to_clipboard">In die Zwischenablage kopiert</string>
     <string name="general_record">Aufnehmen</string>
     <string name="general_pause">Pausieren</string>
     <string name="general_resume">Fortsetzen</string>
@@ -77,9 +76,7 @@
     <string name="settings_debug_logging_generate_report">Bericht generieren</string>
     <string name="settings_debug_logging_report_on_github">Auf GitHub melden</string>
     <string name="settings_debug_mode">Debug-Modus aktivieren</string>
-    <string name="settings_copy_version">Version kopieren</string>
     <string name="settings_view_licenses">Lizenzen ansehen</string>
-    <string name="settings_open_github">GitHub-Repository öffnen</string>
     <string name="contact_search_hint">Nach Name oder Nummer suchen...</string>
     <string name="recording_standby_notification_title">Anruf läuft</string>
     <string name="recording_notification_cross_country_tip">🌐International</string>
