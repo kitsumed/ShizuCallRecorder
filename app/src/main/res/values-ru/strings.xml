@@ -96,9 +96,7 @@
     <string name="settings_debug_mode">Включить режим отладки</string>
     <string name="settings_debug_mode_description">Показывать меню разработчика и не скрывать личные данные в логах.</string>
     <string name="settings_debug_caller_number">Отладка телефонного номера</string>
-    <string name="settings_copy_version">Копировать версию</string>
     <string name="settings_view_licenses">Посмотреть лицензии</string>
-    <string name="settings_open_github">Открыть GitHub репозиторий</string>
     <string name="contact_search_hint">Искать по имени или номеру...</string>
     <string name="recording_standby_notification_title">Звонок в процессе</string>
     <string name="recording_notification_cross_country_tip">🌐 Международный</string>
@@ -122,10 +120,20 @@
     <string name="recording_shizuku_not_started">Процесс Shizuku-Server остановлен. Пожалуйста, запустите Shizuku и убедитесь, что службе разрешено работать в фоновом режиме, когда приложению требуется записать аудио.</string>
     <string name="recording_shizuku_permission_denied">Пожалуйста, разрешите приложению использовать Shizuku. Доступ был отклонен.</string>
     <string name="recording_shizuku_auth_key_missing">Ключ авторизации команд Shizuku был потерян. Пожалуйста введите его в настройках приложения.</string>
-    <string name="general_copied_to_clipboard">Скопировано в буфер обмена</string>
     <string name="general_system_limitation_message">Приложение ShizuCallRecorder не будет работать на этом устройстве, так как у вашей системной оболочки (shell) нет необходимых разрешений:\n\n%1$s\n\nВы ничего не можете с этим поделать – приложение не может функционировать и сейчас закроется.</string>
     <string name="disclaimer_title">Добро пожаловать в ShizukuCallRecorder</string>
     <string name="settings_section_about">О приложении</string>
     <string name="contact_select_all">Выбрать все</string>
     <string name="contact_unselect_all">Отменить выбор всех</string>
+    <string name="general_reset">Сброс</string>
+    <string name="settings_shizuku_keep_alive">Оставлять Shizuku активным</string>
+    <string name="settings_file_name_template">Шаблон имени файла</string>
+    <string name="settings_file_name_template_placeholders">Заполнители:</string>
+    <string name="settings_file_name_template_placeholders_preview">Представительный просмотр: %1$s</string>
+    <string name="placeholder_date_desc">Текущая дата и время</string>
+    <string name="placeholder_direction_desc">Направление звонка(входящий/исходящий)</string>
+    <string name="placeholder_phone_number_desc">Телефонный номер</string>
+    <string name="placeholder_cross_country_desc">Указывает, является ли вызов международным (да/нет)</string>
+    <string name="recording_unexpected_error">Во время записи произошла непредвиденная ошибка. Пожалуйста, сообщите об этом вместе с инструкциями по воспроизведению и логами из приложения.</string>
+    <string name="settings_shizuku_keep_alive_desc">Не отправлять ключ авторизации для остановки</string>
 </resources>
