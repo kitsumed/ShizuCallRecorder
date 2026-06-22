@@ -6,7 +6,6 @@
     <string name="general_cancel">Huỷ bỏ</string>
     <string name="general_settings">Cài đặt</string>
     <string name="general_licenses">Giấy phép</string>
-    <string name="general_copied_to_clipboard">Đã sao chép vào bảng nhớ tạm</string>
     <string name="general_record">Ghi</string>
     <string name="general_pause">Tạm dừng</string>
     <string name="general_resume">Bắt đầu trở lại</string>
@@ -59,7 +58,6 @@
     <string name="placeholder_date_desc">Ngày và giờ hiện tại</string>
     <string name="placeholder_direction_desc">Hướng cuộc gọi (đến/đi)</string>
     <string name="placeholder_phone_number_desc">Số điện thoại</string>
-    <string name="placeholder_contact_name_desc">Tên người liên hệ (nếu có)</string>
     <string name="placeholder_cross_country_desc">Cho biết cuộc gọi có phải là cuộc gọi xuyên quốc gia hay không (đúng/sai)</string>
     <string name="settings_auto_record_incoming">Tự động ghi âm cuộc gọi đến</string>
     <string name="settings_auto_record_outgoing">Tự động ghi âm cuộc gọi đi</string>
@@ -109,9 +107,7 @@
     <string name="settings_debug_mode">Bật chế độ gỡ lỗi</string>
     <string name="settings_debug_mode_description">Hiển thị tùy chọn dành cho nhà phát triển, tắt tính năng ẩn nhật ký.</string>
     <string name="settings_debug_caller_number">Gỡ lỗi số điện thoại</string>
-    <string name="settings_copy_version">Sao chép phiên bản</string>
     <string name="settings_view_licenses">Xem giấy phép</string>
-    <string name="settings_open_github">Mở kho lưu trữ GitHub</string>
     <string name="contact_search_hint">Tìm kiếm theo tên hoặc số...</string>
     <string name="contact_select_all">Chọn tất cả</string>
     <string name="contact_unselect_all">Bỏ chọn tất cả</string>
