@@ -16,7 +16,6 @@
     <string name="disclaimer_wait">Attendi %1$ds</string>
     <string name="disclaimer_must_read">È necessario leggere l\'informativa legale.</string>
     <string name="permissions_title">Impostazioni Permessi</string>
-    <string name="general_copied_to_clipboard">Copiato in</string>
     <string name="general_record">Registra</string>
     <string name="disclaimer_introduction">Prima di procedere, apri e leggi le istruzioni di configurazione sul nostro Wiki. Quindi, leggi il Disclaimer riportato qui sotto.</string>
     <string name="disclaimer_checkbox_label">Ho letto il Disclaimer e comprendo i requisiti legali, le responsabilità e le limitazioni tecniche di questo software.</string>
