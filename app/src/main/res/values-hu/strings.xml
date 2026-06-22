@@ -5,7 +5,6 @@
     <string name="general_licenses">Licencek</string>
     <string name="general_continue">Folytatás</string>
     <string name="general_ok">OK</string>
-    <string name="general_copied_to_clipboard">A vágólapra másolva</string>
     <string name="general_record">Rögzítés</string>
     <string name="general_pause">Szünet</string>
     <string name="general_incoming">bejövő</string>
@@ -13,7 +12,7 @@
     <string name="general_system_limitation">Rendszerkorlát</string>
     <string name="disclaimer_title">Üdvözöljük a ShizuCallRecorder alkalmazásban</string>
     <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
-    <string name="general_close">Közeli</string>
+    <string name="general_close">Bezár</string>
     <string name="general_resume">Folytatás</string>
     <string name="general_reset">Visszaállít</string>
     <string name="general_system_limitation_message">ShizuCallRecorder nem tud működni ezen a készüléken mivel a shell alkalmazás nem rendelkezik a megfelelő jogosultságokkal.\n\n%1$s\n\nA helyzettel nem lehet mit csinálni, az alkalmazás nem tud működni és most bezáródik.</string>
@@ -58,7 +57,6 @@
     <string name="placeholder_date_desc">A jelenlegi dátum és idő</string>
     <string name="placeholder_direction_desc">Hívás iránya (bejövő/kimenő)</string>
     <string name="placeholder_phone_number_desc">Telefonszám</string>
-    <string name="placeholder_contact_name_desc">Névjegy (amennyiben elérhető)</string>
     <string name="placeholder_cross_country_desc">Országon kívüli vagy belüli hívás (igen/nem)</string>
     <string name="settings_auto_record_incoming">Automatikus bejövő hívás rögzítés</string>
     <string name="settings_auto_record_outgoing">Automatikus kimenő hívás rögzítés</string>
@@ -108,9 +106,7 @@
     <string name="settings_debug_mode">Hibakeresés mód bekapcsolása</string>
     <string name="settings_debug_mode_description">Fejlesztői beállítások megjelenítése, a naplószűrés kikapcsolása.</string>
     <string name="settings_debug_caller_number">Telefonszám</string>
-    <string name="settings_copy_version">Verziószám másolása</string>
     <string name="settings_view_licenses">Licenszek megtekintése</string>
-    <string name="settings_open_github">A GitHub repo megnyitása</string>
     <string name="contact_search_hint">Keresés név vagy szám alapján...</string>
     <string name="contact_select_all">Összes kijelölése</string>
     <string name="contact_unselect_all">Összes kijelölés megszűntetése</string>
@@ -138,4 +134,5 @@
     <string name="recording_shizuku_permission_denied">Kérjük engedélyezd az alkalmazás számára a Shizuku használatát. Az engedély el lett elutasítotva.</string>
     <string name="recording_shizuku_auth_key_missing">Hiányzik a Shizuku Intents kulcs. Kérjük,add meg az alkalmazás beállításaiban (megj.: a kulcsot a Shizuku alkalmazában találod).</string>
     <string name="settings_file_name_template_placeholders">Kitöltők:</string>
+    <string name="settings_shizuku_keep_alive">A Shizuku életben tartása</string>
 </resources>
