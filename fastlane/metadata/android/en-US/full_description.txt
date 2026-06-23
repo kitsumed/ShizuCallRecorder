@@ -36,6 +36,8 @@
 <p><b>Installation</b></p>
 <p>Please follow the installation instructions in the <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/docs/SUPPORT.md">SUPPORT documentation</a>, under <b>Installation &amp; Configuration</b>.</p>
 
+<p><b>Please note that the official release source is GitHub. Builds are signed with my key, immutable, and attested so you can track them back to the Github Runner (Build CI). F-Droid builds are provided for convenience, but are build and signed by F-Droid, they could have been tampered with.</b></p>
+
 <p><b>Support the Project</b></p>
 
 <p>If you find <b>ShizuCallRecorder</b> useful and want to support its development, you can contribute in several ways:</p>
