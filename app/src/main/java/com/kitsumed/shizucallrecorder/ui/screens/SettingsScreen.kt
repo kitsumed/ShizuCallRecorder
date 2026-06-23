@@ -22,9 +22,11 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -35,7 +37,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -446,8 +447,15 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
                         .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                         .onFocusChanged { isFocused = it.isFocused },
                     singleLine = true,
+                    isError = textState.isBlank(),
                     visualTransformation = if (isFocused) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password, showKeyboardOnFocus = true),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Key,
+                            contentDescription = null
+                        )
+                    }
                 )
 
                 if (textState.trim().isEmpty()) {
@@ -562,7 +570,13 @@ private fun RecordingSection(
                     color = MaterialTheme.colorScheme.primary
                 )
             },
-            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            trailingContent = {
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = null
+                )
+            },
         )
 
         ListItem(
@@ -572,6 +586,12 @@ private fun RecordingSection(
                 Text(
                     text = fileNameFormat,
                     color = MaterialTheme.colorScheme.primary
+                )
+            },
+            trailingContent = {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = null
                 )
             },
             colors = ListItemDefaults.colors(containerColor = Color.Transparent)
