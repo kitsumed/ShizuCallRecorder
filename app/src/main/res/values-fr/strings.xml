@@ -127,8 +127,8 @@
     <string name="contact_unselect_all">Tout désélectionner</string>
     <string name="general_reset">Réinitialiser</string>
     <string name="settings_file_name_template">Format de nom de fichier</string>
-    <string name="settings_file_name_template_placeholders">Formats pour %s :</string>
-    <string name="settings_file_name_template_placeholders_preview">Aperçu : %1$s</string>
+    <string name="settings_file_name_template_placeholders">Formats pour %s :</string>
+    <string name="settings_file_name_template_placeholders_preview">Aperçu : %1$s</string>
     <string name="placeholder_date_desc">La date et l\'heure actuelles</string>
     <string name="placeholder_direction_desc">Sens de l\'appel (in/out)</string>
     <string name="placeholder_phone_number_desc">Le numéro de téléphone</string>
@@ -137,10 +137,10 @@
     <string name="settings_shizuku_keep_alive">Ne pas arrêter Shizuku</string>
     <string name="settings_shizuku_keep_alive_desc">N\'envoie pas l\'intent d\'arrêt</string>
     <string name="sponsor_title">Soutenez le projet</string>
-    <string name="sponsor_body_title">Salut, je m\'appelle kitsumed (Med) ! 👋</string>
-    <string name="sponsor_body">Je m\'intéresse aux technologies et à l\'informatique depuis mon plus jeune âge. La plupart de mes projets naissent de ma volonté de trouver des solutions à mes propres handicaps physiques ou mentaux, tandis que d\'autres sont simplement le fruit d\'une inspiration spontanée.\n\nShizuCallRecorder est né d\'un besoin personnel lié à l\'un de mes handicaps. Pendant plusieurs années, j\'ai cherché une application d\'enregistrement d\'appels gratuite et open source (FOSS) qui fonctionnerait sur des appareils non rootés, mais je n\'en ai pas trouvé. Il n\'en existait aucune. J\'ai donc décidé de créer la mienne et de la rendre publique.\n\nJe consacre une grande partie de mon temps libre à apprendre, à développer et à maintenir des logiciels open source. Votre soutien m\'aide concrètement dans ma vie quotidienne sur le plan financier et me motive à continuer de créer des outils de qualité pour la communauté.\n\nJe tiens à ce que mes applications restent exemptes de publicités intrusives et de systèmes de suivi qui portent atteinte à la vie privée. Si mes outils vous ont été utiles au quotidien, n\'hésitez pas à me soutenir !</string>
-    <string name="sponsor_days_used">Vous utilisez ShizuCallRecorder depuis %1$d jours !</string>
-    <string name="sponsor_way_to_help">Comment vous pouvez aider :</string>
+    <string name="sponsor_body_title">Salut, je m\'appelle kitsumed (Med) ! 👋</string>
+    <string name="sponsor_body">Je m\'intéresse aux technologies et à l\'informatique depuis mon plus jeune âge. La plupart de mes projets naissent de ma volonté de trouver des solutions à mes propres handicaps physiques ou mentaux, tandis que d\'autres sont simplement le fruit d\'une inspiration spontanée.\n\nShizuCallRecorder est né d\'un besoin personnel lié à l\'un de mes handicaps. Pendant plusieurs années, j\'ai cherché une application d\'enregistrement d\'appels gratuite et open source (FOSS) qui fonctionnerait sur des appareils non rootés, mais je n\'en ai pas trouvé. Il n\'en existait aucune. J\'ai donc décidé de créer la mienne et de la rendre publique.\n\nJe consacre une grande partie de mon temps libre à apprendre, à développer et à maintenir des logiciels open source. Votre soutien m\'aide concrètement dans ma vie quotidienne sur le plan financier et me motive à continuer de créer des outils de qualité pour la communauté.\n\nJe tiens à ce que mes applications restent exemptes de publicités intrusives et de systèmes de suivi qui portent atteinte à la vie privée. Si mes outils vous ont été utiles au quotidien, n\'hésitez pas à me soutenir !</string>
+    <string name="sponsor_days_used">Vous utilisez ShizuCallRecorder depuis %1$d jours !</string>
+    <string name="sponsor_way_to_help">Comment vous pouvez aider :</string>
     <string name="sponsor_way_github_sponsor_title">Devenez sponsor GitHub</string>
     <string name="sponsor_way_github_sponsor_description">Débloquez le succès « Public Sponsor », faites apparaître votre profil sur ma page et soutenez moi et mon travail open source financièrement.</string>
     <string name="sponsor_way_github_star_title">Ajoutez-le à vos favoris sur GitHub</string>
@@ -152,10 +152,10 @@
     <string name="sponsor_github_sponsor_button">Devenir sponsor sur GitHub</string>
     <string name="sponsor_github_star_button">Favoris Github</string>
     <string name="sponsor_maybe_later_button">Peut-être plus tard</string>
-    <string name="sponsor_notification_body">Ce projet est gratuit, open source et ne contient aucune publicité. Si cet outil vous a été utile au quotidien, pensez à soutenir son développement !</string>
+    <string name="sponsor_notification_body">Ce projet est gratuit, open source et ne contient aucune publicité. Si cet outil vous a été utile au quotidien, pensez à soutenir son développement !</string>
     <string name="sponsor_notification_action">Voir les options de soutien</string>
-    <string name="sponsor_notification_call_to_action_title">Vous appréciez ShizuCallRecorder ?</string>
-    <string name="sponsor_notification_call_to_action">Nous avons besoin de votre aide !</string>
+    <string name="sponsor_notification_call_to_action_title">Vous appréciez ShizuCallRecorder ?</string>
+    <string name="sponsor_notification_call_to_action">Nous avons besoin de votre aide !</string>
     <string name="permission_manage_ongoing_calls_label">Gérer les appels en cours</string>
     <string name="permission_manage_ongoing_calls_description">L\'autorisation AppOps est automatiquement accordée avec Shizuku. Elle est nécessaire pour détecter les appels avec InCallService.</string>
     <string name="settings_call_detection_method">Méthode de détection des appels</string>
@@ -168,4 +168,10 @@
     <string name="placeholder_caller_name_desc">Le nom de l\'appelant, vérifie d\'abord la liste de contacts, puis l\'identification de l’appelant fournie par l\'opérateur si disponible</string>
     <string name="placeholder_package_name_desc">Le nom ou le nom du package de l\'application qui a lancé l\'appel.</string>
     <string name="settings_open_github_Wiki">Ouvrir le Wiki</string>
+    <string name="placeholder_date_year_desc">L\'année en cours (exemple, 2026)</string>
+    <string name="placeholder_date_month_desc">Le mois en cours, complété par des zéros (01-12)</string>
+    <string name="placeholder_date_day_desc">Le jour actuel du mois, complété par des zéros (01-31)</string>
+    <string name="placeholder_date_hours_desc">L\'heure actuelle, au format 24 heures et complété par des zéros (00-23)</string>
+    <string name="placeholder_date_minutes_desc">Les minutes actuelles, complétées par des zéros (00-59)</string>
+    <string name="placeholder_date_seconds_desc">Les secondes actuelles, complétées par des zéros (00-59)</string>
 </resources>
