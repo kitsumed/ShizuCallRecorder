@@ -66,8 +66,6 @@ object RecordingFileNameFormatter {
         // Capture a single instant so that {date} and the granular {date:...} sub-fields all describe the same moment.
         val now = Date()
         val dateStr = SimpleDateFormat("yyyyMMdd_HHmmss.SSSZ", Locale.CANADA).format(now)
-
-        // Granular date sub-fields, each backed by a minimal SimpleDateFormat pattern applied to the same instant.
         val dateYearStr = SimpleDateFormat("yyyy", Locale.CANADA).format(now)
         val dateMonthStr = SimpleDateFormat("MM", Locale.CANADA).format(now)
         val dateDayStr = SimpleDateFormat("dd", Locale.CANADA).format(now)
@@ -98,8 +96,6 @@ object RecordingFileNameFormatter {
         }
 
         val baseName = template
-            // Replace the granular date sub-fields before {date}; their tags include the closing brace,
-            // so {date} never partially matches {date:...} and the two stay independent.
             .replace(FileNamePlaceholder.DATE_YEAR.tag, dateYearStr)
             .replace(FileNamePlaceholder.DATE_MONTH.tag, dateMonthStr)
             .replace(FileNamePlaceholder.DATE_DAY.tag, dateDayStr)

@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
@@ -97,10 +100,16 @@ fun FileNameFormatDialog(
 
     AlertDialog(
         title = { Text(stringResource(R.string.settings_file_name_template)) },
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        modifier = Modifier.fillMaxWidth(0.90f),
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
                 OutlinedTextField(
                     value = text,
+                    isError = text.isBlank(),
                     onValueChange = { text = it },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -111,7 +120,6 @@ fun FileNameFormatDialog(
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
-
                 Text(
                     text = descriptions,
                     style = MaterialTheme.typography.bodySmall
@@ -143,7 +151,11 @@ fun FileNameFormatDialog(
                     ) {
                         Text(stringResource(R.string.general_cancel))
                     }
-                    Button(onClick = { onConfirm(text) }) {
+                    Button(
+                        onClick = { onConfirm(text) },
+                        // Disable saving if text is blank
+                        enabled = text.isNotBlank()
+                    ) {
                         Text(stringResource(R.string.general_ok))
                     }
                 }
