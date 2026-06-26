@@ -14,6 +14,7 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -286,10 +287,26 @@ private fun PermissionCard(
     statusOverride: String? = null,
     iconOverride: ImageVector? = null
 ) {
+    // Animate the background container color smoothly
     val containerColor by animateColorAsState(
-        targetValue = if (granted) MaterialTheme.colorScheme.surfaceContainerHigh
-        else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
-        label = "cardColor"
+        targetValue = if (granted) {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+        } else {
+            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f)
+        },
+        animationSpec = tween(durationMillis = 500),
+        label = "cardBackgroundColor"
+    )
+
+    // Animate the status/icon color
+    val statusColor by animateColorAsState(
+        targetValue = if (granted) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.error
+        },
+        animationSpec = tween(durationMillis = 600),
+        label = "cardStatusColor"
     )
 
     ElevatedCard(
@@ -311,19 +328,20 @@ private fun PermissionCard(
                     Spacer(modifier = Modifier.weight(1f))
 
                     Icon(
-                        if (granted) Icons.Default.CheckCircle else Icons.Default.ErrorOutline,
-                        null, Modifier.size(16.dp),
-                        if (!granted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                        imageVector = if (granted) Icons.Default.CheckCircle else Icons.Default.ErrorOutline,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = statusColor // Used the animated color here
                     )
                     Text(
                         text = statusOverride ?: if (granted) stringResource(R.string.permissions_status_granted) else stringResource(R.string.permissions_status_required),
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (!granted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                        color = statusColor, // Used the animated color here
                         fontWeight = FontWeight.Bold
                     )
                 }
             },
-            supportingContent = { Text(description,  style = MaterialTheme.typography.bodySmall) },
+            supportingContent = { Text(description, style = MaterialTheme.typography.bodySmall) },
         )
     }
 }

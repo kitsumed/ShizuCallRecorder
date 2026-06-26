@@ -9,7 +9,11 @@
 package com.kitsumed.shizucallrecorder.ui.screens
 
 import android.content.pm.PackageManager
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,64 +58,6 @@ import java.util.concurrent.TimeUnit
 private val GithubPink = Color(0xFFDB61A2)
 private val GithubGold = Color(0xFFE3B341)
 
-@Composable
-private fun StaggeredFadePop(
-    index: Int,
-    delayPerItem: Int = 80, // Milliseconds between every card animation
-    content: @Composable () -> Unit
-) {
-    val isPreview = LocalInspectionMode.current
-
-    // Shared animation values
-    val alpha = remember { Animatable(if (isPreview) 1f else 0f) }
-    val scale = remember { Animatable(if (isPreview) 1f else 0.85f) } // Starts slightly smaller
-    val translateY = remember { Animatable(if (isPreview) 0f else 100f) } // Starts lower down
-
-    LaunchedEffect(Unit) {
-        if (!isPreview) {
-            // Wait for this item specific turn in the queue
-            delay((index * delayPerItem).toLong())
-
-            // Launch all animations in parallel
-            launch {
-                alpha.animateTo(
-                    targetValue = 1f,
-                    animationSpec = spring(stiffness = Spring.StiffnessLow)
-                )
-            }
-            launch {
-                scale.animateTo(
-                    targetValue = 1f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-            }
-            launch {
-                translateY.animateTo(
-                    targetValue = 0f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier.graphicsLayer {
-            this.alpha = alpha.value
-            this.scaleX = scale.value
-            this.scaleY = scale.value
-            this.translationY = translateY.value
-        }
-    ) {
-        content()
-    }
-}
-
 /**
  * A friendly, non-intrusive screen explaining ways to support the project and the developer.
  *
@@ -125,6 +71,26 @@ fun SponsorScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    // Controls when the footer is shown. It can be triggered by either scrolling down or a timeout.
+    var showFooter by remember { mutableStateOf(false) }
+
+    // Trigger the footer when the user scrolls down a bit
+    LaunchedEffect(scrollState) {
+        snapshotFlow { scrollState.value > 60 } // 60 pixels, Only emits when this boolean condition changes
+            .collect { isScrolledPastThreshold ->
+                if (isScrolledPastThreshold && !showFooter) {
+                    showFooter = true
+                }
+            }
+    }
+
+    // Fallback trigger just in case the screen is unscrollable
+    LaunchedEffect(Unit) {
+        delay(4500) // Wait 4.5 seconds
+        showFooter = true
+    }
+
 
     // Calculate days since first install
     val daysUsed by produceState(initialValue = 0L, key1 = context) {
@@ -298,13 +264,20 @@ fun SponsorScreen(
             }
 
             // Footer / Actions
-            StaggeredFadePop(index = 8) {
-                Column {
+            Column {
+                StaggeredFadePop(index = 8) {
                     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+                }
 
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Waits for scroll, then expands
+                    StaggeredExpandAndSlideUp(
+                        index = 0,
+                        showTrigger = showFooter,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Button(
                             onClick = { context.openGithubSponsor() },
@@ -328,7 +301,14 @@ fun SponsorScreen(
                                 style = MaterialTheme.typography.labelLarge,
                             )
                         }
+                    }
 
+                    // expands after Button 1 (index 1)
+                    StaggeredExpandAndSlideUp(
+                        index = 1,
+                        showTrigger = showFooter,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -476,6 +456,101 @@ fun BioCard() {
         }
     }
 }
+
+@Composable
+private fun StaggeredExpandAndSlideUp(
+    index: Int,
+    showTrigger: Boolean,
+    modifier: Modifier = Modifier,
+    delayPerItem: Int = 140,
+    content: @Composable () -> Unit
+) {
+    val isPreview = LocalInspectionMode.current
+    var isVisible by remember { mutableStateOf(isPreview) }
+
+    // Listens for the parent trigger to flip to true
+    LaunchedEffect(showTrigger) {
+        if (showTrigger && !isPreview && !isVisible) {
+            delay((index * delayPerItem).toLong())
+            isVisible = true
+        }
+    }
+
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = expandVertically(
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+            expandFrom = Alignment.Top
+        ) + slideInVertically(
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+            initialOffsetY = { it }
+        ) + fadeIn(
+            animationSpec = tween(durationMillis = 400)
+        ),
+        modifier = modifier
+    ) {
+        content()
+    }
+}
+
+@Composable
+private fun StaggeredFadePop(
+    index: Int,
+    delayPerItem: Int = 80, // Milliseconds between every card animation
+    content: @Composable () -> Unit
+) {
+    val isPreview = LocalInspectionMode.current
+
+    // Shared animation values
+    val alpha = remember { Animatable(if (isPreview) 1f else 0f) }
+    val scale = remember { Animatable(if (isPreview) 1f else 0.85f) } // Starts slightly smaller
+    val translateY = remember { Animatable(if (isPreview) 0f else 100f) } // Starts lower down
+
+    LaunchedEffect(Unit) {
+        if (!isPreview) {
+            // Wait for this item specific turn in the queue
+            delay((index * delayPerItem).toLong())
+
+            // Launch all animations in parallel
+            launch {
+                alpha.animateTo(
+                    targetValue = 1f,
+                    animationSpec = spring(stiffness = Spring.StiffnessLow)
+                )
+            }
+            launch {
+                scale.animateTo(
+                    targetValue = 1f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+            }
+            launch {
+                translateY.animateTo(
+                    targetValue = 0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier.graphicsLayer {
+            this.alpha = alpha.value
+            this.scaleX = scale.value
+            this.scaleY = scale.value
+            this.translationY = translateY.value
+        }
+    ) {
+        content()
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

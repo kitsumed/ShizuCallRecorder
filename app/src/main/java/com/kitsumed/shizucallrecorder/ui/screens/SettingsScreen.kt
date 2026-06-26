@@ -15,6 +15,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -420,7 +424,22 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
             description     = stringResource(R.string.settings_shizuku_auto_manage_desc)
         )
 
-        AnimatedVisibility(visible = autoManageShizuku,enter = fadeIn() + expandVertically(),exit = fadeOut() + shrinkVertically()) {
+        AnimatedVisibility(
+            visible = autoManageShizuku,
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)) +
+                    expandVertically(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(durationMillis = 450)) +
+                    shrinkVertically(
+                        animationSpec = tween(durationMillis = 450, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
+        ) {
             Column {
                 var textState by remember(shizukuAuthKey) { mutableStateOf(shizukuAuthKey) }
                 var isFocused by remember { mutableStateOf(false) }
@@ -603,8 +622,19 @@ private fun RecordingSection(
         )
         AnimatedVisibility(
             visible = autoRecordIncoming,
-            enter   = fadeIn() +  expandVertically(),
-            exit    = fadeOut() + shrinkVertically()
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)) +
+                    expandVertically(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(durationMillis = 450)) +
+                    shrinkVertically(
+                        animationSpec = tween(durationMillis = 450, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
         ) {
             Column {
                 ToggleListItem(
@@ -637,8 +667,19 @@ private fun RecordingSection(
         )
         AnimatedVisibility(
             visible = autoRecordOutgoing,
-            enter   = fadeIn() +  expandVertically(),
-            exit    = fadeOut() + shrinkVertically()
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)) +
+                    expandVertically(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(durationMillis = 450)) +
+                    shrinkVertically(
+                        animationSpec = tween(durationMillis = 450, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
         ) {
             Column {
                 ToggleListItem(
@@ -776,61 +817,81 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
             description     = if (!isLoggingEnabled) stringResource(R.string.settings_debug_logging_enabled_description) else null
         )
 
-        if (isLoggingEnabled) {
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                Text(
-                    text = stringResource(R.string.settings_debug_logging_title),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Text(
-                    text = stringResource(R.string.settings_debug_logging_steps),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = stringResource(R.string.settings_debug_logging_step_warning),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
-
-                if (isDebugEnabled) {
-                    Spacer(modifier = Modifier.height(5.dp))
+        AnimatedVisibility(
+            visible = isLoggingEnabled,
+            enter = fadeIn(animationSpec = tween(400)) +
+                    expandVertically(
+                        animationSpec = tween(400, easing = LinearOutSlowInEasing),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(300)) +
+                    shrinkVertically(
+                        animationSpec = tween(300, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
+        ) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
-                        text = stringResource(R.string.settings_debug_logging_step_warning_no_redaction),
+                        text = stringResource(R.string.settings_debug_logging_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.settings_debug_logging_steps),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = stringResource(R.string.settings_debug_logging_step_warning),
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.error
                     )
-                }
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = onExportLogs,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(stringResource(R.string.settings_debug_logging_generate_report))
+                    if (isDebugEnabled) {
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(
+                            text = stringResource(R.string.settings_debug_logging_step_warning_no_redaction),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
 
-                    OutlinedButton(
-                        onClick = { context.openGithubReportIssue()},
-                        modifier = Modifier.weight(1f)
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(stringResource(R.string.settings_debug_logging_report_on_github))
+                        Button(
+                            onClick = onExportLogs,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(R.string.settings_debug_logging_generate_report))
+                        }
+
+                        OutlinedButton(
+                            onClick = { context.openGithubReportIssue()},
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(R.string.settings_debug_logging_report_on_github))
+                        }
                     }
                 }
+
             }
         }
-
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
 
         ToggleListItem(
@@ -839,7 +900,20 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
             onCheckedChange = { actions.setDebugEnabled(it) },
             description = stringResource(R.string.settings_debug_mode_description)
         )
-        if (isDebugEnabled) {
+
+        AnimatedVisibility(
+            visible = isDebugEnabled,
+            enter = fadeIn(animationSpec = tween(400)) +
+                    expandVertically(
+                        animationSpec = tween(400, easing = LinearOutSlowInEasing),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(300)) +
+                    shrinkVertically(
+                        animationSpec = tween(300, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
+        ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -868,6 +942,7 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
                 )
                 DebugActionGrid(actions)
             }
+
         }
     }
 }
@@ -953,8 +1028,19 @@ private fun IgnoreContactsOptions(
                 )
             }
         }
-
-        if (selectedEnum == AppPreferences.IgnoreContactsMode.SELECTED) {
+        AnimatedVisibility(
+            visible = selectedEnum == AppPreferences.IgnoreContactsMode.SELECTED,
+            enter = fadeIn(animationSpec = tween(400)) +
+                    expandVertically(
+                        animationSpec = tween(400, easing = LinearOutSlowInEasing),
+                        expandFrom = Alignment.Top
+                    ),
+            exit = fadeOut(animationSpec = tween(300)) +
+                    shrinkVertically(
+                        animationSpec = tween(300, easing = LinearOutSlowInEasing),
+                        shrinkTowards = Alignment.Top
+                    )
+        ) {
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick  = onSelectContacts,
