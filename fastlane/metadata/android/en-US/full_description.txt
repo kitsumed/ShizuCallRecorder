@@ -1,56 +1,23 @@
-<p><b>ShizuCallRecorder</b> is the first <b>non-root FOSS call recorder app for Android 11+</b>. It empowers ADB through Shizuku to use an advanced list of permissions granted to the shell application (<a href="https://android.googlesource.com/platform/frameworks/base/+/android16-release/packages/Shell/AndroidManifest.xml">Shell AndroidManifest</a>).</p>
-
-<p>Latest URL: <a href="https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml">View latest source</a></p>
+<b>ShizuCallRecorder</b> is the first <b>non-root FOSS call recorder app for Android 11+</b>. It empowers ADB through Shizuku to use an advanced list of permissions granted to the shell application (<a href="https://android.googlesource.com/platform/frameworks/base/+/android16-release/packages/Shell/AndroidManifest.xml">Shell AndroidManifest</a>).
+Latest ShellManifest URL: <a href="https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml">View latest source</a>
 
 <p><b>Features</b></p>
-<ul>
-  <li>Records <b>both sides of phone calls</b> (incoming and outgoing)
-    <ul>
-      <li>Should work even when using Bluetooth or a remote headset</li>
-    </ul>
-  </li>
-  <li><b>Security toggles</b> to manage Shizuku on/off state
-    <ul>
-      <li>Helps reduce the potential attack surface introduced by Shizuku</li>
-      <li>Helps with apps that detect or warn when USB debugging or Shizuku is enabled</li>
-    </ul>
-  </li>
-  <li><b>Automatic call recording</b> option with basic exclusion rules:
-    <ul>
-      <li>Ignore anonymous calls</li>
-      <li>Ignore specific contacts</li>
-      <li>Ignore all contacts</li>
-    </ul>
-  </li>
-  <li>Saves recordings using <b>Opus</b> or <b>AAC</b> codec</li>
-  <li>The app runs only on phone event changes, with no persistent background process and no notifications</li>
-</ul>
+<ul><li>Records <b>both sides of phone calls</b> (incoming and outgoing)<ul><li>Should work even when using Bluetooth or a remote headset</li></ul></li><li><b>Security toggles</b> to manage Shizuku on/off state<ul><li>Helps reduce the potential attack surface introduced by Shizuku</li><li>Helps with apps that detect or warn when USB debugging or Shizuku is enabled</li></ul></li><li><b>Automatic call recording</b> option with basic exclusion rules:<ul><li>Ignore anonymous calls</li><li>Ignore specific contacts</li><li>Ignore all contacts</li></ul></li><li>Saves recordings using <b>Opus</b> or <b>AAC</b> codec</li><li>The app runs only on phone event changes, with no persistent background process and no notifications</li></ul>
 
 <p><b>Requirements</b></p>
-<ul>
-  <li><b>Android 11</b> or newer</li>
-  <li>See the <b>Android Tested Versions</b> table on <a href="https://github.com/kitsumed/ShizuCallRecorder#requirements">GitHub</a> for more information on limitations</li>
-  <li><a href="https://github.com/thedjchi/Shizuku">Shizuku</a> (recommended fork: <a href="https://github.com/thedjchi">thedjchi</a>)</li>
-</ul>
+<ul><li><b>Android 11</b> or newer</li><li>See the <b>Android Tested Versions</b> table on <a href="https://github.com/kitsumed/ShizuCallRecorder#requirements">GitHub</a> for more information on limitations</li><li><a href="https://github.com/thedjchi/Shizuku">Shizuku</a> (recommended fork: <a href="https://github.com/thedjchi">thedjchi</a>)</li></ul>
 
 <p><b>Installation</b></p>
-<p>Please follow the installation instructions in the <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/docs/SUPPORT.md">SUPPORT documentation</a>, under <b>Installation &amp; Configuration</b>.</p>
+Please follow the installation instructions in the <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/docs/SUPPORT.md">SUPPORT documentation</a>, under <b>Installation &amp; Configuration</b>.
 
-<p><b>Please note that the official release source is GitHub. Builds are signed with my key, immutable, and attested so you can track them back to the Github Runner (Build CI). F-Droid builds are provided for convenience, but are build and signed by F-Droid, they could have been tampered with.</b></p>
+<b>Please note that the official release source is GitHub. Builds are signed with my key, immutable, and attested so you can track them back to the Github Runner (Build CI). F-Droid builds are provided for convenience, but are build and signed by F-Droid, they could have been voluntarily or involuntarily tampered with at any point during build process. I recommend you use Github builds.</b>
+
 
 <p><b>Support the Project</b></p>
-
 <p>If you find <b>ShizuCallRecorder</b> useful and want to support its development, you can contribute in several ways:</p>
-
-<ul>
-  <li>Contribute to the project on GitHub: <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/CONTRIBUTING.md">Contributing Guide</a></li>
-  <li>Support ongoing development via GitHub Sponsors: <a href="https://github.com/sponsors/kitsumed">Sponsor kitsumed</a></li>
-</ul>
+<ul><li>Contribute to the project on GitHub: <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/CONTRIBUTING.md">Contributing Guide</a></li><li>Support ongoing development via GitHub Sponsors: <a href="https://github.com/sponsors/kitsumed">Sponsor kitsumed</a></li></ul>
 
 <p><b>Disclaimer</b></p>
-
-<p><b>Recording phone calls may be subject to complex and varying laws in different countries and jurisdictions.</b> For example, you may need to <b>ensure you have consent</b> from all parties before recording conversations. The <b>developers and contributors are not responsible</b> for any misuse or legal consequences arising from the use of this application.</p>
-
+<p><b>Recording phone calls may be subject to complex and varying laws in different countries and jurisdictions.</b></p> <p>For example, you may need to <b>ensure you have consent</b> from all parties before recording conversations.The <b>developers and contributors are not responsible</b> for any misuse or legal consequences arising from the use of this application.</p>
 <p>You can <b>learn more on Wikipedia at</b>: <a href="https://en.wikipedia.org/wiki/Telephone_call_recording_laws">Telephone call recording laws</a>.</p>
-
-<p><b>If you are legally required to inform or ask someone for consent before recording</b>, please note that the application <b>DOES NOT handle this for you</b>. In some cases, certain features, like automatic call recording, may not be legally allowed. It is your responsibility to ensure compliance with applicable laws. <b>This is not legal advice</b>. Please <b>consult a legal professional for guidance</b> regarding your specific situation.</p>
+<b>If you are legally required to inform or ask someone for consent before recording</b>, please note that the application <b>DOES NOT handle this for you</b>. In some cases, certain features, like automatic call recording, may not be legally allowed. It is your responsibility to ensure compliance with applicable laws. <b>This is not legal advice</b>. Please <b>consult a legal professional for guidance</b> regarding your specific situation.
