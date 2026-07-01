@@ -25,6 +25,7 @@
     <string name="general_reset">Reset</string>
     <string name="general_system_limitation">System Limitation</string>
     <string name="general_system_limitation_message">ShizuCallRecorder will not work on this device as your shell application does not have the required permissions:\n\n%1$s\n\nThere is nothing you can do about this, the app cannot function and will now close.</string>
+    <string name="general_permission_escalation_exhausted">Failed to gain \'%1$s\' permission \'%2$s\'.\nAll escalation steps (%3$d) were exhausted.\n\nYour OEM may be actively blocking or reverting all of our permission changes. Please look into your phone settings to see if there is anything that could disable that behavior.\n\nDevices from Vivo, Oppo, Xiaomi, and other Chinese vendors often include aggressive system restrictions that may completely block access to this permission.\n\nIf you find a way to grant yourself the required permission manually with ADB, please report it to us by creating an issue on GitHub!</string>
 
     <!-- ========================================== -->
     <!-- UI SECTIONS                                -->

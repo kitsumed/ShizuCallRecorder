@@ -16,6 +16,7 @@ import android.provider.Settings
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
 import com.kitsumed.shizucallrecorder.onboarding.OnboardingStatus
@@ -26,6 +27,8 @@ import com.kitsumed.shizucallrecorder.system.permissions.AppPermission
 import com.kitsumed.shizucallrecorder.ui.screens.PermissionsScreen
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -48,6 +51,17 @@ class PermissionsViewModel(application: Application) : AndroidViewModel(applicat
 
     /** AppPreferences instance for accessing user preferences. */
     private val preferences = AppPreferences(appContext)
+
+
+    /** MutableStateFlow to track whether a permission request is currently being processed. */
+    private val _isProcessingGrantingRequest = MutableStateFlow(false)
+    /** Processing state of permission request as a read-only StateFlow for UI observation. */
+    val isProcessingGrantingRequest = _isProcessingGrantingRequest.asStateFlow()
+
+    /** MutableStateFlow to hold any error messages that may occur during permission requests. */
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    /** Read-only StateFlow for observing error messages in the UI. To be hidden when null */
+    val errorMessage = _errorMessage.asStateFlow()
 
 
     /**
@@ -95,19 +109,23 @@ class PermissionsViewModel(application: Application) : AndroidViewModel(applicat
             status.callDetectionModeGrantedPermissions.contains(currentPermission)
         }
 
-        // Process the first missing dynamic permission
         when (val nextToRequest = missingPermissions.first()) {
-            is AppPermission.Runtime -> requestRuntimePermission(nextToRequest.manifestString)
-            is AppPermission.AppOp -> {
+            is AppPermission.Runtime -> {
+                requestRuntimePermission(nextToRequest.manifestString)
+            }
+            is AppPermission.Elevated -> {
+                _isProcessingGrantingRequest.value = true
                 viewModelScope.launch(Dispatchers.IO) {
-                    // The AppOpsManager operation string is in the format "android:permission_name", but our grantAppOp function expects just the permission name
-                    val permissionName = nextToRequest.opString.substringAfter("android:").uppercase()
-                    AppLogger.d(TAG, "Trying to grant AppOps permission: $permissionName. Source opString: ${nextToRequest.opString}")
-                    val appOpsGranted = ShizukuConnectionManager.grantAppOp(appContext, permissionName)
-                    //TODO: Add error message when appOpsGranted is false, so the user knows something went wrong
-                    if (appOpsGranted) {
-                        //Go back on the UI thread to trigger a refresh and show the new permission state.
-                        withContext(Dispatchers.Main) { onPermissionGranted() }
+                    // Attempt to grant the elevated permission via Shizuku.
+                    val success = nextToRequest.grant(appContext)
+                    withContext(Dispatchers.Main) {
+                        _isProcessingGrantingRequest.value = false
+                        if (!success) {
+                            AppLogger.w(TAG, "Failed to grant elevated permission with Shizuku.")
+                            _errorMessage.value = appContext.getString(R.string.general_permission_escalation_exhausted, nextToRequest::class.simpleName, nextToRequest.permissionIdentifier, nextToRequest.escalationAttemptsChain.count())
+                        }
+                        // Refresh the UI to show potential changes
+                        onPermissionGranted()
                     }
                 }
             }
@@ -122,5 +140,12 @@ class PermissionsViewModel(application: Application) : AndroidViewModel(applicat
      */
     fun onCallDetectionModeChanged(newMode: CallDetectionMode) {
         preferences.setCallDetectionMode(newMode)
+    }
+
+    /**
+     * Dismisses the current error message.
+     */
+    fun dissmissError() {
+        _errorMessage.value = null
     }
 }

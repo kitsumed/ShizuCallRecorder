@@ -8,6 +8,7 @@
 
 package com.kitsumed.shizucallrecorder.services.callDetection
 
+import android.Manifest
 import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.ImportantDevices
 import androidx.compose.material.icons.filled.Phone
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.system.permissions.AppPermission
+import com.kitsumed.shizucallrecorder.system.permissions.EscalationStep
 
 /**
  * Defines the various modes of call detection available in the app, along with their associated metadata such as API level requirements and component class names.
@@ -45,13 +47,13 @@ enum class CallDetectionMode(
         componentClassName = "com.kitsumed.shizucallrecorder.services.callDetection.phoneState.PhoneStateReceiver",
         requiredPermissions = setOf(
             AppPermission.Runtime(
-                manifestString = android.Manifest.permission.READ_PHONE_STATE,
+                manifestString = Manifest.permission.READ_PHONE_STATE,
                 titleResId = R.string.permission_phone_state_label,
                 descriptionResId = R.string.permission_phone_state_description,
                 icon = Icons.Default.Phone
             ),
             AppPermission.Runtime(
-                manifestString = android.Manifest.permission.READ_CALL_LOG,
+                manifestString = Manifest.permission.READ_CALL_LOG,
                 titleResId = R.string.permission_call_log_label,
                 descriptionResId = R.string.permission_call_log_description,
                 icon = Icons.Default.History
@@ -66,11 +68,20 @@ enum class CallDetectionMode(
         descriptionResId = R.string.call_detection_mode_incallservice_description,
         componentClassName = "com.kitsumed.shizucallrecorder.services.callDetection.incall.InCallService",
         requiredPermissions = setOf(
-            AppPermission.AppOp(
+            AppPermission.Elevated.AppOp(
                 opString = "android:manage_ongoing_calls", // AppOpsManager.OPSTR_MANAGE_ONGOING_CALLS - https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/app/AppOpsManager.java;l=2202
                 titleResId = R.string.permission_manage_ongoing_calls_label,
                 descriptionResId = R.string.permission_manage_ongoing_calls_description,
-                icon = Icons.Default.ImportantDevices
+                icon = Icons.Default.ImportantDevices,
+                escalationAttemptsChain = listOf(
+                    // AppOps are the least privileged granted, so we try them first. Only available on Android 12+
+                    EscalationStep.PackageAppOp(opString = "android:manage_ongoing_calls", minApi = 31, maxApi = Int.MAX_VALUE),
+                    EscalationStep.UidAppOp(opString = "android:manage_ongoing_calls", minApi = 31, maxApi = Int.MAX_VALUE),
+                    // Some chinese ROMs (like Vivo, Oppo, Xiaomi) have very aggressive permission management and system monitoring apps, we try more open fallbacks.
+                    // See: https://github.com/kitsumed/ShizuCallRecorder/issues/41
+                    EscalationStep.RoleGrant(roleName = "COMPANION_DEVICE_GLASSES", minApi = 34, maxApi = Int.MAX_VALUE), // Prioritize glasses on Android 14+ as they have a little bit less permission...
+                    EscalationStep.RoleGrant(roleName = "COMPANION_DEVICE_WATCH", minApi = 31, maxApi = Int.MAX_VALUE),
+                )
             ),
         )
     );

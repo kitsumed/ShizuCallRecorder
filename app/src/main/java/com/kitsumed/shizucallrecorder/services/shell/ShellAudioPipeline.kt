@@ -31,6 +31,27 @@ import java.io.InterruptedIOException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * ShellAudioPipeline manages the audio-capture pipeline in the shell process.
+ * AI generated Overview:
+ *
+ *   ┌─────────────────────────────────────────────────────────────┐
+ *   │  Shell Process (UID 2000 or 0)                              │
+ *   │                                                             │
+ *   │  ShellService --> AudioPipeline (this class)                │
+ *   │    │                                                        │
+ *   │    ├── launches  scrcpy-server (app_process)                │
+ *   │    │     └── connects to  LocalServerSocket                 │
+ *   │    │                          │                             │
+ *   │    ├── AudioRelayCoroutine ◄──┘  (socket → pipe)            │
+ *   │    │         │                                              │
+ *   │    │     Pipe[1] write-end (kept in Shell)                  │
+ *   │    │     Pipe[0] read-end  ───────────────► App Process     │
+ *   │    │                                          ScrcpyClient  │
+ *   │    ├── LogConsumerCoroutine   (drain stdout)                │
+ *   │    └── ProcessMonitorCoroutine (wait for exit)              │
+ *   └─────────────────────────────────────────────────────────────┘
+ */
 class ShellAudioPipeline {
     private companion object {
         const val TAG = "SCR:ShellAudioPipeline"

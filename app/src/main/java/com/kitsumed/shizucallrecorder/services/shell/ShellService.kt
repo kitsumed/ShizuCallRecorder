@@ -9,63 +9,21 @@
 package com.kitsumed.shizucallrecorder.services.shell
 
 import android.content.Context
-import android.net.LocalServerSocket
-import android.net.LocalSocket
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.annotation.Keep
 import com.kitsumed.shizucallrecorder.ILogCallback
 import com.kitsumed.shizucallrecorder.IShellService
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ServerExtractor
 import com.kitsumed.shizucallrecorder.utils.AppLogger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeoutOrNull
-import java.io.File
-import java.io.IOException
-import java.io.InterruptedIOException
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.system.exitProcess
 
 /**
  * ShellService runs inside the privileged shell process (UID 2000 or 0) managed by Shizuku.
  *
- * By running under the app shell as ADB or root via Shizuku, we can
- * launch scrcpy-server with app_process and capture audio that a normal app cannot access.
- *
- * AI generated Overview:
- *
- *   ┌─────────────────────────────────────────────────────────────┐
- *   │  Shell Process (UID 2000 or 0)                              │
- *   │                                                             │
- *   │  ShellService (this class, AIDL stub)                       │
- *   │    │                                                        │
- *   │    ├── launches  scrcpy-server (app_process)                │
- *   │    │     └── connects to  LocalServerSocket                 │
- *   │    │                          │                             │
- *   │    ├── AudioRelayCoroutine ◄──┘  (socket → pipe)            │
- *   │    │         │                                              │
- *   │    │     Pipe[1] write-end (kept in Shell)                  │
- *   │    │     Pipe[0] read-end  ───────────────► App Process     │
- *   │    │                                          ScrcpyClient  │
- *   │    ├── LogConsumerCoroutine   (drain stdout)                │
- *   │    └── ProcessMonitorCoroutine (wait for exit)              │
- *   └─────────────────────────────────────────────────────────────┘
- *
  * Shizuku requirements:
- *  • Must have a no-arg constructor AND a single-Context constructor (Shizuku v13+).
- *  • Must be annotated with [@Keep] so ProGuard/R8 does not remove/rename the class.
- *  • [destroy] must call [kotlin.system.exitProcess] to terminate the shell process when Shizuku asks.
+ *  - Must have a no-arg constructor AND a single-Context constructor (Shizuku v13+).
+ *  - Must be annotated with [@Keep] so ProGuard/R8 does not remove/rename the class.
+ *  - [destroy] must call [kotlin.system.exitProcess] to terminate the shell process when Shizuku asks.
  */
 @Keep
 class ShellService : IShellService.Stub {
@@ -74,6 +32,7 @@ class ShellService : IShellService.Stub {
     }
 
     private val audioPipeline by lazy { ShellAudioPipeline() }
+    private val commandExecutor by lazy { ShellCommandExecutor() }
 
     // ---- Shizuku-required constructors
 
@@ -98,15 +57,17 @@ class ShellService : IShellService.Stub {
 
     // -------- IShellService AIDL implementation
 
+    override fun setLogCallback(listener: ILogCallback, isRedactionEnabled: Boolean) {
+        AppLogger.initAsRemote(listener, isRedactionEnabled)
+    }
+
     override fun startRecording(
         audioSource: String,
         audioCodec: String,
         audioBitRate: Int,
         serverPath: String,
-        isDebuggingModeEnabled: Boolean,
-        listener: ILogCallback
+        isDebuggingModeEnabled: Boolean
     ): ParcelFileDescriptor? {
-        AppLogger.initAsRemote(listener, isDebuggingModeEnabled)
         return audioPipeline.startCapture(audioSource, audioCodec, audioBitRate, serverPath, isDebuggingModeEnabled)
     }
 
@@ -114,21 +75,18 @@ class ShellService : IShellService.Stub {
         audioPipeline.stopCapture()
     }
 
-    override fun grantAppOps(packageName: String, opName: String, userProfileId: Int): Boolean {
-        try {
-            AppLogger.i(TAG, "Executing AppOps set --user $userProfileId $packageName $opName allow")
-            val process = ProcessBuilder("appops", "set", "--user", userProfileId.toString(), packageName, opName, "allow").start()
-            val errorOutput = process.errorStream.bufferedReader().readText().trim()
-            val inputOutput = process.inputStream.bufferedReader().readText().trim()
-            val exitCode = process.waitFor()
-            AppLogger.i(TAG, "grantAppOps completed with exit code $exitCode. Output: ${inputOutput.ifBlank { "Empty" }}, Error: ${errorOutput.ifBlank { "Empty" }}")
-            // We return false if the exit code is non-zero or if there was any error output, indicating that the operation failed.
-            return (exitCode == 0 && errorOutput.isBlank())
-        } catch (e: Exception) {
-            AppLogger.e(TAG, "Error granting AppOps $opName to $packageName: ${e.message}", e)
-        }
-        return false
+    override fun grantAppOpByPackage(packageName: String, opName: String, userProfileId: Int): Boolean {
+        return commandExecutor.grantAppOpByPackage(packageName, opName, userProfileId)
     }
+
+    override fun grantAppOpByUid(uid: Int, opName: String, userProfileId: Int): Boolean {
+        return commandExecutor.grantAppOpByUid(uid, opName, userProfileId)
+    }
+
+    override fun grantRole(packageName: String, roleName: String, userProfileId: Int): Boolean {
+        return commandExecutor.grantRole(packageName, roleName, userProfileId)
+    }
+
 
     /**
      * Called by Shizuku when it wants to shut down this user service.

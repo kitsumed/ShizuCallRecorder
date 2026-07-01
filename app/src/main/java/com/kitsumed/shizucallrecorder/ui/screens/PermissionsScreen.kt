@@ -9,7 +9,6 @@
 package com.kitsumed.shizucallrecorder.ui.screens
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,6 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
@@ -73,6 +74,9 @@ fun PermissionsScreen(
 
     val activityContext = LocalContext.current
 
+    val isProcessingGrantingRequest by viewModel.isProcessingGrantingRequest.collectAsStateWithLifecycle()
+    val errorMessage by viewModel.errorMessage.collectAsStateWithLifecycle()
+
     // Permission launchers must live inside a composable - the system dialog can only be
     // triggered from a composable context.  We pass these into the ViewModel as lambdas so
     // the ViewModel never needs to import Compose or hold a UI reference.
@@ -103,8 +107,7 @@ fun PermissionsScreen(
         if (ShizukuConnectionManager.isAvailable()) {
             // If Shizuku server is running, just ensure we have all required permissions on the Shell app level. If not, then the app won't work.
             val requiredPermissions = listOf(
-                Manifest.permission.CAPTURE_AUDIO_OUTPUT,
-                "android.permission.MANAGE_APP_OPS_MODES" // Manifest.permission.MANAGE_APP_OPS_MODES is hidden in public API
+                Manifest.permission.CAPTURE_AUDIO_OUTPUT
             )
 
             val missingPermissions = requiredPermissions.filter {
@@ -117,16 +120,38 @@ fun PermissionsScreen(
 
                 val dialogMessage = stringResource(R.string.general_system_limitation_message, cleanPermissionsString)
 
-                AlertDialog.Builder(activityContext)
-                    .setTitle(R.string.general_system_limitation)
-                    .setMessage(dialogMessage)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setCancelable(false)
-                    .setPositiveButton(stringResource(R.string.general_ok)) { _, _ ->
-                        exitProcess(0)
-                    }.show()
+                AlertDialog(
+                    onDismissRequest = { exitProcess(0) },
+                    title = { Text(text = stringResource(R.string.general_system_limitation)) },
+                    text = { Text(text = dialogMessage) },
+                    confirmButton = {
+                        TextButton(onClick = { exitProcess(0) }) {
+                            Text(text = stringResource(R.string.general_close))
+                        }
+                    },
+                    dismissButton = null,
+                    properties = DialogProperties(
+                        dismissOnBackPress = false,
+                        dismissOnClickOutside = false,
+                    ),
+                    icon = { Icon(Icons.Default.Warning, contentDescription = null) }
+                )
             }
         }
+    }
+
+    if (errorMessage != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dissmissError() },
+            title = { Text(text = stringResource(R.string.general_system_limitation)) },
+            text = { Text(text = errorMessage.toString()) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.dissmissError() }) {
+                    Text(text = stringResource(R.string.general_close))
+                }
+            },
+            icon = { Icon(Icons.Default.ErrorOutline, contentDescription = null) }
+        )
     }
 
     PermissionsContent(
@@ -143,6 +168,7 @@ fun PermissionsScreen(
             viewModel.onCallDetectionModeChanged(newMode)
             onPermissionGranted() // Refresh the UI after changing the mode
         },
+        isProcessingGrantingRequest = isProcessingGrantingRequest,
         modifier = modifier
     )
 }
@@ -168,9 +194,9 @@ fun PermissionsContent(
     status: OnboardingStatus.Status,
     onGrantAccessButtonClick: () -> Unit,
     onCallDetectionModeChanged: (CallDetectionMode) -> Unit,
-    modifier: Modifier = Modifier
+    isProcessingGrantingRequest: Boolean,
+    modifier: Modifier = Modifier,
 ) {
-
     Surface(
         modifier = modifier
             .navigationBarsPadding()
@@ -290,15 +316,24 @@ fun PermissionsContent(
             Button(
                 onClick = onGrantAccessButtonClick,
                 modifier = Modifier.fillMaxWidth(),
+                enabled = !isProcessingGrantingRequest,
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text(
-                    text = when {
-                        status.isComplete()       -> stringResource(R.string.general_continue)
-                        !status.shizukuRunning    -> stringResource(R.string.permission_shizuku_open)
-                        else                      -> stringResource(R.string.permissions_grant_access)
-                    }
-                )
+                if (isProcessingGrantingRequest) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(22.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = when {
+                            status.isComplete()       -> stringResource(R.string.general_continue)
+                            !status.shizukuRunning    -> stringResource(R.string.permission_shizuku_open)
+                            else                      -> stringResource(R.string.permissions_grant_access)
+                        }
+                    )
+                }
             }
         }
     }
@@ -389,6 +424,7 @@ private fun PermissionsScreenPreview() {
             ),
             onGrantAccessButtonClick = {},
             onCallDetectionModeChanged = { },
+            isProcessingGrantingRequest = false
         )
     }
 }

@@ -162,8 +162,7 @@ class AudioRecordingEngine {
                 codecEnum.cliKey,
                 bitRate,
                 serverPath,
-                preferences.isDebugEnabled(),
-                AppLogger.callback
+                preferences.isDebugEnabled()
             )
         } catch (e: Exception) {
             throw PipelineInitializationException(
