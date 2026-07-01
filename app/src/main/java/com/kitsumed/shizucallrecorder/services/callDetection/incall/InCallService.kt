@@ -138,11 +138,16 @@ class InCallService : InCallService() {
         }
     }
 
+    /**
+     * Handles the state change of the tracked call. If the call becomes active, it triggers the [RecordingDecisionEngine] pipeline to determine if recording should start.
+     * @param call The [Call] object whose state has changed.
+     * @param state A duplicate of `call.details.state`, provided for convenience. This is here to match the signature of the [Call.Callback.onStateChanged] method.
+     */
     private fun handleCallStateChanged(call: Call, state: Int) {
-        AppLogger.v(TAG, "Received onStateChanged callback for call: ${call.details}, new state: $state")
+        AppLogger.v(TAG, "Received onStateChanged callback for call: ${call.details}, current state: $state")
         // Restrict state change handling to the primary tracked call. This prevents issues with parallel calls (not supported in this implementation).
         if (call != activeTrackedCall) return
-        AppLogger.d(TAG, "Primary call state changed to from ${Connection.stateToString(call.details.state)} (${call.details.state}) to ${Connection.stateToString(state)} (${state})")
+        AppLogger.d(TAG, "Primary call state changed to ${Connection.stateToString(call.details.state)} (${call.details.state})")
 
 
 
