@@ -174,4 +174,5 @@
     <string name="placeholder_date_hours_desc">L\'heure actuelle, au format 24 heures et complété par des zéros (00-23)</string>
     <string name="placeholder_date_minutes_desc">Les minutes actuelles, complétées par des zéros (00-59)</string>
     <string name="placeholder_date_seconds_desc">Les secondes actuelles, complétées par des zéros (00-59)</string>
+    <string name="general_permission_escalation_exhausted">Impossible d\'obtenir l\'autorisation \'%2$s\' de type \'%1$s\'.\nToutes les étapes d\'élévation de permission (%3$d) ont été épuisées.\n\nIl se peut que votre fabricant bloque ou réinitialise activement toutes nos modifications de permissions. Veuillez vérifier les paramètres de votre téléphone pour voir s\'il existe un paramètre susceptible de désactiver ce comportement.\n\nLes appareils de Vivo, Oppo, Xiaomi et d\'autres fabricants chinois intègrent souvent des restrictions système strictes qui peuvent bloquer complètement l\'accès à cette autorisation.\n\nSi vous trouvez comment vous accorder manuellement l\'autorisation requise via ADB, merci de nous informer en créant un ticket sur GitHub !</string>
 </resources>
