@@ -168,4 +168,10 @@
     <string name="placeholder_caller_name_desc">Nazwa dzwoniącego, najpierw sprawdza listę kontaktów, a w przypadku braku dopasowania korzysta z usługi Caller ID operatora, jeśli jest dostępna</string>
     <string name="placeholder_package_name_desc">Nazwa lub nazwa pakietu aplikacji, która zainicjowała połączenie.</string>
     <string name="settings_open_github_Wiki">Otwórz Wiki</string>
+    <string name="placeholder_date_year_desc">Bieżący rok (np. 2026)</string>
+    <string name="placeholder_date_month_desc">Bieżący miesiąc, dwucyfrowy (01-12)</string>
+    <string name="placeholder_date_day_desc">Bieżący dzień miesiąca, dwucyfrowy (01-31)</string>
+    <string name="placeholder_date_hours_desc">Bieżąca godzina w formacie 24-godzinnym, dwucyfrowa (00-23)</string>
+    <string name="placeholder_date_minutes_desc">Bieżąca minuta, dwucyfrowa (00-59)</string>
+    <string name="placeholder_date_seconds_desc">Bieżąca sekunda, dwucyfrowa (00-59)</string>
 </resources>
