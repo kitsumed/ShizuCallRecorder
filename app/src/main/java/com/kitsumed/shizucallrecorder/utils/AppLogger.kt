@@ -328,14 +328,7 @@ object AppLogger {
      * before it gets committed to physical storage.
      */
     private fun redact(msg: String): String {
-        val phoneRedactionRegex = Regex(
-            "(?<!\\d)" +              // Negative Lookbehind: Don't start in the middle of another number
-                    "(?:\\+?\\d{1,3}[-.\\s]?)?" + // Optional Country Code (e.g., +1 or 33)
-                    "(?:\\(\\d{1,4}\\)|\\d{1,4})" + // Area code (with or without parentheses)
-                    "[-.\\s]?\\d{3,4}" +      // Prefix
-                    "[-.\\s]?\\d{3,4}" +      // Line number
-                    "(?!\\d)"                 // Negative Lookahead: Don't end in the middle of another number
-        )
+        val phoneRedactionRegex = Regex("(?<!\\d)(?:\\+?(?:\\d[-.\\s]?){8,14}\\d)(?!\\d)")
         return msg.replace(phoneRedactionRegex, "[PHONE_REDACTED]")
     }
 
