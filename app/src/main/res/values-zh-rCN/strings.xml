@@ -159,8 +159,8 @@
     <string name="sponsor_way_contribute_title">支持此项目</string>
     <string name="sponsor_way_contribute_description">为代码、错误日志或翻译等方面提供帮助。</string>
     <string name="sponsor_way_share_title">分享此App</string>
-    <string name="settings_call_detection_method_warning_title">关于我能力有限的提醒</string>
-    <string name="call_detection_mode_phonestate_description">用一个已经弃用的Android接口来确定手机的状态。此模式下，不同的系统环境很有可能会导致出现意外情况，并且能够获取到的信息也有限。</string>
+    <string name="settings_call_detection_method_warning_title">此模式受限较多</string>
+    <string name="call_detection_mode_phonestate_description">将会使用一个已经弃用的Android接口来确定手机的状态。此模式下，不同的系统环境很有可能会导致出现意外情况，并且能够获取到的信息也有限。</string>
     <string name="call_detection_mode_phonestate_limited_support">用这种方法来检测通话状态是不可靠的。在检测通话状态的变化时会通过一个已经弃用的Android接口，不同的系统环境可能会导致出现不同的问题。另外，此模式下也无法区分运营商电话和V-o-I-P通话。不过，您可以通过在录音条件中忽略匿名呼叫来排除V-o-I-P的通话。</string>
     <string name="call_detection_mode_incallservice_description">采用最新的 InCallService API。这种模式更加稳定，并且能够读取到的信息也更多、更准确。</string>
     <string name="settings_record_third_party_calls">录制V-o-I-P的电话</string>&gt;
@@ -168,4 +168,11 @@
     <string name="placeholder_caller_name_desc">来电显示（优先依照本地的通讯录，如无对应结果则会以运营商的来电识别为准）</string>
     <string name="placeholder_package_name_desc">发起通话的App名称或包名。</string>
     <string name="settings_open_github_Wiki">打开项目Wiki</string>
+    <string name="placeholder_date_year_desc">当前年（格式示例：2026）</string>
+    <string name="placeholder_date_month_desc">当前月（请输入严格两位数，格式：01）</string>
+    <string name="placeholder_date_day_desc">当前日（请输入严格两位数，格式：01）</string>
+    <string name="placeholder_date_hours_desc">当前时（严格两位数，范围：00~23）</string>
+    <string name="placeholder_date_minutes_desc">当前分（严格两位数，范围：00~59）</string>
+    <string name="placeholder_date_seconds_desc">当前秒（严格两位数，范围：00~59）</string>
+    <string name="general_permission_escalation_exhausted">无法获取“%1$s”权限“%2$s”。\n已用尽所有权限提升步骤（%3$d）。\n\n您的设备制造商（OEM）可能正在主动阻止或撤销我们对权限所做的所有更改。请检查手机设置，看看是否有任何选项会导致这种行为。\n\nVivo、Oppo、小米以及其他中国厂商的设备通常带有较为严格的系统限制，可能会完全阻止对此权限的访问。\n\n如果您找到了通过 ADB 手动授予所需权限的方法，请通过在 GitHub 上创建 Issue 告诉我们！</string>
 </resources>
