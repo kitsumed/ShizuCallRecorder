@@ -13,6 +13,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import androidx.documentfile.provider.DocumentFile
+import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
@@ -22,7 +23,6 @@ import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioMuxer
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyClient
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ServerExtractor
 import com.kitsumed.shizucallrecorder.system.storage.SafHelper
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
@@ -146,13 +146,7 @@ class AudioRecordingEngine {
         currentRecordingUri = safResult.uri
         outputPfd = safResult.descriptor
 
-        val serverPath = ScrcpyConfig.getServerPath(context)
-        if (!ServerExtractor.ensureServerFile(context, serverPath)) {
-            throw PipelineInitializationException(
-                userFriendlyMessage = context.getString(R.string.recording_error_server_missing),
-                technicalLogMessage = "scrcpy-server missing or SHA256 check was invalid at $serverPath"
-            )
-        }
+        val serverPath = installServerForShell(context, service)
 
         scrcpyAudioMuxer = ScrcpyAudioMuxer(outputPfd!!.fileDescriptor, safResult.displayName)
 
@@ -220,6 +214,58 @@ class AudioRecordingEngine {
                 AppLogger.w(TAG, "Audio reader ended: ${e.message}")
             }
         }
+    }
+
+    private fun installServerForShell(context: Context, service: IShellService): String {
+        val serverPath = ScrcpyConfig.getShellServerPath()
+        val pipe = ParcelFileDescriptor.createPipe()
+        val readEnd = pipe[0]
+        val writeEnd = pipe[1]
+        var writerFailure: Throwable? = null
+
+        val writerThread = Thread({
+            try {
+                context.assets.open(BuildConfig.SCRCPY_SERVER_ASSET_NAME).use { input ->
+                    ParcelFileDescriptor.AutoCloseOutputStream(writeEnd).use { output ->
+                        input.copyTo(output)
+                    }
+                }
+            } catch (t: Throwable) {
+                writerFailure = t
+                runCatching { writeEnd.close() }
+            }
+        }, "ScrcpyServerPipeWriter")
+
+        writerThread.start()
+        val installed = try {
+            service.installServerFile(readEnd, serverPath)
+        } catch (e: Exception) {
+            throw PipelineInitializationException(
+                userFriendlyMessage = context.getString(R.string.recording_error_server_missing),
+                technicalLogMessage = "Remote exception installing scrcpy-server at $serverPath",
+                cause = e
+            )
+        } finally {
+            runCatching { readEnd.close() }
+            runCatching { writerThread.join() }
+        }
+
+        if (!installed) {
+            writerFailure?.let { failure ->
+                throw PipelineInitializationException(
+                    userFriendlyMessage = context.getString(R.string.recording_error_server_missing),
+                    technicalLogMessage = "Failed to stream bundled scrcpy-server asset to ShellService",
+                    cause = failure
+                )
+            }
+
+            throw PipelineInitializationException(
+                userFriendlyMessage = context.getString(R.string.recording_error_server_missing),
+                technicalLogMessage = "ShellService could not install or verify scrcpy-server at $serverPath"
+            )
+        }
+
+        return serverPath
     }
 
     /**

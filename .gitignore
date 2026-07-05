@@ -39,3 +39,4 @@ render.experimental.xml
 
 # Idk but I don't want to commit theses
 .kotlin/sessions/*
+*.properties

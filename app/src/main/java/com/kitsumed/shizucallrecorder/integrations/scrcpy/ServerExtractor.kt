@@ -10,6 +10,7 @@ package com.kitsumed.shizucallrecorder.integrations.scrcpy
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.ParcelFileDescriptor
 import androidx.annotation.WorkerThread
 import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.utils.AppLogger
@@ -45,6 +46,56 @@ object ServerExtractor {
         }
         AppLogger.d(TAG, "Server file absent or hash mismatch, extracting from assets...")
         return extractFromAssets(context, file)
+    }
+
+    /**
+     * Copies the server bytes from a Binder pipe into a shell-accessible destination.
+     *
+     * This is used for Shizuku user services because the shell process may not be able to read
+     * the app's profile-scoped external storage, especially from work profiles.
+     */
+    @WorkerThread
+    fun installFromPipe(serverData: ParcelFileDescriptor, serverPath: String): Boolean {
+        val destFile = File(serverPath)
+        if (destFile.exists() && verifyServerHash(destFile)) {
+            AppLogger.d(TAG, "Shell server file already present and verified at $serverPath")
+            runCatching { serverData.close() }
+            return true
+        }
+
+        val tempFile = File("${destFile.path}.tmp.${android.os.Process.myPid()}")
+        return try {
+            destFile.parentFile?.mkdirs()
+            ParcelFileDescriptor.AutoCloseInputStream(serverData).use { input ->
+                writeFile(tempFile, input)
+            }
+
+            if (!verifyServerHash(tempFile)) {
+                AppLogger.w(TAG, "Shell server pipe copy completed but hash verification FAILED")
+                tempFile.delete()
+                return false
+            }
+
+            if (destFile.exists() && !destFile.delete()) {
+                AppLogger.w(TAG, "Unable to replace existing shell server file at $serverPath")
+                tempFile.delete()
+                return false
+            }
+
+            if (!tempFile.renameTo(destFile)) {
+                AppLogger.w(TAG, "Unable to move shell server file into place at $serverPath")
+                tempFile.delete()
+                return false
+            }
+
+            destFile.setReadable(true, false)
+            AppLogger.d(TAG, "Shell server installed and verified at $serverPath")
+            true
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Shell server install failed: ${e.message}", e)
+            tempFile.delete()
+            false
+        }
     }
 
     /**

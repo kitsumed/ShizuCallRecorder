@@ -73,6 +73,18 @@ object ScrcpyConfig {
         return folder.absolutePath + "/scrcpy-${SCRCPY_VERSION}-server.jar"
     }
 
+    /**
+     * Returns a destination path owned by the shell process.
+     *
+     * Work profiles expose app external storage under paths such as /storage/emulated/10,
+     * which the Shizuku shell process may not be able to read. Installing the server under
+     * /data/local/tmp keeps the CLASSPATH visible from the process that launches app_process.
+     */
+    fun getShellServerPath(): String {
+        val hashPrefix = EXPECTED_SERVER_SHA256.take(12)
+        return "/data/local/tmp/${BuildConfig.APPLICATION_ID}/scrcpy-${SCRCPY_VERSION}-$hashPrefix-server.jar"
+    }
+
     /** The fully qualified main class name inside scrcpy-server.jar. */
     const val SERVER_MAIN_CLASS = "com.genymobile.scrcpy.Server"
 

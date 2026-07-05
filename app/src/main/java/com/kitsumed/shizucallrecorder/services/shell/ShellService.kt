@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.kitsumed.shizucallrecorder.ILogCallback
 import com.kitsumed.shizucallrecorder.IShellService
+import com.kitsumed.shizucallrecorder.integrations.scrcpy.ServerExtractor
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlin.system.exitProcess
 
@@ -69,6 +70,10 @@ class ShellService : IShellService.Stub {
         isDebuggingModeEnabled: Boolean
     ): ParcelFileDescriptor? {
         return audioPipeline.startCapture(audioSource, audioCodec, audioBitRate, serverPath, isDebuggingModeEnabled)
+    }
+
+    override fun installServerFile(serverData: ParcelFileDescriptor, serverPath: String): Boolean {
+        return ServerExtractor.installFromPipe(serverData, serverPath)
     }
 
     override fun stopRecording() {

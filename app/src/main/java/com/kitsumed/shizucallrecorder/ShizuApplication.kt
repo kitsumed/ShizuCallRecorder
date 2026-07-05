@@ -9,8 +9,13 @@
 package com.kitsumed.shizucallrecorder
 
 import android.app.Application
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionOrchestrator
 import com.kitsumed.shizucallrecorder.utils.AppLogger
+import com.kitsumed.shizucallrecorder.workers.DailyCleanupWorker
+import java.util.concurrent.TimeUnit
 
 /**
  * ShizuApplication is run when the app process is created. Can be seen as the very first entry point of the app.
@@ -21,5 +26,13 @@ class ShizuApplication : Application() {
         AppLogger.init(applicationContext)
         // Sync configurations down to PackageManager mapping immediately on launch
         CallDetectionOrchestrator(applicationContext).syncComponents()
+
+        // Enqueue daily cleanup worker
+        val cleanupWorkRequest = PeriodicWorkRequestBuilder<DailyCleanupWorker>(1, TimeUnit.DAYS).build()
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            DailyCleanupWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            cleanupWorkRequest
+        )
     }
 }

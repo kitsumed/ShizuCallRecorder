@@ -15,6 +15,8 @@
     <string name="general_continue">Continue</string>
     <string name="general_ok">OK</string>
     <string name="general_cancel">Cancel</string>
+    <string name="general_discard">Discard</string>
+    <string name="general_delete">Delete</string>
     <string name="general_settings">Settings</string>
     <string name="general_licenses">Licenses</string>
     <string name="general_record">Record</string>
@@ -158,6 +160,12 @@
 
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>
+    
+    <string name="settings_auto_delete_recordings">Auto-delete recordings</string>
+    <string name="settings_auto_delete_never">Never</string>
+    <string name="settings_auto_delete_days">%1$d days</string>
+    <string name="settings_auto_delete_custom">Custom&#8230;</string>
+    <string name="settings_auto_delete_custom_dialog_title">Custom auto-delete (days)</string>
 
     <string name="settings_file_name_template">File Name Template</string>
     <string name="settings_file_name_template_placeholders">Placeholders for %s :</string>
@@ -293,6 +301,10 @@
     <string name="recording_toast_paused">Recording paused.</string>
     <string name="recording_toast_resumed">Recording resumed.</string>
     <string name="recording_started">Recording started.</string>
+    <string name="recording_toast_discarded">Recording discarded.</string>
+    <string name="recording_toast_deleted">Recording deleted.</string>
+    <string name="recording_saved_title">Recording Saved</string>
+    <string name="recording_saved_message">Your recording has been saved.</string>
     <!-- Recording Service: Errors -->
     <string name="recording_error_title">Recording Error</string>
     <string name="recording_error_folder_missing">Selected output folder is missing, invalid, or we do not have permission to write to it. Select one in the app settings.</string>

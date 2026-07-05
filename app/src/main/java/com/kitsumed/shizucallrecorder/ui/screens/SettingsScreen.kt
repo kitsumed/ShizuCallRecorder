@@ -536,8 +536,23 @@ private fun RecordingSection(
     val ignoreCrossCountryOutgoing = remember(updateTrigger) { preferences.isIgnoreCrossCountryOutgoingEnabled() }
     val ignoredContactsIncomingCount = remember(updateTrigger) { preferences.getIgnoredContactsIncoming().size }
     val ignoredContactsOutgoingCount = remember(updateTrigger) { preferences.getIgnoredContactsOutgoing().size }
+    val autoDeleteDays = remember(updateTrigger) { preferences.getAutoDeleteDays() }
 
     var showFileNameFormatDialog by remember { mutableStateOf(false) }
+    var showCustomAutoDeleteDialog by remember { mutableStateOf(false) }
+
+    val autoDeleteOptions = remember(autoDeleteDays, context) {
+        val options = mutableListOf(
+            OptionItem("0", context.getString(R.string.settings_auto_delete_never)),
+            OptionItem("7", context.getString(R.string.settings_auto_delete_days, 7)),
+            OptionItem("30", context.getString(R.string.settings_auto_delete_days, 30))
+        )
+        if (autoDeleteDays != 0 && autoDeleteDays != 7 && autoDeleteDays != 30) {
+            options.add(OptionItem(autoDeleteDays.toString(), context.getString(R.string.settings_auto_delete_days, autoDeleteDays)))
+        }
+        options.add(OptionItem("custom", context.getString(R.string.settings_auto_delete_custom)))
+        options
+    }
 
     SettingsSection(title = stringResource(R.string.settings_section_recording)) {
         val detectionOptions = CallDetectionMode.entries.map { mode ->
@@ -626,6 +641,21 @@ private fun RecordingSection(
                 )
             },
             colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+        )
+
+        val selectedAutoDelete = autoDeleteOptions.find { it.key == autoDeleteDays.toString() } ?: autoDeleteOptions.first()
+        M3DropdownField(
+            label = stringResource(R.string.settings_auto_delete_recordings),
+            selected = selectedAutoDelete,
+            options = autoDeleteOptions,
+            onOptionSelected = { item ->
+                if (item.key == "custom") {
+                    showCustomAutoDeleteDialog = true
+                } else {
+                    actions.setAutoDeleteDays(item.key.toInt())
+                }
+            },
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
         )
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp)
@@ -722,6 +752,42 @@ private fun RecordingSection(
                 showFileNameFormatDialog = false
             },
             onDismiss = { showFileNameFormatDialog = false }
+        )
+    }
+
+    if (showCustomAutoDeleteDialog) {
+        var customDaysInput by remember { mutableStateOf("") }
+        AlertDialog(
+            onDismissRequest = { showCustomAutoDeleteDialog = false },
+            title = { Text(stringResource(R.string.settings_auto_delete_custom_dialog_title)) },
+            text = {
+                OutlinedTextField(
+                    value = customDaysInput,
+                    onValueChange = { newValue ->
+                        if (newValue.isEmpty() || newValue.all { it.isDigit() }) {
+                            customDaysInput = newValue
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    val days = customDaysInput.toIntOrNull() ?: 0
+                    if (days > 0) {
+                        actions.setAutoDeleteDays(days)
+                    }
+                    showCustomAutoDeleteDialog = false
+                }) {
+                    Text(stringResource(android.R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCustomAutoDeleteDialog = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            }
         )
     }
 }
@@ -1189,8 +1255,8 @@ private fun SettingsScreenPreview() {
             override fun setFileNameTemplate(template: String) {}
             override fun setCallDetectionMode(mode: CallDetectionMode) {}
             override fun setRecordThirdPartyCalls(enabled: Boolean) {}
+            override fun setAutoDeleteDays(days: Int) {}
         }
-
         // File name template selection dialog
         //FileNameFormatDialog(AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE, {},{})
 

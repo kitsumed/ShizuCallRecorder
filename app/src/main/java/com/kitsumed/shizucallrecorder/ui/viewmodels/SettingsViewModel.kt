@@ -76,6 +76,7 @@ interface SettingsActions {
     fun setFileNameTemplate(template: String)
     fun setCallDetectionMode(mode: CallDetectionMode)
     fun setRecordThirdPartyCalls(enabled: Boolean)
+    fun setAutoDeleteDays(days: Int)
 }
 
 /**
@@ -252,7 +253,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         refresh()
     }
 
-    // -------- File Naming --------
+    // -------- File Naming & Management --------
 
     /** Saves the file name template.
      *
@@ -260,6 +261,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setFileNameTemplate(template: String) {
         preferences.setFileNameTemplate(template)
+        refresh()
+    }
+
+    /** Saves the auto-delete days. */
+    override fun setAutoDeleteDays(days: Int) {
+        preferences.setAutoDeleteDays(days)
         refresh()
     }
 

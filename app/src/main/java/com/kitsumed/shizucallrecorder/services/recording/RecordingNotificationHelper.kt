@@ -15,6 +15,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Handler
@@ -80,6 +81,11 @@ class RecordingNotificationHelper(private val context: Context) {
         val actionIcon: Int?
         val actionText: String?
         val actionIntentAction: String?
+        
+        var discardActionIcon: Int? = null
+        var discardActionText: String? = null
+        var discardActionIntentAction: String? = null
+
         // We want to show the cross-country tip if we are unsure about the metadata, as it is better to be safe than sorry.
         val subRes: Int = if (state.metadata == null || state.metadata?.isCrossCountry == true) R.string.recording_notification_cross_country_tip else R.string.recording_notification_current_country_tip
 
@@ -105,6 +111,9 @@ class RecordingNotificationHelper(private val context: Context) {
                     actionText = context.getString(R.string.general_pause)
                     actionIntentAction = RecordingForegroundService.ACTION_PAUSE_RECORDING
                 }
+                discardActionIcon = R.drawable.ic_stop
+                discardActionText = context.getString(R.string.general_discard)
+                discardActionIntentAction = RecordingForegroundService.ACTION_DISCARD_RECORDING
             }
             else -> {
                 titleRes = R.string.recording_standby_notification_title
@@ -150,6 +159,17 @@ class RecordingNotificationHelper(private val context: Context) {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
             builder.addAction(actionIcon, actionText, actionPendingIntent)
+        }
+
+        if (discardActionText != null && discardActionIntentAction != null && discardActionIcon != null) {
+            val discardPendingIntent = PendingIntent.getService(
+                context, 2,
+                Intent(context, RecordingForegroundService::class.java).apply {
+                    action = discardActionIntentAction
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            builder.addAction(discardActionIcon, discardActionText, discardPendingIntent)
         }
 
         return builder.build()
@@ -242,5 +262,41 @@ class RecordingNotificationHelper(private val context: Context) {
                 vibrator.vibrate(effect)
             }
         }
+    }
+
+    /**
+     * Shows a notification when a recording is successfully saved,
+     * giving the user the option to delete it quickly.
+     */
+    fun showRecordingSavedNotification(uri: Uri) {
+        val deleteIntent = Intent(context, RecordingActionReceiver::class.java).apply {
+            action = RecordingActionReceiver.ACTION_DELETE_SAVED_RECORDING
+            putExtra(RecordingActionReceiver.EXTRA_RECORDING_URI, uri.toString())
+        }
+        val deletePendingIntent = PendingIntent.getBroadcast(
+            context, uri.hashCode(), deleteIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        
+        // Open intent so clicking the notification opens the folder or file
+        val openIntent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "audio/*")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        val openPendingIntent = PendingIntent.getActivity(
+            context, uri.hashCode(), openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID_SERVICE)
+            .setSmallIcon(R.drawable.ic_mic)
+            .setContentTitle(context.getString(R.string.recording_saved_title))
+            .setContentText(context.getString(R.string.recording_saved_message))
+            .setAutoCancel(true)
+            .setContentIntent(openPendingIntent)
+            .addAction(R.drawable.ic_stop, context.getString(R.string.general_delete), deletePendingIntent)
+            .build()
+            
+        context.getSystemService(NotificationManager::class.java).notify(uri.hashCode(), notification)
     }
 }

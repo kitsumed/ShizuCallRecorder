@@ -133,12 +133,15 @@ android {
         minSdk = 30
         targetSdk = 36
         // Keep theses two values hard-coded here and update them per version. (To keep F-Droid compatibility since their parser is very basic)
-        versionCode = 14
-        versionName = "1.1.1"
+        versionCode = 15
+        versionName = "1.2.0"
 
         buildConfigField("String", "SCRCPY_VERSION", "\"$scrcpyVersion\"")
         buildConfigField("String", "SCRCPY_SERVER_SHA256", "\"$scrcpyServerSha256\"")
         buildConfigField("String", "SCRCPY_SERVER_ASSET_NAME", "\"$scrcpyServerAssetName\"")
+
+        // Nome dell'app di default per le build release
+        manifestPlaceholders["appName"] = "@string/app_name"
     }
     signingConfigs {
         // Signing config for CI environments.
@@ -152,6 +155,12 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            // Forza un nome diverso per distinguere l'app di debug
+            manifestPlaceholders["appName"] = "ShizuCallRecorder Debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -250,6 +259,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.work.runtime.ktx)
 
     // Compose Core
     implementation(libs.androidx.activity.compose)

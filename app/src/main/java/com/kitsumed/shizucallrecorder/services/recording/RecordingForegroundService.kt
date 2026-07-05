@@ -60,6 +60,9 @@ class RecordingForegroundService : Service() {
         /** Intent action sent to this service to stop the current recording session and kill the service. */
         const val ACTION_STOP_RECORDING = "com.kitsumed.shizucallrecorder.STOP_RECORDING"
 
+        /** Intent action sent to this service to discard the current recording and kill the service. */
+        const val ACTION_DISCARD_RECORDING = "com.kitsumed.shizucallrecorder.DISCARD_RECORDING"
+
         // -- Intent action for controlling an active recording session with notifications. --
 
         /** Intent action sent to this service to pause the current recording. */
@@ -130,7 +133,7 @@ class RecordingForegroundService : Service() {
             // Handle cleanup if the service dies
             if (hasSession) {
                 notificationHelper.showErrorNotification(getString(R.string.recording_error_shizuku_disconnected_unexpectedly))
-                stopRecordingSessionAndService()
+                stopRecordingSessionAndService(false)
             }
         }
 
@@ -187,7 +190,7 @@ class RecordingForegroundService : Service() {
                 if (currentMeta == null) {
                     AppLogger.e(TAG, "Start request received without metadata. Cannot start recording session.")
                     notificationHelper.showErrorNotification(getString(R.string.recording_unexpected_error))
-                    stopRecordingSessionAndService()
+                    stopRecordingSessionAndService(false)
                     return START_NOT_STICKY // We won't reach this anyway.
                 }
 
@@ -206,14 +209,14 @@ class RecordingForegroundService : Service() {
                     } catch (e: SecurityException) { // Shizuku permission not granted
                         AppLogger.e(TAG, "Shizuku permission was denied / not granted", e)
                         notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_permission_denied))
-                        stopRecordingSessionAndService()
+                        stopRecordingSessionAndService(false)
                     } catch (e: Exception) { // Shizuku not running or other binding connection errors
                         // Don't catch coroutine cancellations, they are used for cleanup. This creates a false error notification when everything's fine.
                         if (e is CancellationException) throw e
 
                         AppLogger.e(TAG, "Failed to perform ShellService binding with Shizuku. Ensure it is running, else look at error related to failed binding.", e)
                         notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_not_started) + "\nLocalized: " + e.localizedMessage)
-                        stopRecordingSessionAndService()
+                        stopRecordingSessionAndService(false)
                     } finally {
                         if (currentState is RecordingServiceState.Starting) {
                             if (!hasSession) {
@@ -250,7 +253,8 @@ class RecordingForegroundService : Service() {
                 }
             }
 
-            ACTION_STOP_RECORDING -> stopRecordingSessionAndService()
+            ACTION_STOP_RECORDING -> stopRecordingSessionAndService(false)
+            ACTION_DISCARD_RECORDING -> stopRecordingSessionAndService(true)
             ACTION_NOTIFICATION_DISMISSED -> {
                 AppLogger.d(TAG, "Ongoing foreground service notification dismissed by user (Android 14+), reposting.")
                 updateNotification()
@@ -272,7 +276,7 @@ class RecordingForegroundService : Service() {
             } else {
                 notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_auth_key_missing))
                 notificationHelper.showToast(getString(R.string.recording_shizuku_auth_key_missing))
-                stopRecordingSessionAndService()
+                stopRecordingSessionAndService(false)
             }
         }
     }
@@ -282,7 +286,7 @@ class RecordingForegroundService : Service() {
         // This is the guaranteed last callback before the service process is cleaned up.
         AppLogger.v(TAG, "RecordingForegroundService is destroying... Ensuring cleanup...")
         serviceScope.cancel()
-        stopRecordingSessionAndService()
+        stopRecordingSessionAndService(false)
         shizukuManager.unbind()
         if (appPreferences.isShizukuAutoManageEnabled() && !appPreferences.isShizukuKeepAliveEnabled()) {
             ShizukuConnectionManager.stopServer(this, appPreferences.getShizukuAuthKey())
@@ -317,18 +321,16 @@ class RecordingForegroundService : Service() {
             // Ensure partial resources are cleaned up
             activeSession.cancel(this, shellService)
             currentState = RecordingServiceState.Standby(metadata)
-            stopRecordingSessionAndService()
+            stopRecordingSessionAndService(false)
         }
     }
 
     /**
      * Stops the current recording session and stop the foreground recording service.
      *
-     * Always trigger [AudioRecordingEngine.release] so that if we are currently recording,
-     * we safely shuts down the pipeline and saves the file, clears the current session,
-     * removes the foreground notification, and stops the service.
+     * @param discard If true, cancels the recording and deletes the partial file.
      */
-    private fun stopRecordingSessionAndService() {
+    private fun stopRecordingSessionAndService(discard: Boolean = false) {
         val activeSession = (currentState as? RecordingServiceState.Active)?.engine
         if (activeSession == null) {
             AppLogger.d(TAG, "No active session, exiting standby state, removing foreground notification and stopping service.")
@@ -336,6 +338,17 @@ class RecordingForegroundService : Service() {
             stopSelf() // Stop the service since the session is over
             return
         }
+        
+        if (discard) {
+            AppLogger.i(TAG, "Discarding active recording session...")
+            activeSession.cancel(this, shellService)
+            notificationHelper.showToast(getString(R.string.recording_toast_discarded))
+            currentState = RecordingServiceState.Standby(null)
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+            return
+        }
+
         AppLogger.i(TAG, "Stopping active recording session, remove foreground notification and stopping service...")
 
         // Capture metadata before releasing resources, in case we need to query call logs for the final file name if phone number is empty.
@@ -378,7 +391,13 @@ class RecordingForegroundService : Service() {
                 } else {
                     AppLogger.d(TAG, "Call log confirmed the call is anonymous, or no actual number was found. Keeping file name as is.")
                 }
+                
+                CoroutineScope(Dispatchers.Main).launch {
+                    notificationHelper.showRecordingSavedNotification(uriToRename)
+                }
             }
+        } else if (uriToRename != null) {
+            notificationHelper.showRecordingSavedNotification(uriToRename)
         }
         currentState = RecordingServiceState.Standby(null)
         AppLogger.i(TAG, "The recording session has been stopped and resources have been released. Stopping foreground service. Goodbye >3")

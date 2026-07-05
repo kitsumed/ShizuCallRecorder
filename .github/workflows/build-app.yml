@@ -59,7 +59,7 @@ jobs:
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       
       # Set up Java 17 (required for Android Gradle Plugin 8.x)
       - name: Setup Java 17
@@ -111,9 +111,11 @@ jobs:
       # Set up signing for release builds
       # Signing keystore is stored as a base64-encoded secret
       - name: Decode Keystore
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
         run: |
-          # Decode the keystore from base64 secret
-          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 -d > app/release-keystore.jks
+          # Decode the keystore from base64 secret, ignoring any garbage/newlines
+          echo "$ENCODED_KEYSTORE" | base64 --decode --ignore-garbage > app/release-keystore.jks
         
       # Build Debug APK (for Debug Asset type)
       - name: Build Debug APK
@@ -157,9 +159,9 @@ jobs:
       
       # Upload the APK as a build artifact for the release job
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
-          name: apk-${{ steps.set-output.outputs.BUILD_TYPE }}
+          name: app-release-artifact
           path: app/build/outputs/apk/ShizuCallRecorder-*.apk # Pattern, all apk file that start with the app name
           retention-days: 30
           if-no-files-found: error
@@ -181,20 +183,20 @@ jobs:
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       
       # Download the APK artifact from the build job
       - name: Download APK Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
-          name: apk-${{ needs.build.outputs.BUILD_TYPE }}
+          name: app-release-artifact
           path: ./release-assets
       
       # Generate build provenance attestation for supply chain security
       # This creates a signed attestation that proves where and how the artifact was built
       # See: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       - name: Generate Build Provenance Attestation
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: ./release-assets/${{ needs.build.outputs.FINAL_APK_NAME }}
       

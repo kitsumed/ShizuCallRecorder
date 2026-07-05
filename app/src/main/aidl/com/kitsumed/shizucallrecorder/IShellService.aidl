@@ -36,6 +36,18 @@ interface IShellService {
     ) = 2;
 
     /**
+     * Installs the bundled scrcpy-server JAR into a path writable/readable by the shell process.
+     *
+     * @param serverData Read-end of a pipe containing the server JAR bytes.
+     * @param serverPath Destination path owned by the shell process.
+     * @return True if the destination exists and matches the expected SHA-256.
+     */
+    boolean installServerFile(
+        in ParcelFileDescriptor serverData,
+        String serverPath
+    ) = 7;
+
+    /**
      * Stops the audio capture pipeline and releases all resources.
      */
     void stopRecording() = 3;

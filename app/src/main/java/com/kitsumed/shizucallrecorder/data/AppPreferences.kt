@@ -72,8 +72,9 @@ class AppPreferences(context: Context) {
 
         val AUDIO_BITRATE = ScrcpyAudioCodec.OPUS.defaultBitRate
 
-        // --- File Naming ---
+        // --- File Naming & Management ---
         const val FILE_NAME_TEMPLATE = "{date}_{direction}_{phone_number}"
+        const val AUTO_DELETE_DAYS = 0 // 0 means Never
 
         // --- UI & Appearance ---
         val THEME_MODE = ThemeMode.SYSTEM
@@ -115,6 +116,7 @@ class AppPreferences(context: Context) {
         AUDIO_CODEC("audio_codec"),
         AUDIO_BITRATE("audio_bitrate"),
         FILE_NAME_TEMPLATE("file_name_template"),
+        AUTO_DELETE_DAYS("auto_delete_days"),
         THEME_MODE("theme_mode"),
         DYNAMIC_COLOR("dynamic_color"),
         SHOW_TOASTS("show_toasts"),
@@ -379,6 +381,12 @@ class AppPreferences(context: Context) {
 
     /** Sets the user configured file name template. */
     fun setFileNameTemplate(template: String) = setString(Key.FILE_NAME_TEMPLATE, template)
+
+    /** Gets the number of days after which recordings should be auto-deleted. 0 means never. */
+    fun getAutoDeleteDays() = getInt(Key.AUTO_DELETE_DAYS, DefaultsValue.AUTO_DELETE_DAYS)
+
+    /** Sets the number of days after which recordings should be auto-deleted. */
+    fun setAutoDeleteDays(days: Int) = setInt(Key.AUTO_DELETE_DAYS, days)
 
     // -------- UI & Appearance --------
 
