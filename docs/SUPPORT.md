@@ -10,12 +10,6 @@ If you are new to ShizuCallRecorder, please check the [configuration documentati
 >[!TIP]
 > This application only saves recording files. If you would like a visual interface to browse the files and see your contact names, you can use an application like [bcr-gui](https://github.com/nicorac/bcr-gui) (unrelated to this project). I made ShizuCallRecorder in a way that it replicates the [BCR](https://github.com/chenxiaolong/BCR) file name format. **I will not add a visual interface, I want to keep the app relatively simple**.
 
-## Issues, bugs and support
+## Troubleshooting
 
-If you have issues with ShizuCallRecorder getting killed in background or not starting when you receive a call, please check [dontkillmyapp](https://dontkillmyapp.com/) for specific instructions for you phone OEM.
-Also ensure that the application is excluded from battery saving.
-
-If you need help installing, testing, using, or configuring Shizuku and/or ShizuCallRecorder. Please use the correct community support forum. [Shizuku](https://github.com/thedjchi/Shizuku/discussions/categories/q-a) or [ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder/discussions).
-
-If you have a issue **(a bug)** where ShizuCallRecorder does not behave the right way, crash, or has any other unexpected error, please create a new [issue](https://github.com/kitsumed/ShizuCallRecorder/issues).
-
+Please check the [troubleshooting documentation](./troubleshooting.md) with frequents issues and questions.
