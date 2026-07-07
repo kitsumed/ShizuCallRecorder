@@ -11,6 +11,7 @@ package com.kitsumed.shizucallrecorder.utils
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.Process
 import android.util.Log
 import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.ILogCallback
@@ -232,6 +233,8 @@ object AppLogger {
                 writer.println("Device: ${Build.DEVICE}")
                 writer.println("Product: ${Build.PRODUCT}")
                 writer.println("Android Version: ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
+                writer.println("Installed Application UID (Kernel): ${Process.myUid()}")
+                writer.println("Current UserHandle ID (User Profile): ${Process.myUserHandle().hashCode()}")
                 writer.println("Device Country Iso Estimation: ${PhoneNumberManager.getInstance(context).getDeviceCountryIso()}")
                 writer.println("Log Redaction Disabled / Debug Mode : ${prefs.isDebugEnabled()}")
                 writer.println("Call Detection Method: ${prefs.getCallDetectionMode().key}")
