@@ -16,6 +16,7 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.provider.CallLog
+import androidx.core.content.IntentCompat
 import androidx.documentfile.provider.DocumentFile
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.R
@@ -158,15 +159,11 @@ class RecordingForegroundService : Service() {
 
         // Parse metadata if present in the intent (START/STANDBY)
         if (intent != null) {
-            val newMetadata = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(
-                    EnrichedCallData.EXTRA_METADATA,
-                    EnrichedCallData::class.java
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra(EnrichedCallData.EXTRA_METADATA)
-            }
+            val newMetadata = IntentCompat.getParcelableExtra(
+                intent,
+                EnrichedCallData.EXTRA_METADATA,
+                EnrichedCallData::class.java
+            )
             if (newMetadata != null) {
                 currentMeta = newMetadata
             }

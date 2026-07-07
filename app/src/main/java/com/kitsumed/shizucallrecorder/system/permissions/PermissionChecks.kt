@@ -9,12 +9,9 @@
 package com.kitsumed.shizucallrecorder.system.permissions
 
 import android.Manifest
-import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.PowerManager
-import android.os.Process
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
@@ -30,14 +27,7 @@ object PermissionChecks {
      * @return true if the app can post notifications.
      */
     fun hasNotificationPermission(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            NotificationManagerCompat.from(context).areNotificationsEnabled()
-        } else {
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        }
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 
     /**
