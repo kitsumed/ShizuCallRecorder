@@ -320,16 +320,16 @@ class AppPreferences(context: Context) {
     /** Sets the contacts mode defining which outgoing calls are ignored. */
     fun setIgnoreContactsModeOutgoing(mode: IgnoreContactsMode) = setString(Key.IGNORE_CONTACTS_MODE_OUTGOING, mode.key)
 
-    /** Gets the set of specific contact numbers to ignore for incoming calls. */
+    /** Gets the set of specific contact lookup id to ignore for incoming calls. */
     fun getIgnoredContactsIncoming() = getStringSet(Key.IGNORED_CONTACTS_INCOMING, DefaultsValue.IGNORED_CONTACTS_INCOMING)
     
-    /** Sets the set of specific contact numbers to ignore for incoming calls. */
+    /** Sets the set of specific contact lookup id to ignore for incoming calls. */
     fun setIgnoredContactsIncoming(numbers: Set<String>) = setStringSet(Key.IGNORED_CONTACTS_INCOMING, numbers)
 
-    /** Gets the set of specific contact numbers to ignore for outgoing calls. */
+    /** Gets the set of specific contact lookup id to ignore for outgoing calls. */
     fun getIgnoredContactsOutgoing() = getStringSet(Key.IGNORED_CONTACTS_OUTGOING, DefaultsValue.IGNORED_CONTACTS_OUTGOING)
     
-    /** Sets the set of specific contact numbers to ignore for outgoing calls. */
+    /** Sets the set of specific contact lookup id to ignore for outgoing calls. */
     fun setIgnoredContactsOutgoing(numbers: Set<String>) = setStringSet(Key.IGNORED_CONTACTS_OUTGOING, numbers)
 
     // -------- Debug --------

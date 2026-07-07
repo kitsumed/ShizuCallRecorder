@@ -127,8 +127,8 @@ fun SettingsScreen(
         onSelectFolder = { folderPickerLauncher.launch(null) },
         onOpenContactsIncoming = { contactPickerViewModel.openContactPicker(ContactPickerType.INCOMING) },
         onOpenContactsOutgoing = { contactPickerViewModel.openContactPicker(ContactPickerType.OUTGOING) },
-        onConfirmContacts = { numbers ->
-            contactPickerViewModel.confirmContactPicker(numbers)
+        onConfirmContacts = { lookupIDs ->
+            contactPickerViewModel.confirmContactPicker(lookupIDs)
             // Refresh the screen so the new contact list information is shown immediately after confirming and closing the dialog.
             viewModel.refresh()
         },
@@ -211,7 +211,7 @@ fun SettingsContent(
                 ContactPickerType.OUTGOING -> stringResource(R.string.settings_select_contacts_outgoing)
             },
             contacts = picker.contacts,
-            initialSelection = picker.selectedNumbers,
+            initialSelection = picker.selectedContactsLookupId,
             onConfirm = onConfirmContacts,
             onDismiss = onDismissContacts
         )

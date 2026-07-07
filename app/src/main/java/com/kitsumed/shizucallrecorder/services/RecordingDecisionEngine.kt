@@ -208,14 +208,20 @@ class RecordingDecisionEngine private constructor(context: Context) {
      *
      * @param normalisedNumber The normalized phone number to check
      * @param mode The contact ignore mode (NONE, ALL, or SELECTED)
-     * @param ignoredNumbers Set of phone numbers to check against (for SELECTED mode)
+     * @param ignoredContactsLookupId Set of Contacts (lookup ID) to check against (for SELECTED mode)
      * @return true if the call should be ignored, false otherwise
      */
     private fun shouldIgnoreContact(
         normalisedNumber: String,
         mode: AppPreferences.IgnoreContactsMode,
-        ignoredNumbers: Set<String>
+        ignoredContactsLookupId: Set<String>
     ): Boolean {
+
+        val lookupUri = Uri.withAppendedPath(
+            ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+            Uri.encode(normalisedNumber)
+        )
+
         return when (mode) {
             AppPreferences.IgnoreContactsMode.NONE -> false
 
@@ -223,10 +229,6 @@ class RecordingDecisionEngine private constructor(context: Context) {
                 if (!PermissionChecks.hasContactsPermission(appContext)) {
                     false
                 } else {
-                    val lookupUri = Uri.withAppendedPath(
-                        ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
-                        Uri.encode(normalisedNumber)
-                    )
                     appContext.contentResolver.query(
                         lookupUri,
                         arrayOf(ContactsContract.PhoneLookup._ID),
@@ -239,8 +241,29 @@ class RecordingDecisionEngine private constructor(context: Context) {
                 }
             }
 
-            AppPreferences.IgnoreContactsMode.SELECTED ->
-                ignoredNumbers.any { PhoneNumberManager.Companion.normalisePhoneNumber(it) == normalisedNumber }
+            AppPreferences.IgnoreContactsMode.SELECTED -> {
+                // If no contacts are selected, we can skip the query and return false directly
+                if (!PermissionChecks.hasContactsPermission(appContext) || ignoredContactsLookupId.isEmpty()) {
+                    return false
+                }
+
+                appContext.contentResolver.query(
+                    lookupUri,
+                    arrayOf(ContactsContract.PhoneLookup.LOOKUP_KEY),
+                    null,
+                    null,
+                    null
+                )?.use { cursor ->
+                    val lookupIdIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.LOOKUP_KEY)
+                    while (cursor.moveToNext()) {
+                        val contactLookupId = cursor.getString(lookupIdIndex)
+                        if (ignoredContactsLookupId.contains(contactLookupId)) {
+                            return true
+                        }
+                    }
+                }
+                false
+            }
         }
     }
 

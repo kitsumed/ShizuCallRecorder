@@ -9,11 +9,13 @@
 package com.kitsumed.shizucallrecorder.ui.viewmodels
 
 import android.app.Application
+import android.provider.ContactsContract
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.system.permissions.PermissionChecks
-import com.kitsumed.shizucallrecorder.ui.common.ContactEntry
+import com.kitsumed.shizucallrecorder.ui.common.ContactSelectionDialog
+import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,12 +40,27 @@ enum class ContactPickerType {
  *
  * @param type            Whether the picker is for incoming or outgoing calls.
  * @param contacts        The list of contacts loaded from the device.
- * @param selectedNumbers Phone numbers that are already saved as ignored (shown pre-checked).
+ * @param selectedContactsLookupId Contacts lookup ID that are already saved as ignored (shown pre-checked).
  */
 data class ContactPickerState(
     val type: ContactPickerType,
     val contacts: List<ContactEntry>,
-    val selectedNumbers: Set<String>
+    val selectedContactsLookupId: Set<String>
+)
+
+/**
+ * A single device contact entry shown in [ContactSelectionDialog].
+ *
+ * @param lookupKey The unique key/ID for this contact (used as the selection key).
+ * @param name The contact's display name from the Contacts provider.
+ * @param displayNumbers A string representations of the phone numbers associated with this entry.
+ * @param photoUri Content URI of the contact's thumbnail photo, or null if none exists.
+ */
+data class ContactEntry(
+    val lookupKey: String,
+    val name: String,
+    val displayNumbers: String,
+    val photoUri: String? = null
 )
 
 /**
@@ -54,6 +71,10 @@ data class ContactPickerState(
  * the `StateFlow` and triggers a refresh (recompose) whenever the dialog opens or closes.
  */
 class ContactPickerViewModel(application: Application) : AndroidViewModel(application) {
+
+    companion object {
+        private const val TAG = "SCR:ContactPickerViewModel"
+    }
 
     /**
      * Application context - safe to store in a ViewModel because it lives as long as the
@@ -91,26 +112,38 @@ class ContactPickerViewModel(application: Application) : AndroidViewModel(applic
         // Run in the background so loading contacts doesn't freeze the screen.
         viewModelScope.launch {
             val contacts = loadContactsFromDevice()
-            val selectedNumbers = when (type) {
+
+            // Fetch raw saved keys
+            val rawSelectedKeys = when (type) {
                 ContactPickerType.INCOMING -> preferences.getIgnoredContactsIncoming()
                 ContactPickerType.OUTGOING -> preferences.getIgnoredContactsOutgoing()
             }
-            _contactPickerState.value = ContactPickerState(type, contacts, selectedNumbers)
+
+            // List of all contacts lookup keys.
+            val validContactsLookupKeys = contacts.map { it.lookupKey }.toSet()
+            // Keep only the saved keys that still exist on the device. Ignore old/stale keys so they later get removed when user save.
+            val cleanSelectedLookupKeys = rawSelectedKeys.intersect(validContactsLookupKeys)
+
+            if (rawSelectedKeys.size != cleanSelectedLookupKeys.size) {
+                AppLogger.d(TAG, "Ignored ${rawSelectedKeys.size - cleanSelectedLookupKeys.size} stale contacts lookup keys.")
+            }
+
+            _contactPickerState.value = ContactPickerState(type, contacts, cleanSelectedLookupKeys)
         }
     }
 
     /**
      * Saves the contacts the user selected in the [ContactSelectionDialog] and closes the dialog.
-     * Call [SettingsViewModel.refresh] afterwards to update the settings screen with the new list.
+     * Call [SettingsViewModel.refresh] afterward to update the settings screen with the new list.
      *
-     * @param numbers The phone numbers the user chose to ignore.
+     * @param contactsLookupId The contacts (lookup id) the user chose to ignore.
      */
-    fun confirmContactPicker(numbers: Set<String>) {
+    fun confirmContactPicker(contactsLookupId: Set<String>) {
         val currentType = _contactPickerState.value?.type
         when (currentType) {
-            ContactPickerType.INCOMING -> preferences.setIgnoredContactsIncoming(numbers)
-            ContactPickerType.OUTGOING -> preferences.setIgnoredContactsOutgoing(numbers)
-            null -> Unit // Dialog was closed before confirming; nothing to save.
+            ContactPickerType.INCOMING -> preferences.setIgnoredContactsIncoming(contactsLookupId)
+            ContactPickerType.OUTGOING -> preferences.setIgnoredContactsOutgoing(contactsLookupId)
+            null -> throw IllegalStateException("Contact picker state is null when trying to confirm selection. This should never happen.")
         }
         _contactPickerState.value = null
     }
@@ -132,33 +165,45 @@ class ContactPickerViewModel(application: Application) : AndroidViewModel(applic
         // withContext(Dispatchers.IO) runs the database query in the background.
         return withContext(Dispatchers.IO) {
             val resolver = appContext.contentResolver
-            val uri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+            val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
             val projection = arrayOf(
-                android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER,
-                android.provider.ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI,
+                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
             )
-            val contacts    = mutableListOf<ContactEntry>()
-            val seenNumbers = mutableSetOf<String>()
+
+            val contactsMap = mutableMapOf<String, ContactEntry>()
 
             // .use{} automatically closes the cursor when done, even if something goes wrong.
             resolver.query(uri, projection, null, null, null)?.use { cursor ->
-                val nameIndex   = cursor.getColumnIndexOrThrow(android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-                val numberIndex = cursor.getColumnIndexOrThrow(android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER)
-                val photoIndex  = cursor.getColumnIndexOrThrow(android.provider.ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI)
+                val nameIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                val numberIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val photoIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI)
+                val lookupKeyIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY)
 
                 while (cursor.moveToNext()) {
-                    val name     = cursor.getString(nameIndex)   ?: ""
-                    val number   = cursor.getString(numberIndex) ?: ""
+                    val lookupKey = cursor.getString(lookupKeyIndex) ?: continue
+                    val name = cursor.getString(nameIndex) ?: ""
+                    val number = cursor.getString(numberIndex)?.trim() ?: ""
                     val photoUri = cursor.getString(photoIndex)
-                    val trimmed  = number.trim()
-                    // Skip duplicates so each phone number only appears once.
-                    if (trimmed.isNotBlank() && seenNumbers.add(trimmed)) {
-                        contacts.add(ContactEntry(name, trimmed, photoUri))
+
+                    if (number.isNotBlank()) {
+                        val existing = contactsMap[lookupKey]
+                        if (existing != null) {
+                            // Append the number if it's not already in the string
+                            if (!existing.displayNumbers.contains(number)) {
+                                contactsMap[lookupKey] = existing.copy(
+                                    displayNumbers = "${existing.displayNumbers}, $number"
+                                )
+                            }
+                        } else {
+                            contactsMap[lookupKey] = ContactEntry(lookupKey, name, number, photoUri)
+                        }
                     }
                 }
             }
-            contacts.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+            contactsMap.values.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
         }
     }
 }

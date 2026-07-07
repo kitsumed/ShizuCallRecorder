@@ -10,8 +10,6 @@ package com.kitsumed.shizucallrecorder.ui.common
 
 import android.graphics.ImageDecoder
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -43,27 +41,16 @@ import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.kitsumed.shizucallrecorder.R
+import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactEntry
 
-/**
- * A single device contact entry shown in [ContactSelectionDialog].
- *
- * @param name     The contact's display name from the Contacts provider.
- * @param number   The phone number associated with this entry (used as the selection key).
- * @param photoUri Content URI of the contact's thumbnail photo, or null if none exists.
- */
-data class ContactEntry(
-    val name: String,
-    val number: String,
-    val photoUri: String? = null
-)
 
 /**
  * Full-screen dialog that lets the user select one or more contacts from a searchable list.
  *
  * @param title            Heading text shown at the top of the dialog.
  * @param contacts         Full list of device contacts to display.
- * @param initialSelection Numbers that should be pre-checked when the dialog opens.
- * @param onConfirm        Called with the final [Set] of selected numbers when the user taps OK.
+ * @param initialSelection Contacts (LookupKey) that should be pre-checked when the dialog opens.
+ * @param onConfirm        Called with the final [Set] of selected contacts (LookupKey) when the user taps OK.
  * @param onDismiss        Called when the user taps Cancel or dismisses the dialog.
  * @param modifier         Optional layout modifier for the dialog [Surface].
  */
@@ -100,8 +87,8 @@ fun ContactSelectionDialog(
  *
  * @param title            Heading text shown at the top of the dialog.
  * @param contacts         Full list of device contacts to display.
- * @param initialSelection Numbers that should be pre-checked when the dialog opens.
- * @param onConfirm        Called with the final [Set] of selected numbers when the user taps OK.
+ * @param initialSelection Contacts (LookupKeys) that should be pre-checked when the dialog opens.
+ * @param onConfirm        Called with the final [Set] of selected contacts (LookupKeys) when the user taps OK.
  * @param onDismiss        Called when the user taps Cancel or dismisses the dialog.
  * @param modifier         Optional layout modifier for the root [Surface].
  */
@@ -119,7 +106,7 @@ fun ContactSelectionContent(
     // mutableStateListOf gives Compose per-item granularity: toggling one row only
     // triggers a refresh (recompose) for that row, not the entire list.
     // Keyed on initialSelection so the checked state resets if the dialog re-opens with new data.
-    val selectedNumbers = remember(initialSelection) {
+    val selectedContactsLookupKey = remember(initialSelection) {
         mutableStateListOf<String>().apply { addAll(initialSelection) }
     }
 
@@ -127,7 +114,7 @@ fun ContactSelectionContent(
         if (searchQuery.isBlank()) contacts
         else contacts.filter {
             it.name.contains(searchQuery, ignoreCase = true) ||
-                    it.number.contains(searchQuery)
+                    it.displayNumbers.contains(searchQuery)
         }
     }
 
@@ -168,9 +155,9 @@ fun ContactSelectionContent(
             ) {
                 items(
                     items = filteredContacts,
-                    key = { it.number } // Stable key enables efficient diffing in LazyColumn.
+                    key = { it.lookupKey } // Stable key enables efficient diffing in LazyColumn.
                 ) { contact ->
-                    val isSelected = selectedNumbers.contains(contact.number)
+                    val isSelected = selectedContactsLookupKey.contains(contact.lookupKey)
 
                     ContactListItem(
                         contact = contact,
@@ -178,12 +165,12 @@ fun ContactSelectionContent(
                         modifier = Modifier.animateItem(), // This handles the entry, exit, and reordering animations in the list
                         onToggle = {
                             if (isSelected) {
-                                // Directly mutate the observable list. Because selectedNumbers is
+                                // Directly mutate the observable list. Because selectedContactsLookupKey is
                                 // a mutableStateListOf, Compose triggers a refresh (recompose)
                                 // only for this item's row — not the entire list.
-                                selectedNumbers.remove(contact.number)
+                                selectedContactsLookupKey.remove(contact.lookupKey)
                             } else {
-                                selectedNumbers.add(contact.number)
+                                selectedContactsLookupKey.add(contact.lookupKey)
                             }
                         }
                     )
@@ -197,14 +184,14 @@ fun ContactSelectionContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val isAllSelected = contacts.isNotEmpty() && contacts.all { selectedNumbers.contains(it.number) }
+                val isAllSelected = contacts.isNotEmpty() && contacts.all { selectedContactsLookupKey.contains(it.lookupKey) }
                 TextButton(
                     onClick = {
                         if (isAllSelected) {
-                            selectedNumbers.clear()
+                            selectedContactsLookupKey.clear()
                         } else {
-                            selectedNumbers.clear()
-                            selectedNumbers.addAll(contacts.map { it.number })
+                            selectedContactsLookupKey.clear()
+                            selectedContactsLookupKey.addAll(contacts.map { it.lookupKey })
                         }
                     }
                 ) {
@@ -232,7 +219,7 @@ fun ContactSelectionContent(
                     Button(
                         onClick = {
                             // Convert the observable list back to an immutable Set for the callback.
-                            onConfirm(selectedNumbers.toSet())
+                            onConfirm(selectedContactsLookupKey.toSet())
                         }
                     ) {
                         Text(stringResource(R.string.general_ok))
@@ -257,7 +244,7 @@ private fun ContactListItem(
     onToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Smooth M3 background colour transition when the selection state changes.
+    // Smooth M3 background color transition when the selection state changes.
     val backgroundColor by animateColorAsState(
         targetValue = if (isSelected)
             MaterialTheme.colorScheme.secondaryContainer
@@ -281,7 +268,7 @@ private fun ContactListItem(
             headlineContent = {
                 Text(contact.name, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal)
             },
-            supportingContent = { Text(contact.number) },
+            supportingContent = { Text(contact.displayNumbers) },
             leadingContent = { ContactAvatar(contact) },
             colors = ListItemDefaults.colors(
                 containerColor = backgroundColor // Background is applied via the modifier above.
@@ -344,12 +331,12 @@ private fun ContactAvatar(contact: ContactEntry) {
 @Composable
 fun PreviewContactSelectionDialog() {
     val dummyContacts = listOf(
-        ContactEntry("Alice Smith", "+1 555-0101", null),
-        ContactEntry("Bob Johnson", "+1 555-0202", null),
-        ContactEntry("Charlie Brown", "+1 555-0303", null),
-        ContactEntry("David Wilson", "+1 555-0404", null)
+        ContactEntry("1","Alice Smith", "+1 555-0101", null),
+        ContactEntry("2","Bob Johnson", "+1 555-0202", null),
+        ContactEntry("3","Charlie Brown", "+1 555-0303", null),
+        ContactEntry("4","David Wilson", "+1 555-0404", null)
     )
-    val selectedContacts = setOf("+1 555-0202")
+    val selectedContacts = setOf("2")
 
     ShizucallrecorderTheme(darkTheme = true) {
         ContactSelectionContent(
