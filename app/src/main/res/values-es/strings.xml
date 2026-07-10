@@ -24,7 +24,7 @@
     <string name="permissions_status_granted">Concedido</string>
     <string name="permissions_status_required">Requerido</string>
     <string name="permission_notifications_label">Notificaciones</string>
-    <string name="permission_notifications_description">Se utiliza para el estado de la grabación y las alertas de error.</string>
+    <string name="permission_notifications_description">Se utiliza para el estado de la grabación y las alertas de errores.</string>
     <string name="permission_contacts_label">Contactos</string>
     <string name="permission_contacts_description">Se utiliza para filtrar los contactos conocidos según las reglas de ignorar.</string>
     <string name="general_incoming">entrante</string>
@@ -135,7 +135,7 @@
     <string name="placeholder_cross_country_desc">Indica si la llamada es nacional de larga distancia (verdadero/falso)</string>
     <string name="recording_unexpected_error">Se produjo un error inesperado durante la grabación. Por favor, informa de esto incluyendo los pasos para reproducirlo y los registros de la aplicación.</string>
     <string name="settings_shizuku_keep_alive">Mantén a Shizuku con vida</string>
-    <string name="settings_shizuku_keep_alive_desc">No envíes la intención de detener</string>
+    <string name="settings_shizuku_keep_alive_desc">No enviar el intent de detener</string>
     <string name="sponsor_title">Apoya el proyecto</string>
     <string name="sponsor_body_title">¡Hola, soy kitsumed (Med)! 👋</string>
     <string name="sponsor_body">He estado metido en tecnologías y ordenadores desde que era joven. La mayoría de mis proyectos nacen de buscar soluciones para mis propias discapacidades físicas o mentales, mientras que otros simplemente son chispazos aleatorios de inspiración.\n\nShizuCallRecorder nació de una necesidad personal relacionada con una de mis discapacidades. Durante varios años busqué una aplicación gratuita y de código abierto (FOSS) para grabar llamadas que funcionara en dispositivos sin root, pero no encontré ninguna. No existía. Así que decidí crear la mía propia y hacerla pública.\n\nDedico gran parte de mi tiempo libre a aprender, crear y mantener software de código abierto. Tu apoyo me ayuda directamente en mi día a día a nivel económico y me motiva a seguir desarrollando herramientas de alta calidad para la comunidad.\n\nCreo en mantener mis aplicaciones libres de anuncios agresivos y de sistemas de rastreo que invadan la privacidad. Si mis herramientas te han sido útiles en tu día a día, ¡por favor, considera apoyarme!</string>
@@ -174,4 +174,16 @@
     <string name="placeholder_date_hours_desc">La hora actual, en formato de 24 horas y con cero a la izquierda (00–23)</string>
     <string name="placeholder_date_minutes_desc">Los minutos actuales, con cero a la izquierda (00–59)</string>
     <string name="placeholder_date_seconds_desc">Los segundos actuales, con cero a la izquierda (00–59)</string>
+    <string name="general_permission_escalation_exhausted">No se ha podido obtener el permiso «%1$s» para «%2$s».\nSe agotaron todos los pasos de escalamiento (%3$d).\n\nPor favor, asegúrate de que Shizuku esté ejecutándose en este momento, ya que esto podría estar causando este error.\n\nEs posible que tu fabricante (OEM) esté bloqueando o revirtiendo todos nuestros cambios de permisos. Revisa los ajustes de tu teléfono para ver si hay algo que pueda desactivar ese comportamiento.\n\nLos dispositivos de Vivo, Oppo, Xiaomi y otros fabricantes chinos suelen incluir restricciones de sistema agresivas que pueden bloquear por completo el acceso a este permiso.\n\nSi encuentras una forma de concederte manualmente el permiso requerido mediante ADB, ¡infórmanos creando una incidencia en GitHub!</string>
+    <string name="general_play">Reproducir</string>
+    <string name="general_share">Compartir</string>
+    <string name="general_delete">Eliminar</string>
+    <string name="general_deleted">Eliminado</string>
+    <string name="settings_post_recording_notification">Notificación después de la grabación</string>
+    <string name="settings_post_recording_notification_description">Mostrar una notificación cuando termine la grabación con acciones rápidas como reproducir y eliminar.</string>
+    <string name="post_recording_notification_title">Gestión de las grabaciones</string>
+    <string name="post_recording_notification_unknown_caller">Llamante anónimo o desconocido</string>
+    <string name="delete_recording_confirmation_title">Eliminar grabación</string>
+    <string name="delete_recording_confirmation_message">¿Seguro que quieres eliminar esta grabación? Esta acción no se puede deshacer.</string>
+    <string name="delete_recording_confirmation_failed">No se pudo eliminar la grabación. Por favor, revisa los registros de la aplicación.</string>
 </resources>
