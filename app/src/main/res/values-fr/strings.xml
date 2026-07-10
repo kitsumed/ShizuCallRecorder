@@ -174,5 +174,16 @@
     <string name="placeholder_date_hours_desc">L\'heure actuelle, au format 24 heures et complété par des zéros (00-23)</string>
     <string name="placeholder_date_minutes_desc">Les minutes actuelles, complétées par des zéros (00-59)</string>
     <string name="placeholder_date_seconds_desc">Les secondes actuelles, complétées par des zéros (00-59)</string>
-    <string name="general_permission_escalation_exhausted">Impossible d\'obtenir l\'autorisation \'%2$s\' de type \'%1$s\'.\nToutes les étapes d\'élévation de permission (%3$d) ont été épuisées.\n\nIl se peut que votre fabricant bloque ou réinitialise activement toutes nos modifications de permissions. Veuillez vérifier les paramètres de votre téléphone pour voir s\'il existe un paramètre susceptible de désactiver ce comportement.\n\nLes appareils de Vivo, Oppo, Xiaomi et d\'autres fabricants chinois intègrent souvent des restrictions système strictes qui peuvent bloquer complètement l\'accès à cette autorisation.\n\nSi vous trouvez comment vous accorder manuellement l\'autorisation requise via ADB, merci de nous informer en créant un ticket sur GitHub !</string>
+    <string name="general_permission_escalation_exhausted">Impossible d\'obtenir l\'autorisation \'%2$s\' de type \'%1$s\'.\nToutes les étapes d\'élévation de permission (%3$d) ont été épuisées.\n\nVeuillez vous assurer que Shizuku est bien en cours d\'exécution, car cela pourrait être à l\'origine de cette erreur.\n\nIl se peut que votre fabricant bloque ou réinitialise activement toutes nos modifications de permissions. Veuillez vérifier les paramètres de votre téléphone pour voir s\'il existe un paramètre susceptible de désactiver ce comportement.\n\nLes appareils de Vivo, Oppo, Xiaomi et d\'autres fabricants chinois intègrent souvent des restrictions système strictes qui peuvent bloquer complètement l\'accès à cette autorisation.\n\nSi vous trouvez comment vous accorder manuellement l\'autorisation requise via ADB, merci de nous informer en créant un ticket sur GitHub !</string>
+    <string name="general_play">Jouer</string>
+    <string name="general_share">Partager</string>
+    <string name="general_delete">Effacer</string>
+    <string name="general_deleted">Supprimer</string>
+    <string name="settings_post_recording_notification">Notification de fin d\'appel</string>
+    <string name="settings_post_recording_notification_description">Afficher une notification à la fin de l\'enregistrement, proposant des actions rapides telles que lire et supprimer.</string>
+    <string name="post_recording_notification_title">Gestion des enregistrements</string>
+    <string name="post_recording_notification_unknown_caller">Appel anonyme ou inconnu</string>
+    <string name="delete_recording_confirmation_title">Supprimer l\'enregistrement</string>
+    <string name="delete_recording_confirmation_message">Êtes-vous sûr de vouloir supprimer cet enregistrement ? Cette action ne peut pas être annulée.</string>
+    <string name="delete_recording_confirmation_failed">Impossible de supprimer l\'enregistrement. Veuillez consulter les journaux de l\'application.</string>
 </resources>
