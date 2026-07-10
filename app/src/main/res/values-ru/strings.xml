@@ -136,4 +136,24 @@
     <string name="placeholder_cross_country_desc">Указывает, является ли вызов международным (да/нет)</string>
     <string name="recording_unexpected_error">Во время записи произошла непредвиденная ошибка. Пожалуйста, сообщите об этом вместе с инструкциями по воспроизведению и логами из приложения.</string>
     <string name="settings_shizuku_keep_alive_desc">Не отправлять ключ авторизации для остановки</string>
+    <string name="general_permission_escalation_exhausted">Не удалось \'%1$s\' получить разрешение \'%2$s\'.\nВсе попытки обойти ограничение (%3$d) были исчерпаны.\n\nПожалуйста, убедитесь, что Shizuku запущен в данный момент, так как его остановка могла стать причиной этой ошибки.\n\nПроизводитель вашего устройства также может активно блокировать или сбрасывать все наши изменения разрешений. Пожалуйста, проверьте настройки телефона – возможно, там есть пункт, который позволяет отключить такое поведение системы.\n\nУстройства от Vivo, Oppo, Xiaomi и других китайских производителей часто содержат агрессивные системные ограничения, которые могут полностью блокировать доступ к этому разрешению.\n\nЕсли вы найдёте способ выдать себе необходимое разрешение вручную с помощью ADB, пожалуйста, сообщите нам об этом, создав обращение (issue) на GitHub!</string>
+    <string name="sponsor_title">Поддержать проект</string>
+    <string name="sponsor_days_used">Вы использовали ShizukuCallRecorder %1$d дней!</string>
+    <string name="sponsor_way_to_help">Способы, которыми можете поддержать:</string>
+    <string name="sponsor_way_github_sponsor_title">Стать спонсором на GitHub</string>
+    <string name="sponsor_way_github_sponsor_description">Получите значок публичного спонсора, добавьте свой профиль на мою страницу и поддержите меня и мою работу над проектами с открытым исходным кодом финансово.</string>
+    <string name="sponsor_way_github_star_title">Поставить звезду на GitHub</string>
+    <string name="sponsor_way_github_star_description">Улучшит видимость проекта, чтобы другие могли найти его.</string>
+    <string name="sponsor_way_contribute_title">Помощь в разработке</string>
+    <string name="sponsor_way_contribute_description">Помочь с кодом, отчётах об ошибках и переводами.</string>
+    <string name="sponsor_way_share_title">Поделится приложением</string>
+    <string name="sponsor_way_share_description">Расскажи своим друзьями или сообществу о ShizukuCallRecorder.</string>
+    <string name="sponsor_github_sponsor_button">Стать спосонсором на GitHub</string>
+    <string name="sponsor_github_star_button">Поставить звезду</string>
+    <string name="sponsor_maybe_later_button">Возможно позже</string>
+    <string name="sponsor_notification_body">Это свободный проект с открытым исходным кодом, в котором нет рекламы. Если этот инструмент помогает в вашей повседневной жизни, пожалуйста, рассмотрите способы поддержать разработку проекта!</string>
+    <string name="sponsor_notification_action">Посмотреть опции поддержки</string>
+    <string name="sponsor_notification_call_to_action_title">Нравится ShizukuCallRecorder?</string>
+    <string name="sponsor_notification_call_to_action">Нам нужна ваша помощь!</string>
+    <string name="permission_manage_ongoing_calls_label">Управлять текущими звонками</string>
 </resources>
