@@ -174,5 +174,5 @@
     <string name="placeholder_date_hours_desc">当前时（严格两位数，范围：00~23）</string>
     <string name="placeholder_date_minutes_desc">当前分（严格两位数，范围：00~59）</string>
     <string name="placeholder_date_seconds_desc">当前秒（严格两位数，范围：00~59）</string>
-    <string name="general_permission_escalation_exhausted">无法获取“%1$s”权限“%2$s”。\n已用尽所有权限提升步骤（%3$d）。\n\n您的设备制造商（OEM）可能正在主动阻止或撤销我们对权限所做的所有更改。请检查手机设置，看看是否有任何选项会导致这种行为。\n\nVivo、Oppo、小米以及其他中国厂商的设备通常带有较为严格的系统限制，可能会完全阻止对此权限的访问。\n\n如果您找到了通过 ADB 手动授予所需权限的方法，请通过在 GitHub 上创建 Issue 告诉我们！</string>
+    <string name="general_permission_escalation_exhausted">无法获取“%1$s”权限“%2$s”。\n所有能够提高权限的途径均已被尝试过（%3$d）。\n\n注意：请确保 Shizuku 此刻正在运行。这也有可能会意外导致抛出此错误。\n\n您的 OEM 可能在自动地撤销已对权限所做的任何更改。请检查手机设置，看看是否有任何安全选项会导致这种行为。\n\nOPPO、vivo、小米等中国厂商的设备通常带有较为严格的安全限制，可能会完全阻止此类权限的访问。\n\n如果您找到了通过 ADB 手动授予所需权限的方法，请在 GitHub 上创建 Issue 告诉我们！</string>
 </resources>
