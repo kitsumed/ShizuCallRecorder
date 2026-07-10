@@ -174,4 +174,16 @@
     <string name="placeholder_date_hours_desc">Bieżąca godzina w formacie 24-godzinnym, dwucyfrowa (00-23)</string>
     <string name="placeholder_date_minutes_desc">Bieżąca minuta, dwucyfrowa (00-59)</string>
     <string name="placeholder_date_seconds_desc">Bieżąca sekunda, dwucyfrowa (00-59)</string>
+    <string name="general_play">Odtwarzaj</string>
+    <string name="general_share">Udostępnij</string>
+    <string name="general_delete">Usuń</string>
+    <string name="general_deleted">Usunięto</string>
+    <string name="general_permission_escalation_exhausted">Nie udało się uzyskać uprawnienia \'%2$s\' dla \'%1$s\'.\nWyczerpano wszystkie dostępne metody (%3$d).\n\nUpewnij się, że Shizuku jest obecnie uruchomione, ponieważ to może być przyczyną tego błędu.\n\nProducent Twojego urządzenia (OEM) może również aktywnie blokować lub cofać wszystkie wprowadzane przez nas zmiany uprawnień. Przejrzyj ustawienia swojego telefonu, aby sprawdzić, czy istnieje możliwość wyłączenia tego zachowania.\n\nUrządzenia marek Vivo, Oppo, Xiaomi oraz innych chińskich producentów często zawierają agresywne ograniczenia systemowe, które mogą całkowicie zablokować dostęp do tego uprawnienia.\n\nJeśli znajdziesz sposób na samodzielne, ręczne przyznanie wymaganego uprawnienia za pomocą ADB, zgłoś nam to, tworząc zgłoszenie (issue) w serwisie GitHub!</string>
+    <string name="settings_post_recording_notification">Powiadomienie o zakończeniu nagrania</string>
+    <string name="settings_post_recording_notification_description">Wyświetla powiadomienie po zakończeniu nagrania z szybkimi akcjami, takimi jak odtworzenie i usunięcie.</string>
+    <string name="post_recording_notification_title">Zarządzanie nagraniami</string>
+    <string name="post_recording_notification_unknown_caller">Zastrzeżony lub nieznany numer</string>
+    <string name="delete_recording_confirmation_title">Usuń nagranie</string>
+    <string name="delete_recording_confirmation_message">Czy na pewno chcesz usunąć to nagranie? Tej operacji nie można cofnąć.</string>
+    <string name="delete_recording_confirmation_failed">Nie udało się usunąć nagrania. Sprawdź logi aplikacji.</string>
 </resources>
