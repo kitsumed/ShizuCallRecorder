@@ -174,4 +174,16 @@
     <string name="placeholder_date_hours_desc">A hora atual, 24 horas e preenchida com zeros (00-23)</string>
     <string name="placeholder_date_minutes_desc">Os minutos atuais, preenchidos com zeros (00-59)</string>
     <string name="placeholder_date_seconds_desc">Os segundos atuais, preenchidos com zeros (00-59)</string>
+    <string name="general_play">Iniciar</string>
+    <string name="general_share">Compartilhar</string>
+    <string name="general_delete">Excluir</string>
+    <string name="general_deleted">Excluído</string>
+    <string name="general_permission_escalation_exhausted">"Falha ao obter permissão \'%1$s\' \'%2$s\'.\nTodas as etapas de escalonamento (%3$d) foram esgotadas.\nCertifique-se de que o Shizuku esteja em execução, pois isso pode estar causando o erro.\nSeu OEM também pode estar bloqueando ou revertendo ativamente todas as nossas alterações de permissão.  Verifique as configurações do seu telefone para ver se há algo que possa desativar esse comportamento.\nDispositivos da Vivo, Oppo, Xiaomi e outros fornecedores chineses geralmente incluem restrições agressivas de sistema que podem bloquear completamente o acesso a essa permissão.\nSe você encontrar uma maneira de conceder a permissão necessária manualmente com o ADB, informe-nos criando um problema no GitHub!"</string>
+    <string name="settings_post_recording_notification">Notificação pós-gravação</string>
+    <string name="settings_post_recording_notification_description">Mostre uma notificação após o término da gravação com ações rápidas como reproduzir e excluir.</string>
+    <string name="post_recording_notification_title">Gerenciamento de Gravação</string>
+    <string name="post_recording_notification_unknown_caller">Chamador anônimo ou desconhecido</string>
+    <string name="delete_recording_confirmation_title">Excluir gravação</string>
+    <string name="delete_recording_confirmation_message">Tem certeza de que deseja excluir esta gravação? Esta ação não pode ser desfeita.</string>
+    <string name="delete_recording_confirmation_failed">Falha ao excluir a gravação. Por favor, verifique os logs dos aplicativos.</string>
 </resources>
