@@ -10,6 +10,7 @@ package com.kitsumed.shizucallrecorder.ui.screens
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
@@ -20,6 +21,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -28,14 +30,20 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,10 +53,15 @@ import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionMana
 import com.kitsumed.shizucallrecorder.onboarding.OnboardingStatus
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.system.openAppSettings
+import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
 import com.kitsumed.shizucallrecorder.ui.common.M3DropdownField
 import com.kitsumed.shizucallrecorder.ui.common.OptionItem
+import com.kitsumed.shizucallrecorder.ui.common.ToggleListItem
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 import com.kitsumed.shizucallrecorder.ui.viewmodels.PermissionsViewModel
+import com.kitsumed.shizucallrecorder.utils.AppLogger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 /**
@@ -73,6 +86,10 @@ fun PermissionsScreen(
 ) {
 
     val activityContext = LocalContext.current
+
+    // Quick debug dialog for when issues arise on the permission setup.
+    var showDebugDialog by remember() { mutableStateOf(false) }
+    val activityScope = rememberCoroutineScope()
 
     val isProcessingGrantingRequest by viewModel.isProcessingGrantingRequest.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorMessage.collectAsStateWithLifecycle()
@@ -154,6 +171,88 @@ fun PermissionsScreen(
         )
     }
 
+    if (showDebugDialog) {
+        val prefs = remember { AppPreferences(activityContext) }
+        val exportLogLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri: Uri? ->
+            if (uri != null) {
+                activityScope.launch(Dispatchers.IO) {
+                    AppLogger.exportReport(activityContext, uri)
+                }
+            }
+        }
+        var isLoggingEnabled by remember { mutableStateOf(prefs.isLoggingEnabled()) }
+
+        Dialog(
+            onDismissRequest = { showDebugDialog = false }
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = 14.dp) // Internal vertical padding for sheet boundaries
+                ) {
+                    // 3. Title (padded inside the dialog content)
+                    Text(
+                        text = stringResource(R.string.settings_section_debug),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)
+                    )
+
+                    ToggleListItem(
+                        label = stringResource(R.string.settings_debug_logging_enabled),
+                        description = stringResource(R.string.settings_debug_logging_enabled_description),
+                        checked = isLoggingEnabled,
+                        onCheckedChange = { checked ->
+                            prefs.setLoggingEnabled(checked)
+                            isLoggingEnabled = checked
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = { exportLogLauncher.launch("shizucallrecorder_debug_report.txt") },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.settings_debug_logging_generate_report))
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            OutlinedButton(
+                                onClick = { activityContext.openGithubReportIssue() }
+                            ) {
+                                Text(stringResource(R.string.settings_debug_logging_report_on_github))
+                            }
+
+                            TextButton(
+                                onClick = { showDebugDialog = false }
+                            ) {
+                                Text(text = stringResource(R.string.general_close))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     PermissionsContent(
         status = status,
         onGrantAccessButtonClick = {
@@ -169,7 +268,13 @@ fun PermissionsScreen(
             onPermissionGranted() // Refresh the UI after changing the mode
         },
         isProcessingGrantingRequest = isProcessingGrantingRequest,
-        modifier = modifier
+        modifier = modifier.pointerInput(Unit) {
+            detectTapGestures(
+                onLongPress = {
+                    showDebugDialog = true
+                }
+            )
+        }
     )
 }
 
@@ -177,17 +282,11 @@ fun PermissionsScreen(
  * Stateless visual layer for the permissions checklist screen.
  *
  * Renders a scrollable list of [PermissionCard] items based on the [OnboardingStatus.Status]
- * "Snapshot" and fires [onGrantAccessButtonClick] when the action button is pressed.
- * Contains no logic - all decisions live in [PermissionsViewModel].
- *
- * Accepting [OnboardingStatus.Status] directly (instead of a separate mapping type) ensures
- * that adding a new prerequisite to [OnboardingStatus] is reflected here automatically,
- * without maintaining a redundant parallel data structure.
  *
  * @param status                 The current "Snapshot" of every permission and setup step.
- * @param onGrantAccessButtonClick Forwarded to [PermissionsViewModel.onGrantAccess] by the
- *                               stateful [PermissionsScreen] wrapper.
- * @param modifier               Optional size/position modifier for the root [Surface].
+ * @param onGrantAccessButtonClick Forwarded to [PermissionsViewModel.onGrantAccess] when user taps the button.
+ * @param onGrantAccessButtonLongClick Forwarded to [PermissionsViewModel.onGrantAccess] when user long-presses the button.
+ * @param modifier
  */
 @Composable
 fun PermissionsContent(
@@ -423,7 +522,7 @@ private fun PermissionsScreenPreview() {
                 callDetectionModeGrantedPermissions = emptySet()
             ),
             onGrantAccessButtonClick = {},
-            onCallDetectionModeChanged = { },
+            onCallDetectionModeChanged = {},
             isProcessingGrantingRequest = false
         )
     }

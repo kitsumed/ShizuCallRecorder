@@ -257,6 +257,7 @@ object AppLogger {
      *
      * @param context Application context.
      * @param destinationUri Target SAF URI to which the file will be generated.
+     * @return [android.content.ContentResolver] output stream
      */
     fun exportReport(context: Context, destinationUri: Uri) {
         val file = logFile ?: return
