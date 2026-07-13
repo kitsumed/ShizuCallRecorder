@@ -196,9 +196,8 @@ fun PermissionsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-                        .padding(vertical = 14.dp) // Internal vertical padding for sheet boundaries
+                        .padding(vertical = 14.dp)
                 ) {
-                    // 3. Title (padded inside the dialog content)
                     Text(
                         text = stringResource(R.string.settings_section_debug),
                         style = MaterialTheme.typography.headlineSmall,
