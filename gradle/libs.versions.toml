@@ -17,7 +17,7 @@ shizuku-provider = "13.1.5"
 
 # Utility
 aboutlibraries = "14.2.1"
-libphonenumber = "9.0.33"
+libphonenumber = "9.0.34"
 
 [libraries]
 # AndroidX Core & Lifecycle
