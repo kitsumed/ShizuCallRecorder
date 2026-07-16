@@ -98,11 +98,3 @@ In some cases, certain features, like automatic call recording, may not be legal
 > Because deterministic behavior of the application cannot be guaranteed, it is your responsibility to:
 > 1. Ensure the recording behavior and your application settings aligns with your intent and the specific requirements in your jurisdiction.
 > 2. **Monitor the app's behavior** on your specific device. If you observe any behavior that does not comply with your local laws, you **must immediately cease any activity that constitutes a legal infraction** (For example, hanging up the call, deleting the audio files, etc).
-
-
-## Star History
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&legend=top-left" />
- </picture>
