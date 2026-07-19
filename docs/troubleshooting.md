@@ -35,3 +35,18 @@ Recording calls on Android is complex since every OEM does things differently. T
 **You can try** disabling **VoIP** or **Wi-Fi Calling**. Please also note that third-party applications (like WhatsApp or Facebook) often use VoIP, which will often result in silent recordings. For carrier phone calls, you should have an option available in your phone settings.
 
 You can also look for existing discussions or issues on this project to see if other users have already had the same issue with your device. They may have shared a solution!
+
+---
+
+### Can we integrate specific file name formats to support native phone application integrations?
+
+While we do not and will not offer pre-defined templates for specific apps, we provide the ability to customize your filename format by including multiple details like the hour, contact name, or, when available, the name of the application that made the call.
+
+<details>
+<summary><b>See the list of templates reported to work by users</b></summary>
+
+| Target OEM / OS Version | Template Type | Required Storage Path | Template Format | Filename Example |
+| :--- | :--- | :--- | :--- | :--- |
+| Honor (MagicOS 10 / Android 16) | **Standard (Number only)** | `/storage/emulated/0/Sounds/CallRecord/` | `{phone_number}_{date:year}{date:month}{date:day}{date:hours}{date:minutes}{date:seconds}` | `+33612345678_20260719093015.ogg` |
+| Honor (MagicOS 10 / Android 16) | **With Contact Name** | `/storage/emulated/0/Sounds/CallRecord/` | `{caller_name}@{phone_number}_{date:year}{date:month}{date:day}{date:hours}{date:minutes}{date:seconds}` | `JohnDoe@+33612345678_20260719093015.ogg` |
+</details>
