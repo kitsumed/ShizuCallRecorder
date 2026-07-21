@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_close">Затвори</string>
+    <string name="general_continue">Продължи</string>
+    <string name="general_ok">ОК</string>
+    <string name="general_cancel">Отказ</string>
+    <string name="general_settings">Настройки</string>
+    <string name="general_licenses">Лицензи</string>
+    <string name="general_record">Запис</string>
+    <string name="general_pause">Пауза</string>
+    <string name="general_resume">Възобновяване</string>
+    <string name="general_incoming">входящи</string>
+    <string name="general_outgoing">изходящи</string>
+    <string name="general_reset">Нулиране</string>
+    <string name="general_play">Възпроизвеждане</string>
+    <string name="general_share">Споделяне</string>
+    <string name="general_delete">Изтриване</string>
+    <string name="general_deleted">Изтрито</string>
+    <string name="general_system_limitation">Системно ограничение</string>
+    <string name="general_system_limitation_message">ShizuCallRecorder няма да работи на това устройство, тъй като shell приложението не разполага с нужните разрешения:\n\n%1$s\n\nТози проблем е нерешим – приложението не може да работи и ще се затвори.</string>
+    <string name="general_permission_escalation_exhausted">Неуспешно получаване на разрешение \'%1$s\' permission \'%2$s\'.\nВсички стъпки за ескалация (%3$d) са изчерпани.\n\nУверете се, че Shizuku работи, тъй като е възможно това да е причината.\n\nСъщо така е възможно вашият OEM активно да блокира или отменя всички промени на разрешения. Проверете в настройките на телефона дали няма възможност това поведение да бъде деактивирано.\n\nУстройствата от Vivo, Oppo, Xiaomi и други китайски производители често включват агресивни системни ограничения, които напълно блокират достъпа до това разрешение.\n\nАко откриете начин да си дадете това разрешение ръчно чрез ADB, моля докладвайте ни го чрез създаване на issue в GitHub!</string>
+    <string name="disclaimer_title">Добре дошли в ShizuCallRecorder</string>
+    <string name="disclaimer_wiki_link_KEYWORD">Уики</string>
+    <string name="disclaimer_introduction">Отворете и прочетете инструкциите за настройка в нашето Уики, преди да продължите. След това прочете отказа от отговорност по-долу.</string>
+    <string name="disclaimer_checkbox_label">Прочетох отказа от отговорност и разбрах законовите изисвания, отговорности и технически ограничения на този софтуер.</string>
+    <string name="disclaimer_wait">"Изчакайте  %1$d s"</string>
+    <string name="disclaimer_must_read">Трябва да прочетете отказа от отговорност.</string>
+    <string name="sponsor_title">Подкрепете проекта</string>
+    <string name="sponsor_body_title">Здравейте, аз съм kitsumed (Med)! 👋</string>
+    <string name="sponsor_body">Занимавам се с технологии и компютри от най-ранна възраст. Повечето от проектите ми произтичат от търсенията ми на решения за собствените си физически и умствени затруднения, докато други се дължат на просто случайни проблясъци на вдъхновение.\n\nShizuCallRecorder бе създаден от лична необходимост, свързана с едно от затрудненията ми. В продължение на години търсих безплатно приложение с отворен код (FOSS) за запис на телефонни разговори, което да работи на устройства без root, но така и не успях да открие подходящо такова. Такова просто не съществуваще. Затова реших да си създам собствено такова да и да го пусна за обществено ползване.\n\nПрекарах доста от свободното си време в учене, изграждане и поддръжка на софтуер с отворен код. Вашата подкрепа директно ме подмпомага финансово в ежедневния ми живот и ме мотивира да продължа да създавам висококачествени инструменти за общността.\n\nПоддържането на моите приложения свободни от агресивни реклами и нарушаващо поверителността проследяване е мое верую. Ако приложенията ми са ви от полза във вашето ежедневие, ще съм ви благодарен да ме подкрепите!</string>
+</resources>
