@@ -12,10 +12,10 @@
     <string name="general_incoming">eingehend</string>
     <string name="general_outgoing">ausgehend</string>
     <string name="general_system_limitation">Systemeinschränkung</string>
-    <string name="general_system_limitation_message">ShizuCallRecorder wird nicht an diesem Gerät funktionieren, da Ihre Shell-Anwendung nicht die erforderlichen Berechtigungen hat:\n\n%1$s\n\nDieses Problem kann von Ihnen nicht behoben werden. Die App kann auf Ihrem Gerät nicht funktionieren und wird jetzt geschlossen.</string>
+    <string name="general_system_limitation_message">ShizuCallRecorder wird nicht auf diesem Gerät funktionieren, da Ihre Shell-Anwendung nicht die erforderlichen Berechtigungen hat:\n\n%1$s\n\nDieses Problem kann von Ihnen nicht behoben werden. Die App kann auf Ihrem Gerät nicht funktionieren und wird jetzt geschlossen.</string>
     <string name="disclaimer_title">Willkommen bei ShizuCallRecorder</string>
     <string name="disclaimer_wiki_link_KEYWORD">Wiki</string>
-    <string name="disclaimer_introduction">Bitte öffnen Sie die Einrichtungsanweisungen auf unserer Wiki, bevor Sie fortfahren. Dann lesen Sie den Haftungsausschluss unten.</string>
+    <string name="disclaimer_introduction">Bitte öffnen Sie die Einrichtungsanweisungen auf unserem Wiki, bevor Sie fortfahren. Anschließend lesen Sie den Haftungsausschluss unten.</string>
     <string name="disclaimer_checkbox_label">Ich habe den Haftungsausschluss gelesen und verstehe die rechtlichen Anforderungen, Verantwortungen und technischen Einschränkungen dieser Anwendung.</string>
     <string name="disclaimer_wait">Warten Sie %1$ds</string>
     <string name="disclaimer_must_read">Sie müssen den Haftungsausschluss lesen.</string>
@@ -121,4 +121,13 @@
     <string name="audio_source_voice_performance_description">Hochgeschwindigkeits-Mikrofonmodus, konzipiert für Live-Musik und Echtzeit-Audioanwendungen.</string>
     <string name="settings_debug_mode_description">Entwickleroptionen anzeigen, Log-Redaktion deaktivieren.</string>
     <string name="settings_debug_caller_number">Telefonnummer debuggen</string>
+    <string name="general_reset">zurücksetzten</string>
+    <string name="general_play">Abspielen</string>
+    <string name="general_share">Teilen</string>
+    <string name="general_delete">Löschen</string>
+    <string name="general_deleted">gelöscht</string>
+    <string name="sponsor_title">Das Projekt unterstützen</string>
+    <string name="sponsor_days_used">Sie benutzen ShizuCallRecorder seit %1$d Tagen!</string>
+    <string name="sponsor_way_to_help">Wie Sie helfen können:</string>
+    <string name="sponsor_way_github_sponsor_title">Werden Sie GitHub Sponsor</string>
 </resources>

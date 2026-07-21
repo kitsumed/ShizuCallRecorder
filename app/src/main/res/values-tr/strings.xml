@@ -64,8 +64,8 @@
     <string name="settings_auto_record_incoming">Gelen aramaları otomatik kaydet</string>
     <string name="settings_auto_record_outgoing">Giden aramaları otomatik kaydet</string>
     <string name="settings_ignore_anonymous_incoming">Gelen anonim aramaları yoksay</string>
-    <string name="settings_ignore_cross_country_incoming">Uluslararası gelen aramaları yoksay</string>
-    <string name="settings_ignore_cross_country_outgoing">Uluslararası giden aramaları yoksay</string>
+    <string name="settings_ignore_cross_country_incoming">Gelen uluslararası aramaları yoksay</string>
+    <string name="settings_ignore_cross_country_outgoing">Giden uluslararası aramaları yoksay</string>
     <string name="settings_ignore_contacts_incoming">Kişileri yoksay (gelen)</string>
     <string name="settings_ignore_contacts_outgoing">Kişileri yoksay (giden)</string>
     <string name="settings_ignore_contacts_none">Tüm kişileri kaydet</string>
