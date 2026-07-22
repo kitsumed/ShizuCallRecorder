@@ -79,3 +79,13 @@ When this option is enabled, the application will behave as follows:
 
 >[!WARNING]
 > As mentioned earlier, recording may take a few seconds because Shizuku needs to start. If you enable **Start only when recording**, be aware that audio will **not start recording immediately** when you press the button.
+
+## Recording each side of the call separately
+In the **Audio configuration** section of Settings, enabling **Record each side separately** captures your side (uplink) and the other party's side (downlink) as two separate, time-synced files instead of one mixed recording. This is intended for transcription workflows where you want each speaker clearly attributed.
+
+While this is enabled, the **Audio source** dropdown is ignored (the uplink/downlink sources are used automatically), and two scrcpy-server processes run concurrently for the duration of the call.
+
+If a transcription tool you use requires a single stereo file with one speaker per channel instead of two files, you can combine the two outputs afterward with `ffmpeg`, without any quality loss:
+```
+ffmpeg -i call_..._uplink.opus -i call_..._downlink.opus -filter_complex amerge -ac 2 call_stereo.opus
+```

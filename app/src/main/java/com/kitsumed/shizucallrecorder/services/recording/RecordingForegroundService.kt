@@ -112,7 +112,7 @@ class RecordingForegroundService : Service() {
 
     /** True only if the pipeline is actively reading and capturing audio. */
     private val isCurrentlyRecording: Boolean
-        get() = (currentState as? RecordingServiceState.Active)?.engine?.audioPipeReadJob?.isActive == true
+        get() = (currentState as? RecordingServiceState.Active)?.engine?.isActivelyCapturingAudio == true
 
     // ── Service lifecycle ──────────────────────────────────────────────────────────────
 

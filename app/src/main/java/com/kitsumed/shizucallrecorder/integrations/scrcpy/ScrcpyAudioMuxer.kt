@@ -37,10 +37,15 @@ import java.nio.ByteBuffer
  *
  * @param outputFileDescriptor Writable [java.io.FileDescriptor] for the output file (from SAF).
  * @param outputDisplayPath    Human-readable path for logs (e.g. "Recordings/call_….ogg").
+ * @param sharedOriginNanos    Optional [System.nanoTime] instant to use as PTS=0 instead of this
+ *                             muxer's own first packet. Used for dual-track recording so both
+ *                             tracks' timelines share the exact same wall-clock origin and stay
+ *                             in sync when merged externally (e.g. for transcription).
  */
 class ScrcpyAudioMuxer(
     private val outputFileDescriptor: java.io.FileDescriptor,
-    private val outputDisplayPath: String
+    private val outputDisplayPath: String,
+    private val sharedOriginNanos: Long? = null
 ) : Closeable {
 
     // Muxer state
@@ -144,7 +149,7 @@ class ScrcpyAudioMuxer(
         // dead time from our internal timeline so the final output file doesn't have a huge silence.
         // TODO: This code was added to fix most phone audio player behaving badly with the large silence, ideally we would like to keep the silence and not corrupt the file by doing so.
         if (firstPacketTimeNanos == -1L) {
-            firstPacketTimeNanos = nowNanos
+            firstPacketTimeNanos = sharedOriginNanos ?: nowNanos
             lastPacketWallClockNanos = nowNanos
             AppLogger.d( "First audio frame: wall-clock origin set, pts=0")
         } else {

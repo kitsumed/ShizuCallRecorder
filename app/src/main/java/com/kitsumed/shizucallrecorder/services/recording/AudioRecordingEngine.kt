@@ -39,19 +39,45 @@ import kotlinx.coroutines.withTimeoutOrNull
  * Manages the audio recording pipeline, including the connection to the shell service, reading from the audio pipe,
  * parsing scrcpy-server custom stream format, and writing to the output container via [ScrcpyAudioMuxer].
  *
+ * Normally manages a single [TrackSession] (one scrcpy-server capture -> one output file). When the user enables
+ * dual-track recording, it manages two independent [TrackSession]s in parallel: [primaryTrack] captures
+ * [ScrcpyAudioSource.VOICE_CALL_UPLINK] (your side) and [secondaryTrack] captures [ScrcpyAudioSource.VOICE_CALL_DOWNLINK]
+ * (the other party's side), each writing to its own file, sharing a single wall-clock PTS origin so the two
+ * files stay perfectly in sync when merged externally (e.g. for transcription).
+ *
  * Call [startPipeline] to initialize and start the recording, and [release] to clean up resources when done.
  */
 class AudioRecordingEngine {
 
     /**
-     * Parses the raw byte stream that arrives from the shell process pipe.
-     *
-     * Calls the attached callbacks with parsed audio packets and stream metadata.
+     * Bundles all resources belonging to a single scrcpy capture -> output file pipeline, so
+     * [startPipeline] can run one (single-track) or two (dual-track) of these concurrently.
      */
-    var scrcpyClient: ScrcpyClient? = null
+    private class TrackSession(
+        val outputPfd: ParcelFileDescriptor,
+        val recordingUri: Uri,
+        val scrcpyAudioMuxer: ScrcpyAudioMuxer,
+        val audioReadPipePfd: ParcelFileDescriptor,
+        val audioPipeReadScope: CoroutineScope
+    ) {
+        var scrcpyClient: ScrcpyClient? = null
 
-    /** Writes scrcpy decoded audio packets into the output container (OPUS/AAC). */
-    var scrcpyAudioMuxer: ScrcpyAudioMuxer? = null
+        /**
+         * Active codec enum resolved from the user's preference and confirmed by the stream header.
+         * Updated once [ScrcpyClient.AudioPacketListener.onMetadataReceived] fires.
+         * Defaults to [ScrcpyAudioCodec.OPUS] as a safe initial value before the stream header is read.
+         */
+        var currentCodecEnum: ScrcpyAudioCodec = ScrcpyAudioCodec.OPUS
+
+        /** The active pipe reading job, kept so [release] can wait to finish reading any late bytes. */
+        var audioPipeReadJob: Job? = null
+    }
+
+    /** The uplink track (or the sole track, when dual-track recording is off) of the current session. */
+    private var primaryTrack: TrackSession? = null
+
+    /** The downlink track of the current session. Null unless dual-track recording is enabled. */
+    private var secondaryTrack: TrackSession? = null
 
     /** Metadata captured during the [startPipeline] and locked. Used for checks in [release]. */
     var initializationMetadata: EnrichedCallData? = null
@@ -64,44 +90,16 @@ class AudioRecordingEngine {
         }
 
     /**
-     * Read end of the kernel pipe owned by the shell process.
-     * The shell process writes scrcpy-server audio bytes into the write end; this service
-     * reads from the read end. Android's [ParcelFileDescriptor] wraps a native file descriptor
-     * so it can be transferred across processes via Binder.
+     * URI of the primary (uplink, or sole) recording file.
+     * Used to delete the file if recording fails to start mid-initialization, and by callers to
+     * offer post-recording file actions.
      */
-    var audioReadPipePfd: ParcelFileDescriptor? = null
+    val currentRecordingUri: Uri?
+        get() = primaryTrack?.recordingUri
 
-    /**
-     * Write-access file descriptor for the output file.
-     * This is kept open for the duration of the recording so [ScrcpyAudioMuxer] can write to it,
-     * and is closed in [release] after the muxer finalizes the container header.
-     */
-    var outputPfd: ParcelFileDescriptor? = null
-
-    /**
-     * URI of the current recording file.
-     * Used to delete the file if recording fails to start mid-initialization.
-     */
-    var currentRecordingUri: Uri? = null
-
-    /**
-     * Active codec enum resolved from the user's preference and confirmed by the stream header.
-     * Updated once [ScrcpyClient.AudioPacketListener.onMetadataReceived] fires.
-     * Defaults to [ScrcpyAudioCodec.OPUS] as a safe initial value before the stream header is read.
-     */
-    var currentCodecEnum: ScrcpyAudioCodec = ScrcpyAudioCodec.OPUS
-
-    /**
-     * Coroutine scope for reading from the audio pipe data returned by the shell service.
-     * Initialised in [startPipeline] and cancelled in [release].
-     */
-    var audioPipeReadScope: CoroutineScope? = null
-
-    /**
-     * The active pipe reading job.
-     * We keep a reference so we can wait to finish reading any late bytes during [release].
-     */
-    var audioPipeReadJob: Job? = null
+    /** True while the primary track's audio-pipe read coroutine is still active (capturing audio). */
+    val isActivelyCapturingAudio: Boolean
+        get() = primaryTrack?.audioPipeReadJob?.isActive == true
 
     /** Whether the recording is currently paused by the user. */
     @Volatile
@@ -109,6 +107,8 @@ class AudioRecordingEngine {
 
     /**
      * Orchestrates the initialization and connection of the entire recording pipeline.
+     * Starts one [TrackSession] normally, or two (uplink + downlink) when
+     * [AppPreferences.isDualTrackRecordingEnabled] is on.
      * @throws PipelineInitializationException if any step of the initialization fails, with details for user-friendly and technical error reporting.
      */
     fun startPipeline(context: Service, service: IShellService, metadata: EnrichedCallData) {
@@ -125,22 +125,7 @@ class AudioRecordingEngine {
 
         val codecEnum = ScrcpyAudioCodec.fromKey(preferences.getAudioCodec())
         val bitRate = preferences.getAudioBitRate().takeIf { it > 0 } ?: codecEnum.defaultBitRate
-        val audioSourceEnum = ScrcpyAudioSource.fromKey(preferences.getAudioSource())
-
-        AppLogger.i( "Starting recording pipeline: source=${audioSourceEnum.cliKey} codec=${codecEnum.cliKey} bitrate=$bitRate")
-
-        val fileName = RecordingFileNameFormatter.formatFileName(context, metadata, codecEnum)
-
-        val safResult = SafHelper.createAudioFile(context, folderUri, fileName, codecEnum.mimeType)
-            ?: throw PipelineInitializationException(
-                userFriendlyMessage = context.getString(R.string.recording_error_file_creation),
-                technicalLogMessage = "Failed to create audio file in SAF storage"
-            )
-
-        AppLogger.d( "Created SAF recording file: ${safResult.uri}")
-
-        currentRecordingUri = safResult.uri
-        outputPfd = safResult.descriptor
+        val isDebuggingModeEnabled = preferences.isDebugEnabled()
 
         val serverPath = ScrcpyConfig.getServerPath(context)
         if (!ServerExtractor.ensureServerFile(context, serverPath)) {
@@ -150,17 +135,118 @@ class AudioRecordingEngine {
             )
         }
 
-        scrcpyAudioMuxer = ScrcpyAudioMuxer(outputPfd!!.fileDescriptor, safResult.displayName)
+        // Shared wall-clock origin so dual-track files' PTS=0 lines up to the exact same instant.
+        val sharedOriginNanos = System.nanoTime()
 
-        try {
-            audioReadPipePfd = service.startRecording(
-                audioSourceEnum.cliKey,
-                codecEnum.cliKey,
-                bitRate,
-                serverPath,
-                preferences.isDebugEnabled()
+        if (preferences.isDualTrackRecordingEnabled()) {
+            AppLogger.i( "Starting dual-track recording pipeline: codec=${codecEnum.cliKey} bitrate=$bitRate")
+
+            // If the downlink track below throws, primaryTrack stays set on this engine and will be
+            // torn down (and its file deleted) by the caller's cancel()/release() fallback - no
+            // manual rollback needed here.
+            primaryTrack = startTrack(
+                context = context,
+                service = service,
+                metadata = metadata,
+                folderUri = folderUri,
+                codecEnum = codecEnum,
+                bitRate = bitRate,
+                serverPath = serverPath,
+                isDebuggingModeEnabled = isDebuggingModeEnabled,
+                audioSource = ScrcpyAudioSource.VOICE_CALL_UPLINK,
+                trackSuffix = "uplink",
+                sharedOriginNanos = sharedOriginNanos,
+                useSecondarySlot = false
             )
+            secondaryTrack = startTrack(
+                context = context,
+                service = service,
+                metadata = metadata,
+                folderUri = folderUri,
+                codecEnum = codecEnum,
+                bitRate = bitRate,
+                serverPath = serverPath,
+                isDebuggingModeEnabled = isDebuggingModeEnabled,
+                audioSource = ScrcpyAudioSource.VOICE_CALL_DOWNLINK,
+                trackSuffix = "downlink",
+                sharedOriginNanos = sharedOriginNanos,
+                useSecondarySlot = true
+            )
+        } else {
+            val audioSourceEnum = ScrcpyAudioSource.fromKey(preferences.getAudioSource())
+            AppLogger.i( "Starting recording pipeline: source=${audioSourceEnum.cliKey} codec=${codecEnum.cliKey} bitrate=$bitRate")
+
+            primaryTrack = startTrack(
+                context = context,
+                service = service,
+                metadata = metadata,
+                folderUri = folderUri,
+                codecEnum = codecEnum,
+                bitRate = bitRate,
+                serverPath = serverPath,
+                isDebuggingModeEnabled = isDebuggingModeEnabled,
+                audioSource = audioSourceEnum,
+                trackSuffix = null,
+                sharedOriginNanos = sharedOriginNanos,
+                useSecondarySlot = false
+            )
+        }
+    }
+
+    /**
+     * Creates the output file, muxer, shell-side capture, and [ScrcpyClient] for a single track,
+     * and starts its pipe-reading coroutine.
+     *
+     * @param useSecondarySlot When true, uses [IShellService.startSecondaryRecording] instead of
+     *                         [IShellService.startRecording] so this track runs in its own
+     *                         concurrent shell-side scrcpy-server process (used for the downlink
+     *                         track in dual-track mode).
+     * @throws PipelineInitializationException on any failure; cleans up its own partial file/pipe/output
+     *         before throwing so a failure here never leaks resources for *this* track.
+     */
+    private fun startTrack(
+        context: Service,
+        service: IShellService,
+        metadata: EnrichedCallData,
+        folderUri: Uri,
+        codecEnum: ScrcpyAudioCodec,
+        bitRate: Int,
+        serverPath: String,
+        isDebuggingModeEnabled: Boolean,
+        audioSource: ScrcpyAudioSource,
+        trackSuffix: String?,
+        sharedOriginNanos: Long,
+        useSecondarySlot: Boolean
+    ): TrackSession {
+        val fileName = RecordingFileNameFormatter.formatFileName(context, metadata, codecEnum, trackSuffix = trackSuffix)
+
+        val safResult = SafHelper.createAudioFile(context, folderUri, fileName, codecEnum.mimeType)
+            ?: throw PipelineInitializationException(
+                userFriendlyMessage = context.getString(R.string.recording_error_file_creation),
+                technicalLogMessage = "Failed to create audio file in SAF storage"
+            )
+
+        AppLogger.d( "Created SAF recording file: ${safResult.uri}")
+
+        val outputPfd = safResult.descriptor
+        val scrcpyAudioMuxer = ScrcpyAudioMuxer(outputPfd.fileDescriptor, safResult.displayName, sharedOriginNanos)
+
+        val audioReadPipePfd = try {
+            (if (useSecondarySlot) {
+                service.startSecondaryRecording(audioSource.cliKey, codecEnum.cliKey, bitRate, serverPath, isDebuggingModeEnabled)
+            } else {
+                service.startRecording(audioSource.cliKey, codecEnum.cliKey, bitRate, serverPath, isDebuggingModeEnabled)
+            }) ?: throw PipelineInitializationException(
+                userFriendlyMessage = context.getString(R.string.recording_error_start_failed),
+                technicalLogMessage = "Shell service returned null pipe – cannot start recording"
+            )
+        } catch (e: PipelineInitializationException) {
+            runCatching { outputPfd.close() }
+            runCatching { DocumentFile.fromSingleUri(context, safResult.uri)?.delete() }
+            throw e
         } catch (e: Exception) {
+            runCatching { outputPfd.close() }
+            runCatching { DocumentFile.fromSingleUri(context, safResult.uri)?.delete() }
             throw PipelineInitializationException(
                 userFriendlyMessage = e.localizedMessage ?: context.getString(R.string.recording_error_start_failed),
                 technicalLogMessage = "Remote exception calling startRecording",
@@ -168,60 +254,82 @@ class AudioRecordingEngine {
             )
         }
 
-        val inputPfd = audioReadPipePfd ?: throw PipelineInitializationException(
-            userFriendlyMessage = context.getString(R.string.recording_error_start_failed),
-            technicalLogMessage = "Shell service returned null pipe – cannot start recording"
+        val track = TrackSession(
+            outputPfd = outputPfd,
+            recordingUri = safResult.uri,
+            scrcpyAudioMuxer = scrcpyAudioMuxer,
+            audioReadPipePfd = audioReadPipePfd,
+            audioPipeReadScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         )
 
-        currentCodecEnum = codecEnum
-        scrcpyAudioMuxer?.initialize(currentCodecEnum)
+        track.currentCodecEnum = codecEnum
+        track.scrcpyAudioMuxer.initialize(track.currentCodecEnum)
 
-        scrcpyClient = ScrcpyClient(
-            inputPfd = inputPfd,
+        track.scrcpyClient = ScrcpyClient(
+            inputPfd = audioReadPipePfd,
             expectedCodec = codecEnum,
-            listener = object : ScrcpyClient.AudioPacketListener {
-                /**
-                 * Called once after the 4-byte codec FourCC is verified from the stream header.
-                 * We re-initialise the muxer with the confirmed codec in case it differs from our initial assumption.
-                 */
-                override fun onMetadataReceived(codec: ScrcpyAudioCodec) {
-                    AppLogger.d( "Stream metadata confirmed: codec=${codec.cliKey} fourCC=0x${codec.codecFourCC.toString(16)}")
-                    currentCodecEnum = codec
-                    scrcpyAudioMuxer?.initialize(codec)
-                }
-
-                /** Called for every audio frame received from the pipe. */
-                override fun onAudioPacket(packet: ScrcpyClient.AudioPacket) {
-                    if (isPaused) return // Drop packets while paused, do not write to muxer
-                    scrcpyAudioMuxer?.writePacket(packet, currentCodecEnum)
-                }
-
-                /** Called when the stream ends normally (EOF) or with an error. */
-                override fun onStreamEnd(error: String?) {
-                    if (error != null) {
-                        AppLogger.w( "Scrcpy-client reported stopping parsing due to an audio stream error: $error")
-                    } else {
-                        AppLogger.d( "Scrcpy-client reported our pipe read stream ended normally (EOF)")
-                    }
-                }
-            }
+            listener = buildPacketListener(track)
         )
 
-        val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-        audioPipeReadScope = scope
-        audioPipeReadJob = scope.launch(Dispatchers.IO) {
+        track.audioPipeReadJob = track.audioPipeReadScope.launch(Dispatchers.IO) {
             try {
-                scrcpyClient?.start()
+                track.scrcpyClient?.start()
             } catch (e: Exception) {
                 AppLogger.w( "Audio reader ended: ${e.message}")
+            }
+        }
+
+        return track
+    }
+
+    /**
+     * Builds the [ScrcpyClient.AudioPacketListener] that wires a track's parsed packets into its
+     * own [ScrcpyAudioMuxer], respecting [isPaused].
+     */
+    private fun buildPacketListener(track: TrackSession): ScrcpyClient.AudioPacketListener {
+        return object : ScrcpyClient.AudioPacketListener {
+            /**
+             * Called once after the 4-byte codec FourCC is verified from the stream header.
+             * We re-initialise the muxer with the confirmed codec in case it differs from our initial assumption.
+             */
+            override fun onMetadataReceived(codec: ScrcpyAudioCodec) {
+                AppLogger.d( "Stream metadata confirmed: codec=${codec.cliKey} fourCC=0x${codec.codecFourCC.toString(16)}")
+                track.currentCodecEnum = codec
+                track.scrcpyAudioMuxer.initialize(codec)
+            }
+
+            /** Called for every audio frame received from the pipe. */
+            override fun onAudioPacket(packet: ScrcpyClient.AudioPacket) {
+                if (isPaused) return // Drop packets while paused, do not write to muxer
+                track.scrcpyAudioMuxer.writePacket(packet, track.currentCodecEnum)
+            }
+
+            /** Called when the stream ends normally (EOF) or with an error. */
+            override fun onStreamEnd(error: String?) {
+                if (error != null) {
+                    AppLogger.w( "Scrcpy-client reported stopping parsing due to an audio stream error: $error")
+                } else {
+                    AppLogger.d( "Scrcpy-client reported our pipe read stream ended normally (EOF)")
+                }
             }
         }
     }
 
     /**
-     * Safely releases all held resources in the correct order.
+     * Safely releases all held resources in the correct order, for both tracks if dual-track
+     * recording was active.
      * Everything is wrapped in runCatching to ignore any exceptions and continue the cleanup.
-     *
+     */
+    fun release(shellService: IShellService?) {
+        AppLogger.i( "Releasing session resources and recording pipeline...")
+        releaseTrack(primaryTrack, shellService, isSecondary = false)
+        releaseTrack(secondaryTrack, shellService, isSecondary = true)
+        primaryTrack = null
+        secondaryTrack = null
+    }
+
+    /**
+     * Tears down a single [TrackSession] in the correct order:
      * 1. Stops the remote shell service process natively, which gives scrcpy-server a grace period
      *    to write its final audio bytes before closing the pipe from the sender side.
      * 2. Waits for the local reading coroutine to reach EOF and finish parsing the late bytes.
@@ -229,38 +337,42 @@ class AudioRecordingEngine {
      * 4. Closes the inbound pipe.
      * 5. Closes the muxer and output file descriptor to finalize the container header.
      */
-    fun release(shellService: IShellService?) {
-        AppLogger.i( "Releasing session resources and recording pipeline...")
-        runCatching { shellService?.stopRecording() }
+    private fun releaseTrack(track: TrackSession?, shellService: IShellService?, isSecondary: Boolean) {
+        if (track == null) return
+
+        runCatching {
+            if (isSecondary) shellService?.stopSecondaryRecording() else shellService?.stopRecording()
+        }
 
         runCatching {
             runBlocking {
                 withTimeoutOrNull(2000L) {
-                    audioPipeReadJob?.join()
+                    track.audioPipeReadJob?.join()
                 }
             }
         }
 
-        runCatching { scrcpyClient?.stop() }
-        runCatching { audioPipeReadScope?.cancel() }
-        runCatching { audioReadPipePfd?.close() }
-        runCatching { scrcpyAudioMuxer?.close() }
-        runCatching { outputPfd?.close() }
+        runCatching { track.scrcpyClient?.stop() }
+        runCatching { track.audioPipeReadScope.cancel() }
+        runCatching { track.audioReadPipePfd.close() }
+        runCatching { track.scrcpyAudioMuxer.close() }
+        runCatching { track.outputPfd.close() }
     }
 
     /**
-     * Trigger the normal [release] flow, then followed by an attempt to delete the incomplete recording file if it was created
-     * during the pipeline initialization.
+     * Trigger the normal [release] flow, then followed by an attempt to delete the incomplete recording file(s)
+     * created during the pipeline initialization (both tracks', when dual-track recording was active).
      */
     fun cancel(context: Context, shellService: IShellService?) {
+        val urisToDelete = listOfNotNull(primaryTrack?.recordingUri, secondaryTrack?.recordingUri)
         release(shellService)
-        try {
-            currentRecordingUri?.let { uri ->
+        urisToDelete.forEach { uri ->
+            try {
                 DocumentFile.fromSingleUri(context, uri)?.delete()
+                AppLogger.d( "Cleaned up empty file after start failure")
+            } catch (e: Exception) {
+                AppLogger.w( "Failed to cleanup empty file", e)
             }
-            AppLogger.d( "Cleaned up empty file after start failure")
-        } catch (e: Exception) {
-            AppLogger.w( "Failed to cleanup empty file", e)
         }
     }
 }

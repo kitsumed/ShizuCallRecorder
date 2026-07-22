@@ -755,35 +755,55 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
     val audioSource = remember(updateTrigger) { preferences.getAudioSource() }
     val audioCodec = remember(updateTrigger) { preferences.getAudioCodec() }
     val savedBitRate = remember(updateTrigger) { preferences.getAudioBitRate() }
-        
+    val dualTrackRecording = remember(updateTrigger) { preferences.isDualTrackRecordingEnabled() }
+
     SettingsSection(title = stringResource(R.string.settings_section_audio)) {
         val currentSdk = Build.VERSION.SDK_INT
 
-        // Build the source list from the enum, hiding debug-only entries when debug is off.
-        // Items that require an API level not available on this device are shown as disabled.
-        val audioSourceOptions = ScrcpyAudioSource.entries
-            .filter { !it.isDebugOnly || isDebugEnabled }
-            .map { source ->
-                OptionItem(
-                    key         = source.cliKey,
-                    label       = stringResource(source.titleResId),
-                    description = stringResource(source.descriptionResId),
-                    // Enabled only when the current SDK is within the source's API range.
-                    enabled     = currentSdk >= source.minApi &&
-                                  (source.maxApi == null || currentSdk <= source.maxApi)
-                )
-            }
-
-        val selectedAudio = audioSourceOptions.find { it.key == audioSource }
-            ?: audioSourceOptions.first()
-
-        M3DropdownField(
-            label    = stringResource(R.string.settings_audio_source),
-            selected = selectedAudio,
-            options  = audioSourceOptions,
-            onOptionSelected = { actions.setAudioSource(it.key) },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+        ToggleListItem(
+            label           = stringResource(R.string.settings_dual_track_recording),
+            description     = stringResource(R.string.settings_dual_track_recording_description),
+            checked         = dualTrackRecording,
+            onCheckedChange = { actions.setDualTrackRecordingEnabled(it) },
+            modifier        = Modifier.padding(horizontal = 16.dp)
         )
+
+        // The audio source picker is meaningless in dual-track mode (uplink/downlink are forced),
+        // so it's hidden entirely instead of shown disabled.
+        if (!dualTrackRecording) {
+            // Build the source list from the enum, hiding debug-only entries when debug is off.
+            // Items that require an API level not available on this device are shown as disabled.
+            val audioSourceOptions = ScrcpyAudioSource.entries
+                .filter { !it.isDebugOnly || isDebugEnabled }
+                .map { source ->
+                    OptionItem(
+                        key         = source.cliKey,
+                        label       = stringResource(source.titleResId),
+                        description = stringResource(source.descriptionResId),
+                        // Enabled only when the current SDK is within the source's API range.
+                        enabled     = currentSdk >= source.minApi &&
+                                      (source.maxApi == null || currentSdk <= source.maxApi)
+                    )
+                }
+
+            val selectedAudio = audioSourceOptions.find { it.key == audioSource }
+                ?: audioSourceOptions.first()
+
+            M3DropdownField(
+                label    = stringResource(R.string.settings_audio_source),
+                selected = selectedAudio,
+                options  = audioSourceOptions,
+                onOptionSelected = { actions.setAudioSource(it.key) },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+            )
+        } else {
+            Text(
+                text     = stringResource(R.string.settings_dual_track_recording_source_note),
+                style    = MaterialTheme.typography.labelSmall,
+                color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+            )
+        }
 
         val codecOptions = ScrcpyAudioCodec.entries
             .map { OptionItem(it.cliKey, stringResource(it.titleResId)) }
@@ -1183,6 +1203,7 @@ private fun SettingsScreenPreview() {
             override fun setAudioSource(source: String) {}
             override fun setAudioCodec(codec: String) {}
             override fun setAudioBitRate(bitRate: Int) {}
+            override fun setDualTrackRecordingEnabled(enabled: Boolean) {}
             override fun setThemeMode(mode: AppPreferences.ThemeMode) {}
             override fun setDynamicColorEnabled(enabled: Boolean) {}
             override fun setShowToastsEnabled(enabled: Boolean) {}

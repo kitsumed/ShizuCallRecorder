@@ -41,6 +41,31 @@ interface IShellService {
     void stopRecording() = 3;
 
     /**
+     * Starts a second, independent audio-capture pipeline in parallel with [startRecording].
+     * Used for dual-track recording, where each side of a call (uplink/downlink) is captured
+     * as its own scrcpy-server process and its own pipe, so the two streams never mix.
+     *
+     * @param audioSource        scrcpy audio_source parameter (e.g. "voice-call-downlink").
+     * @param audioCodec         scrcpy audio_codec parameter (e.g. "opus", "aac").
+     * @param audioBitRate       scrcpy audio_bit_rate in bps (e.g. 16000 for 16 kbps Opus).
+     * @param serverPath      Absolute path to scrcpy-server.jar in shared storage.
+     * @param isDebuggingModeEnabled  When true, logs relay throughput every second.
+     * @return The read-end [ParcelFileDescriptor] of the audio pipe, or null on failure.
+     */
+    ParcelFileDescriptor startSecondaryRecording(
+        String audioSource,
+        String audioCodec,
+        int audioBitRate,
+        String serverPath,
+        boolean isDebuggingModeEnabled
+    ) = 7;
+
+    /**
+     * Stops the secondary audio capture pipeline started by [startSecondaryRecording].
+     */
+    void stopSecondaryRecording() = 8;
+
+    /**
      * Grants an AppOp permission at the package level for a specific user profile.
      * @param packageName The package name of the app to grant the permission to.
      * @param opName The AppOp operation name (e.g., "READ_PHONE_STATE").

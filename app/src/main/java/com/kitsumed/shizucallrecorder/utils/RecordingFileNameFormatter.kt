@@ -52,13 +52,16 @@ object RecordingFileNameFormatter {
      * @param metadata Defines the main properties (direction, phone number, cross country).
      * @param codec The selected ScrcpyAudioCodec used to determine the file extension.
      * @param customFormat An optional custom format string to use instead of the one from preferences. Useful for testing or one-off formatting without changing user settings.
+     * @param trackSuffix An optional literal token appended before the extension (e.g. "uplink"), used
+     *                    to distinguish the two files produced by dual-track recording.
      * @return A filesystem-safe filename string.
      */
     fun formatFileName(
         context: Context,
         metadata: EnrichedCallData,
         codec: ScrcpyAudioCodec,
-        customFormat: String? = null
+        customFormat: String? = null,
+        trackSuffix: String? = null
     ): String {
         val template = customFormat ?: AppPreferences(context).getFileNameTemplate()
 
@@ -109,7 +112,8 @@ object RecordingFileNameFormatter {
             .replace(FileNamePlaceholder.PACKAGE_NAME.tag, packageName)
 
         AppLogger.v( "Formatted base filename: '$baseName' with template '$template'")
-        return "$baseName${codec.containerExtension}"
+        val suffix = trackSuffix?.let { "_$it" } ?: ""
+        return "$baseName$suffix${codec.containerExtension}"
     }
 
     /**

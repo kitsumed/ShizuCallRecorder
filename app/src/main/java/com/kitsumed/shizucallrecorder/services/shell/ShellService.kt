@@ -29,6 +29,8 @@ import kotlin.system.exitProcess
 class ShellService : IShellService.Stub {
 
     private val audioPipeline by lazy { ShellAudioPipeline() }
+    /** Second, independent pipeline instance used for dual-track (uplink+downlink) recording. */
+    private val secondaryAudioPipeline by lazy { ShellAudioPipeline() }
     private val commandExecutor by lazy { ShellCommandExecutor() }
 
     // ---- Shizuku-required constructors
@@ -72,6 +74,20 @@ class ShellService : IShellService.Stub {
         audioPipeline.stopCapture()
     }
 
+    override fun startSecondaryRecording(
+        audioSource: String,
+        audioCodec: String,
+        audioBitRate: Int,
+        serverPath: String,
+        isDebuggingModeEnabled: Boolean
+    ): ParcelFileDescriptor? {
+        return secondaryAudioPipeline.startCapture(audioSource, audioCodec, audioBitRate, serverPath, isDebuggingModeEnabled)
+    }
+
+    override fun stopSecondaryRecording() {
+        secondaryAudioPipeline.stopCapture()
+    }
+
     override fun grantAppOpByPackage(packageName: String, opName: String, userProfileId: Int): Boolean {
         return commandExecutor.grantAppOpByPackage(packageName, opName, userProfileId)
     }
@@ -92,6 +108,7 @@ class ShellService : IShellService.Stub {
     override fun destroy() {
         AppLogger.i("ShellService.destroy() – terminating shell process")
         stopRecording()
+        stopSecondaryRecording()
         exitProcess(0)
     }
 }

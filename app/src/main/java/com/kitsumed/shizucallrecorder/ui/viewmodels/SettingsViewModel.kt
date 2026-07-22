@@ -59,6 +59,7 @@ interface SettingsActions {
     fun setAudioSource(source: String)
     fun setAudioCodec(codec: String)
     fun setAudioBitRate(bitRate: Int)
+    fun setDualTrackRecordingEnabled(enabled: Boolean)
     fun setThemeMode(mode: AppPreferences.ThemeMode)
     fun setDynamicColorEnabled(enabled: Boolean)
     fun setShowToastsEnabled(enabled: Boolean)
@@ -250,6 +251,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setAudioBitRate(bitRate: Int) {
         preferences.setAudioBitRate(bitRate)
+        refresh()
+    }
+
+    /** Enables or disables dual-track recording (separate uplink/downlink files). */
+    override fun setDualTrackRecordingEnabled(enabled: Boolean) {
+        preferences.setDualTrackRecordingEnabled(enabled)
         refresh()
     }
 

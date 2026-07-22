@@ -45,6 +45,7 @@ class AppPreferences(context: Context) {
         const val VIBRATION_ENABLED = true
         val CALL_DETECTION_MODE = CallDetectionMode.getDefaultModeForDevice().key
         const val RECORD_THIRD_PARTY_CALLS = false
+        const val DUAL_TRACK_RECORDING_ENABLED = false
 
         const val POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED = false
         const val AUTO_RECORD_INCOMING = false
@@ -123,7 +124,8 @@ class AppPreferences(context: Context) {
         SHIZUKU_KEEP_ALIVE("shizuku_keep_alive"),
         SHIZUKU_AUTH_KEY("shizuku_auth_key"),
         CALL_DETECTION_MODE("call_detection_mode"),
-        RECORD_THIRD_PARTY_CALLS("record_third_party_calls");
+        RECORD_THIRD_PARTY_CALLS("record_third_party_calls"),
+        DUAL_TRACK_RECORDING_ENABLED("dual_track_recording_enabled");
     }
 
     // -------- Nested enums
@@ -376,6 +378,15 @@ class AppPreferences(context: Context) {
 
     /** Sets the configured audio bitrate. */
     fun setAudioBitRate(bitRate: Int) = setInt(Key.AUDIO_BITRATE, bitRate)
+
+    /**
+     * Checks if dual-track recording is enabled. When enabled, each side of the call is captured
+     * separately (uplink/downlink) into two files instead of one, ignoring [getAudioSource].
+     */
+    fun isDualTrackRecordingEnabled() = getBoolean(Key.DUAL_TRACK_RECORDING_ENABLED, DefaultsValue.DUAL_TRACK_RECORDING_ENABLED)
+
+    /** Sets whether dual-track recording is enabled. */
+    fun setDualTrackRecordingEnabled(enabled: Boolean) = setBoolean(Key.DUAL_TRACK_RECORDING_ENABLED, enabled)
 
     // -------- File Naming --------
 

@@ -217,6 +217,10 @@
     <string name="settings_audio_bitrate">Audio bit rate</string>
     <string name="audio_bitrate_kbps" translatable="false">%1$d kbps</string>
 
+    <string name="settings_dual_track_recording">Record each side separately</string>
+    <string name="settings_dual_track_recording_description">Saves two files per call, one for your side and one for the caller\'s side, always in sync. Useful for transcription with clear speaker separation.</string>
+    <string name="settings_dual_track_recording_source_note">Audio source is ignored while this is on; the uplink and downlink sources are used automatically.</string>
+
     <string name="settings_audio_source">Audio source</string>
     <string name="audio_source_voice_comm" translatable="false">Voice communication mic</string>
     <string name="audio_source_voice_comm_description">Microphone audio source tuned for voice communications. Built-in echo cancellation.</string>

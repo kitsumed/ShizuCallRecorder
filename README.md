@@ -26,6 +26,7 @@ It can also be seen as an on-device wrapper for [scrcpy-server](https://github.c
     - Ignore specific contacts
     - Ignore all contacts
 - Saves recordings with **Opus** or **AAC** codec.
+- Optionally records each side of the call (uplink/downlink) as two separate, time-synced files, useful for transcription with clear speaker separation.
 - The app runs only on phone event changes, no persistent background process and notifications
 
 ## Requirements
