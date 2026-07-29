@@ -186,4 +186,6 @@
     <string name="delete_recording_confirmation_title">Eliminar grabación</string>
     <string name="delete_recording_confirmation_message">¿Seguro que quieres eliminar esta grabación? Esta acción no se puede deshacer.</string>
     <string name="delete_recording_confirmation_failed">No se pudo eliminar la grabación. Por favor, revisa los registros de la aplicación.</string>
+    <string name="settings_overlay_title">Mostrar superposición de grabación</string>
+    <string name="settings_overlay_subtitle">Mostrar una superposición sobre otras aplicaciones con acciones rápidas para gestionar la grabación.</string>
 </resources>
