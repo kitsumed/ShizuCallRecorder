@@ -186,4 +186,6 @@
     <string name="recording_shizuku_not_started">Proces Shizuku-Server je zastavený. Spusťte prosím Shizuku a ujistěte se, že může běžet vždy, když aplikace potřebuje nahrávat zvuk.</string>
     <string name="recording_shizuku_permission_denied">Povolte prosím této aplikaci přístup k Shizuku. Oprávnění bylo odepřeno.</string>
     <string name="recording_shizuku_auth_key_missing">Ověřovací klíč Shizuku Intents chybí. Zadejte jej prosím v nastavení aplikace.</string>
+    <string name="settings_overlay_title">Zobrazovat plovoucí ovládání nahrávání</string>
+    <string name="settings_overlay_subtitle">Zobrazí nad ostatními aplikacemi plovoucí ovládání s rychlými akcemi pro správu nahrávání.</string>
 </resources>
