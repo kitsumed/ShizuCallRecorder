@@ -36,7 +36,7 @@
     <string name="permission_battery_label">Akkumulátor optimalizáció</string>
     <string name="permission_battery_description">Aktív állapotban tartja az alkalmazást és lehetővé teszi az esetleges háttérindítási korlátozások megkerülését.</string>
     <string name="permission_storage_description">Felvételek mentésének helye.</string>
-    <string name="permission_shizuku_description">A felvétel elindításához szükséges (ShellService) a scrcpy használatával.</string>
+    <string name="permission_shizuku_description">A felvétel elindításához szükséges (ShellService) az scrcpy használatával.</string>
     <string name="permission_shizuku_not_running">Nem fut</string>
     <string name="permission_shizuku_open">Shizuku megnyitása</string>
     <string name="settings_section_about">Névjegy</string>
@@ -53,7 +53,7 @@
     <string name="settings_tap_to_select_folder">Koppintson a mappa kiválasztáshoz...</string>
     <string name="settings_recording_folder_label">Felvételek mappája</string>
     <string name="settings_file_name_template">Fájlnév minta</string>
-    <string name="settings_file_name_template_placeholders_preview">%1$s előnézete</string>
+    <string name="settings_file_name_template_placeholders_preview">Előnézet: %1$s</string>
     <string name="placeholder_date_desc">A jelenlegi dátum és idő</string>
     <string name="placeholder_direction_desc">Hívás iránya (bejövő/kimenő)</string>
     <string name="placeholder_phone_number_desc">Telefonszám</string>
@@ -92,14 +92,14 @@
     <string name="audio_source_mic_unprocessed_description">A mikrofonból érkező nyers hangot rögzíti, automatikus szűrés vagy bármilyen feljavítás nélkül.</string>
     <string name="audio_source_mic_camcorder_description">Videofelvételre hangolt rögzítés, a kamera irányából érkező hangra fókuszálva.</string>
     <string name="audio_source_mic_voice_recognition_description">Mikrofon, ami a beszédfelismerésre van hangolva (csökkentett zajszint mellett).</string>
-    <string name="audio_source_voice_call_uplink_description">Csak a saját oldalról rögzíti a telefonbeszélgetésből (kimenő irány).</string>
+    <string name="audio_source_voice_call_uplink_description">Csak a saját oldalt rögzíti a telefonbeszélgetésből (kimenő irány).</string>
     <string name="audio_source_voice_call_downlink_description">Csak a másik fél oldalát rögzíti a telefonbeszélgetésből (bejövő irány).</string>
     <string name="audio_source_voice_performance_description">Nagy sebességű mikrofon üzemmód - leginkább élő zenei előadásokhoz és valós idejű hangalkalmazásokhoz.</string>
     <string name="settings_debug_logging_enabled">Naplózás bekapcsolása</string>
     <string name="settings_debug_logging_enabled_description">Hibajelentéshez engedélyezze a beállítást, indítsa újra az alkalmazást majd próbálja reprodukálni az esetet.</string>
     <string name="settings_debug_logging_title">A hibajelentés lépései</string>
     <string name="settings_debug_logging_steps">1. Ellenőrizze, hogy a problémát jelentették-e már a GitHubon; ha nem, folytassa.\n2. Reprodukálja a hibát úgy, hogy a naplózás engedélyezve van.\n3. Használja az alul található „Jelentés generálása” gombot a naplófájlok telefonra mentéséhez.\n4. Használja a „Jelentés a GitHubon” gombot egy új hibajelentés nyitásához, töltse ki a mezőket és csatolja a naplófájlt.</string>
-    <string name="settings_debug_logging_step_warning">A megosztás előtt ellenőrizze a létrehozott fájlt nem tartalmaz-e bizalmas információkat. Ha elkészült, tiltsa le a naplózást.</string>
+    <string name="settings_debug_logging_step_warning">A megosztás előtt ellenőrizze a létrehozott fájlt, nem tartalmaz-e bizalmas információkat. Ha elkészült, tiltsa le a naplózást.</string>
     <string name="settings_debug_logging_step_warning_no_redaction">⚠️ Hibakeresési mód bekapcsolva. A naplószűrés nincs bekapcsolva.</string>
     <string name="settings_debug_logging_generate_report">Jelentés generálása</string>
     <string name="settings_debug_logging_report_on_github">Jelentés a GitHub-on</string>
@@ -124,7 +124,7 @@
     <string name="recording_toast_resumed">A felvétel folytatása.</string>
     <string name="recording_started">A felvétel elindult.</string>
     <string name="recording_error_title">Felvétel hiba</string>
-    <string name="recording_error_folder_missing">A kiválasztott könyvtár nem létezik, érvénytelen vagy nincs írási jogosultság hozzá. Válasszon másikat az alkalmazás beállításaiban.</string>
+    <string name="recording_error_folder_missing">A kiválasztott könyvtár nem létezik, érvénytelen, vagy nincs írási jogosultság hozzá. Válasszon másikat az alkalmazás beállításaiban.</string>
     <string name="recording_error_server_missing">Hiányzik az Scrcpy-server bináris fájl vagy az SHA256 biztonsági ellenőrzés sikertelen volt. Ennek nem szabadna előfordulnia, jelezze a problémát felénk.</string>
     <string name="recording_error_file_creation">A felvétel létrehozása sikertelen. Ellenőrizze a tárhely jogosultságot és/vagy válasszon ki egy másik mappát az alkalmazás beállításaiban.</string>
     <string name="recording_error_start_failed">A felvétel indítása sikertelen. Hiba történt a ShellService binder meghívásakor.</string>
@@ -164,7 +164,7 @@
     <string name="sponsor_notification_call_to_action_title">Tetszik a ShizuCallRecorder?</string>
     <string name="sponsor_notification_call_to_action">Szükségünk van a segítségére!</string>
     <string name="permission_manage_ongoing_calls_label">Folyamatban lévő hívások kezelése</string>
-    <string name="permission_manage_ongoing_calls_description">Az AppOps jogosultság automatikusan létrejön a Shizuku miatt. Szükséges az InCallService észlelt hívásokhoz.</string>
+    <string name="permission_manage_ongoing_calls_description">Az AppOps jogosultság automatikusan létrejön a Shizuku miatt. Az InCallService segítségével történő hívásérzékeléshez szükséges.</string>
     <string name="settings_shizuku_keep_alive_desc">Ne küldje el a leállítási szándékot</string>
     <string name="settings_call_detection_method">Hívásfelismerési módszer</string>
     <string name="settings_call_detection_method_warning_title">Értesítés a korlátozott támogatásról</string>
@@ -174,7 +174,7 @@
     <string name="sponsor_body">Már fiatal korom óta vonzott a technológia és számítógépek világa. A legtöbb projektem a fizikális és mentális korlátaim leküzdése miatt jött létre, egyesek pedig csak véletlenszerű ötletek szüleménye.\n\nA ShizuCallRecorder egy speciális igényem miatt jött létre. Éveken keresztül kutattam egy olyan nyílt forráskódú (FOSS) app után, amely telefonbeszélgetéseket rögzít anélkül, hogy a készülék rootolva lenne. Mivel nem létezett ilyen, így létrehoztam, és elérhetővé tettem mindenki számára.\n\nA szabadidőm jelentős részét azzal töltöttem, hogy megtanuljak felépíteni és karbantartani egy nyílt forráskódú szoftvert. Az anyagi támogatás segít a mindennapjaimban, és motivál hogy továbbra is minőségi eszközöket hozzak létre a közösség számára.\n\nMeggyőződésem, hogy alkalmazásaimba nem szabad agresszív reklámokat és követőket raknom. Így ha hasznosnak találta eszközeimet mindennapjai során, fontolja meg a támogatásomat!</string>
     <string name="sponsor_github_star_button">Repo csillagozása</string>
     <string name="settings_open_github_Wiki">Wiki megnyitása</string>
-    <string name="general_permission_escalation_exhausted">Nem sikerült megszerezni a „%1$s” „%2$s” jogosultságot.\nMinden jogosultság-emelési lépés (%3$d) kimerült.\n\nGyőződjön meg arról, hogy a Shizuku jelenleg fut-e, mivel ez okozhatja a hibát.\n\nElőfordulhat, hogy az OEM aktívan blokkolja vagy visszavonja az összes jogosultság-módosításunkat. Ellenőrizze a telefon beállításait, hogy van-e valami, ami kikapcsolhatja ezt a viselkedést.\n\nA Vivo, Oppo, Xiaomi és más kínai gyártók készülékei gyakran tartalmaznak szigorú rendszerkorlátozásokat, amelyek teljesen blokkolhatják a hozzáférést ehhez a jogosultsághoz.\n\nHa megtalálja a módját, hogy az ADB segítségével manuálisan megadja magának a szükséges jogosultságot, jelezze nekünk, hogy létrehoz egy hibajelentést a GitHubon!</string>
+    <string name="general_permission_escalation_exhausted">Nem sikerült megszerezni a „%1$s” „%2$s” jogosultságot.\nMinden jogosultság-emelési lépés (%3$d) kimerült.\n\nGyőződjön meg arról, hogy a Shizuku jelenleg fut-e, mivel ez okozhatja a hibát.\n\nElőfordulhat, hogy az OEM aktívan blokkolja vagy visszavonja az összes jogosultság-módosításunkat. Ellenőrizze a telefon beállításait, hogy van-e valami, ami kikapcsolhatja ezt a viselkedést.\n\nA Vivo, Oppo, Xiaomi és más kínai gyártók készülékei gyakran tartalmaznak szigorú rendszerkorlátozásokat, amelyek teljesen blokkolhatják a hozzáférést ehhez a jogosultsághoz.\n\nHa megtalálja a módját, hogy az ADB segítségével manuálisan megadja magának a szükséges jogosultságot, jelezze nekünk azzal, hogy létrehoz egy hibajelentést a GitHubon!</string>
     <string name="general_play">Lejátszás</string>
     <string name="general_share">Megosztás</string>
     <string name="general_delete">Törlés</string>
