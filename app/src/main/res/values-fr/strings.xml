@@ -186,4 +186,6 @@
     <string name="delete_recording_confirmation_title">Supprimer l\'enregistrement</string>
     <string name="delete_recording_confirmation_message">Êtes-vous sûr de vouloir supprimer cet enregistrement ? Cette action ne peut pas être annulée.</string>
     <string name="delete_recording_confirmation_failed">Impossible de supprimer l\'enregistrement. Veuillez consulter les journaux de l\'application.</string>
+    <string name="settings_overlay_title">Afficher la fenêtre flottante d\'enregistrement</string>
+    <string name="settings_overlay_subtitle">Affichez une fenêtre superposée par-dessus les autres applications avec des actions rapides pour gérer l\'enregistrement.</string>
 </resources>
