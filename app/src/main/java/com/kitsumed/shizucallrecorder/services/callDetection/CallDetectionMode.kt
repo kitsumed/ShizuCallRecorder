@@ -79,8 +79,9 @@ enum class CallDetectionMode(
                     EscalationStep.UidAppOp(opString = "android:manage_ongoing_calls", minApi = 31, maxApi = Int.MAX_VALUE),
                     // Some chinese ROMs (like Vivo, Oppo, Xiaomi) have very aggressive permission management and system monitoring apps, we try more open fallbacks.
                     // See: https://github.com/kitsumed/ShizuCallRecorder/issues/41
-                    EscalationStep.RoleGrant(roleName = "COMPANION_DEVICE_GLASSES", minApi = 34, maxApi = Int.MAX_VALUE), // Prioritize glasses on Android 14+ as they have a little bit less permission...
-                    EscalationStep.RoleGrant(roleName = "COMPANION_DEVICE_WATCH", minApi = 31, maxApi = Int.MAX_VALUE),
+                    // Role names must be the fully qualified names declared in roles.xml, the role shell command passes them through verbatim.
+                    EscalationStep.RoleGrant(roleName = "android.app.role.COMPANION_DEVICE_GLASSES", minApi = 34, maxApi = Int.MAX_VALUE), // Prioritize glasses on Android 14+ as they have a little bit less permission...
+                    EscalationStep.RoleGrant(roleName = "android.app.role.COMPANION_DEVICE_WATCH", minApi = 31, maxApi = Int.MAX_VALUE),
                 )
             ),
         )

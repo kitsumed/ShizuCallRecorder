@@ -46,7 +46,8 @@ class ShellCommandExecutor {
      * List of roles can be found here: https://cs.android.com/android/platform/superproject/+/android-latest-release:packages/modules/Permission/PermissionController/res/xml/roles.xml?q=roles.xml
      *
      * @param packageName The package name of the app to grant the role to.
-     * @param roleName The name of the role to grant (e.g., "DIALER").
+     * @param roleName The fully qualified name of the role to grant (e.g., "android.app.role.DIALER").
+     * The shell command passes this value verbatim to RoleManager, so a short name matches no role and always fails.
      * @param userProfileId The user ID for which to grant the role.
      * @return True if the command was successful, false otherwise.
      */
