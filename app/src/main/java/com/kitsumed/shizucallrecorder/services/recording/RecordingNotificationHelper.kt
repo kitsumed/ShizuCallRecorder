@@ -29,6 +29,7 @@ import androidx.core.app.NotificationCompat
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
+import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 import com.kitsumed.shizucallrecorder.ui.theme.Green40
 
 class RecordingNotificationHelper(private val context: Context) {
@@ -231,6 +232,15 @@ class RecordingNotificationHelper(private val context: Context) {
      */
     fun showPostCallNotification(fileUri: Uri, callMetadata: EnrichedCallData) {
         val manager = context.getSystemService(NotificationManager::class.java)
+        val number = callMetadata.getBestNumber()
+        val callerName = callMetadata.callerName?.takeIf {
+            it.isNotBlank() && AppPreferences(context).getFileNameTemplate().contains(RecordingFileNameFormatter.FileNamePlaceholder.CALLER_NAME.tag)
+        }
+        val callerText = when {
+            callerName != null && number.isNotEmpty() -> "$callerName ($number)"
+            callerName != null -> callerName
+            else -> number
+        }
 
         // Play action
         val playIntent = Intent(Intent.ACTION_VIEW).apply {
@@ -264,7 +274,7 @@ class RecordingNotificationHelper(private val context: Context) {
             .setSmallIcon(R.drawable.ic_audio_file)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
             .setContentTitle(context.getString(R.string.post_recording_notification_title))
-            .setContentText(callMetadata.getBestNumber().takeIf { it.isNotEmpty() } ?: context.getString(R.string.post_recording_notification_unknown_caller))
+            .setContentText(callerText.ifEmpty { context.getString(R.string.post_recording_notification_unknown_caller) })
             .setAutoCancel(true)
             .addAction(android.R.drawable.ic_media_play, context.getString(R.string.general_play), playPendingIntent)
             .addAction(android.R.drawable.ic_menu_share, context.getString(R.string.general_share), sharePendingIntent)
