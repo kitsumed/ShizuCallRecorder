@@ -98,13 +98,22 @@ class PhoneNumberManager private constructor(context: Context) {
 
     /**
      * Parses a phone number string into a structured [Phonenumber.PhoneNumber] object using the specified default region.
+     * Numbers without a leading '+' are normally parsed using [defaultRegion]. If that interpretation is impossible,
+     * the number is retried as an international number because some call providers omit the '+'.
      * @param rawNumber The raw phone number string to parse (e.g., "202-555-0173").
      * @param defaultRegion The default region ISO code to use for parsing (e.g., "US"). If not provided, it will default to the device's country ISO.
      * @return A [Phonenumber.PhoneNumber] object if parsing is successful, or null if parsing fails.
      */
     suspend fun parsePhoneNumber(rawNumber: String, defaultRegion: String = getDeviceCountryIso()): Phonenumber.PhoneNumber? = withContext(Dispatchers.Default) {
         return@withContext try {
-            phoneUtil.parse(rawNumber, defaultRegion.uppercase())
+            val parsedNumber = phoneUtil.parse(rawNumber, defaultRegion.uppercase())
+            if (rawNumber.trimStart().startsWith("+") || phoneUtil.isPossibleNumber(parsedNumber)) {
+                parsedNumber
+            } else {
+                runCatching {
+                    phoneUtil.parse("+${normalisePhoneNumber(rawNumber)}", null)
+                }.getOrNull()?.takeIf(phoneUtil::isPossibleNumber) ?: parsedNumber
+            }
         } catch (e: Exception) {
             AppLogger.e( "Error parsing phone number: ${e.message}", e)
             null
