@@ -543,6 +543,7 @@ private fun RecordingSection(
     val recordThirdPartyCalls = remember(updateTrigger) { preferences.isRecordThirdPartyCallsEnabled() }
     val fileNameFormat = remember(updateTrigger) { preferences.getFileNameTemplate() }
     val postRecordingFileNotifications = remember(updateTrigger) { preferences.isPostRecordingFileActionsNotificationEnabled() }
+    val showDeleteConfirmation = remember(updateTrigger) { preferences.isShowDeleteConfirmationEnabled() }
     val isVibrationEnabled = remember(updateTrigger) { preferences.isVibrationEnabled() }
     val autoRecordIncoming = remember(updateTrigger) { preferences.isAutoRecordIncomingEnabled() }
     val autoRecordOutgoing = remember(updateTrigger) { preferences.isAutoRecordOutgoingEnabled() }
@@ -652,6 +653,12 @@ private fun RecordingSection(
             description = stringResource(R.string.settings_post_recording_notification_description),
             checked = postRecordingFileNotifications,
             onCheckedChange = { actions.setPostRecordingFileNotification(it) }
+        )
+
+        ToggleListItem(
+            label = stringResource(R.string.settings_show_delete_confirmation),
+            checked = showDeleteConfirmation,
+            onCheckedChange = { actions.setShowDeleteConfirmation(it) }
         )
 
         ToggleListItem(
@@ -1222,6 +1229,7 @@ private fun SettingsScreenPreview() {
             override fun setCallDetectionMode(mode: CallDetectionMode) {}
             override fun setRecordThirdPartyCalls(enabled: Boolean) {}
             override fun setPostRecordingFileNotification(enabled: Boolean) {}
+            override fun setShowDeleteConfirmation(enabled: Boolean) {}
             override fun setOverlayEnabled(enabled: Boolean) {}
         }
 

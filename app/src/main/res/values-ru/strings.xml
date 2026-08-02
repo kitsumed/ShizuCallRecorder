@@ -177,6 +177,7 @@
     <string name="placeholder_package_name_desc">Имя или название пакета приложения, инициировавшего вызов.</string>
     <string name="settings_post_recording_notification">Уведомление после записи</string>
     <string name="settings_post_recording_notification_description">Показать уведомление после завершения записи с помощью быстрых действий, таких как воспроизведение и удаление.</string>
+    <string name="settings_show_delete_confirmation">Запрашивать подтверждение перед удалением записи</string>
     <string name="settings_open_github_Wiki">Открыть Wiki</string>
     <string name="post_recording_notification_title">Управление записями</string>
     <string name="post_recording_notification_unknown_caller">Анонимный или неизвестный абонент</string>

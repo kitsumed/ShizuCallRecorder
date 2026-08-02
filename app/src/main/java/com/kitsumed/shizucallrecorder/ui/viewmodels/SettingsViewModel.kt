@@ -77,6 +77,7 @@ interface SettingsActions {
     fun setCallDetectionMode(mode: CallDetectionMode)
     fun setRecordThirdPartyCalls(enabled: Boolean)
     fun setPostRecordingFileNotification(enabled: Boolean)
+    fun setShowDeleteConfirmation(enabled: Boolean)
     fun setOverlayEnabled(enabled: Boolean)
 }
 
@@ -422,6 +423,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setPostRecordingFileNotification(enabled: Boolean) {
         preferences.setPostRecordingFileActionsNotificationEnabled(enabled)
+        refresh()
+    }
+
+    override fun setShowDeleteConfirmation(enabled: Boolean) {
+        preferences.setShowDeleteConfirmationEnabled(enabled)
         refresh()
     }
 
