@@ -170,7 +170,7 @@ class InCallService : InCallService() {
             val packageName = details.accountHandle.componentName.packageName
 
             val rawCallData = RawCallData(
-                rawPhoneNumber = PhoneNumberManager.normalisePhoneNumber(rawNumber),
+                rawPhoneNumber = normaliseCallHandleNumber(rawNumber, packageName),
                 direction = direction,
                 osProvidedCallerName = oscallerName,
                 packageName = packageName
@@ -193,4 +193,10 @@ class InCallService : InCallService() {
             }
         }
     }
+}
+
+internal fun normaliseCallHandleNumber(rawNumber: String, packageName: String): String {
+    val number = PhoneNumberManager.normalisePhoneNumber(rawNumber)
+    val isWhatsApp = packageName == "com.whatsapp" || packageName == "com.whatsapp.w4b"
+    return if (isWhatsApp && number.isNotEmpty() && !number.startsWith("+")) "+$number" else number
 }

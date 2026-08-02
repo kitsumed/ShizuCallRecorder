@@ -47,6 +47,7 @@ class AppPreferences(context: Context) {
         const val RECORD_THIRD_PARTY_CALLS = false
 
         const val POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED = false
+        const val SHOW_DELETE_CONFIRMATION = true
         const val AUTO_RECORD_INCOMING = false
         const val AUTO_RECORD_OUTGOING = false
 
@@ -101,6 +102,7 @@ class AppPreferences(context: Context) {
         RECORDING_FOLDER_URI("recording_folder_uri"),
         VIBRATION_ENABLED("vibration_enabled"),
         POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED ("post_recording_file_actions_notification_enabled"),
+        SHOW_DELETE_CONFIRMATION("show_delete_confirmation"),
         AUTO_RECORD_INCOMING("auto_record_incoming"),
         AUTO_RECORD_OUTGOING("auto_record_outgoing"),
         IGNORE_ANONYMOUS_INCOMING("ignore_anonymous_incoming"),
@@ -244,6 +246,12 @@ class AppPreferences(context: Context) {
     fun isPostRecordingFileActionsNotificationEnabled() = getBoolean(Key.POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED, DefaultsValue.POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED)
     /** Sets whether post-recording file actions notification is enabled. */
     fun setPostRecordingFileActionsNotificationEnabled(enabled: Boolean) = setBoolean(Key.POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED, enabled)
+
+    /** Checks if deleting a recording requires confirmation. */
+    fun isShowDeleteConfirmationEnabled() = getBoolean(Key.SHOW_DELETE_CONFIRMATION, DefaultsValue.SHOW_DELETE_CONFIRMATION)
+
+    /** Sets whether deleting a recording requires confirmation. */
+    fun setShowDeleteConfirmationEnabled(enabled: Boolean) = setBoolean(Key.SHOW_DELETE_CONFIRMATION, enabled)
 
     /**
      * Gets the current preferred detection mode, automatically falling back

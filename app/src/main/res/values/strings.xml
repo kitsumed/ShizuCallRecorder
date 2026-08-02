@@ -181,6 +181,7 @@
 
     <string name="settings_post_recording_notification">Post-Recording Notification</string>
     <string name="settings_post_recording_notification_description">Show a notification after the recording ends with quick actions like play and delete.</string>
+    <string name="settings_show_delete_confirmation">Show confirmation before deleting a recording</string>
     <string name="settings_vibration_enabled">Vibrate on start/stop</string>
     
     <string name="settings_auto_record_incoming">Automatically record incoming calls</string>

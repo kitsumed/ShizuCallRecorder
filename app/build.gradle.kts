@@ -274,4 +274,6 @@ dependencies {
     // Shizuku
     implementation(libs.shizukuApi)
     implementation(libs.shizukuProvider)
+
+    testImplementation(libs.junit)
 }

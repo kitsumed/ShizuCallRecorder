@@ -29,6 +29,7 @@ import androidx.core.app.NotificationCompat
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
+import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 import com.kitsumed.shizucallrecorder.ui.theme.Green40
 
 class RecordingNotificationHelper(private val context: Context) {
@@ -264,7 +265,13 @@ class RecordingNotificationHelper(private val context: Context) {
             .setSmallIcon(R.drawable.ic_audio_file)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
             .setContentTitle(context.getString(R.string.post_recording_notification_title))
-            .setContentText(callMetadata.getBestNumber().takeIf { it.isNotEmpty() } ?: context.getString(R.string.post_recording_notification_unknown_caller))
+            .setContentText(
+                getPostRecordingCallerText(
+                    callMetadata,
+                    AppPreferences(context).getFileNameTemplate(),
+                    context.getString(R.string.post_recording_notification_unknown_caller)
+                )
+            )
             .setAutoCancel(true)
             .addAction(android.R.drawable.ic_media_play, context.getString(R.string.general_play), playPendingIntent)
             .addAction(android.R.drawable.ic_menu_share, context.getString(R.string.general_share), sharePendingIntent)
@@ -322,5 +329,18 @@ class RecordingNotificationHelper(private val context: Context) {
                 vibrator.vibrate(effect)
             }
         }
+    }
+}
+
+internal fun getPostRecordingCallerText(metadata: EnrichedCallData, fileNameTemplate: String, unknownCaller: String): String {
+    val number = metadata.getBestNumber()
+    val name = metadata.callerName?.takeIf {
+        it.isNotBlank() && fileNameTemplate.contains(RecordingFileNameFormatter.FileNamePlaceholder.CALLER_NAME.tag)
+    }
+
+    return when {
+        name != null && number.isNotEmpty() -> "$name ($number)"
+        name != null -> name
+        else -> number.ifEmpty { unknownCaller }
     }
 }

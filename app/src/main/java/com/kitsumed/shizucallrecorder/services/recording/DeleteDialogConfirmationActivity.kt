@@ -17,10 +17,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
 import androidx.documentfile.provider.DocumentFile
 import com.kitsumed.shizucallrecorder.R
+import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 
 /**
- * This is a simple activity that shows a confirmation dialog to the user before deleting a recording file.
+ * Deletes a recording file, optionally showing a confirmation dialog first.
  */
 class DeleteDialogConfirmationActivity : AppCompatActivity() {
 
@@ -34,22 +35,17 @@ class DeleteDialogConfirmationActivity : AppCompatActivity() {
             return
         }
 
+        if (!shouldShowDeleteConfirmation(AppPreferences(this).isShowDeleteConfirmationEnabled())) {
+            deleteRecording(fileUri)
+            finish()
+            return
+        }
+
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_recording_confirmation_title))
             .setMessage(getString(R.string.delete_recording_confirmation_message))
             .setPositiveButton(getString(R.string.general_delete)) { dialog, _ ->
-                try {
-                    val deleted = DocumentFile.fromSingleUri(this, fileUri)?.delete() == true
-                    if (deleted) {
-                        Toast.makeText(this, getString(R.string.general_deleted), Toast.LENGTH_SHORT).show()
-                        // Remove the notifications from the notification tray since file no longer exists
-                        val manager = getSystemService(android.app.NotificationManager::class.java)
-                        manager.cancel(RecordingNotificationHelper.POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ID)
-                    }
-                } catch (e: Exception) {
-                    AppLogger.e( "Failed to delete file: $fileUri", e)
-                    Toast.makeText(this, getString(R.string.delete_recording_confirmation_failed), Toast.LENGTH_LONG).show()
-                }
+                deleteRecording(fileUri)
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.general_cancel)) { dialog, _ ->
@@ -59,4 +55,20 @@ class DeleteDialogConfirmationActivity : AppCompatActivity() {
                 finish()
             }.show()
     }
+
+    private fun deleteRecording(fileUri: Uri) {
+        try {
+            val deleted = DocumentFile.fromSingleUri(this, fileUri)?.delete() == true
+            if (deleted) {
+                Toast.makeText(this, getString(R.string.general_deleted), Toast.LENGTH_SHORT).show()
+                getSystemService(android.app.NotificationManager::class.java)
+                    .cancel(RecordingNotificationHelper.POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ID)
+            }
+        } catch (e: Exception) {
+            AppLogger.e("Failed to delete file: $fileUri", e)
+            Toast.makeText(this, getString(R.string.delete_recording_confirmation_failed), Toast.LENGTH_LONG).show()
+        }
+    }
 }
+
+internal fun shouldShowDeleteConfirmation(enabled: Boolean) = enabled

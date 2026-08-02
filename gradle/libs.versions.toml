@@ -18,6 +18,7 @@ shizuku-provider = "13.1.5"
 # Utility
 aboutlibraries = "14.2.1"
 libphonenumber = "9.0.35"
+junit = "4.13.2"
 
 [libraries]
 # AndroidX Core & Lifecycle
@@ -51,6 +52,7 @@ aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3",
 
 # Libphonenumber
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
+junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
