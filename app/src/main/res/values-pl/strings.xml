@@ -186,4 +186,6 @@
     <string name="delete_recording_confirmation_title">Usuń nagranie</string>
     <string name="delete_recording_confirmation_message">Czy na pewno chcesz usunąć to nagranie? Tej operacji nie można cofnąć.</string>
     <string name="delete_recording_confirmation_failed">Nie udało się usunąć nagrania. Sprawdź logi aplikacji.</string>
+    <string name="settings_overlay_title">Pokaż nakładkę nagrywania</string>
+    <string name="settings_overlay_subtitle">Wyświetla nad innymi aplikacjami nakładkę umożliwiającą szybkie zarządzanie nagrywaniem.</string>
 </resources>
