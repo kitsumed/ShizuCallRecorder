@@ -186,4 +186,6 @@
     <string name="delete_recording_confirmation_title">Kaydı sil</string>
     <string name="delete_recording_confirmation_message">Bu kaydı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
     <string name="delete_recording_confirmation_failed">Kayıt silinemedi. Lütfen uygulama günlüklerini kontrol edin.</string>
+    <string name="settings_overlay_title">Yüzen kayıt butonu göster</string>
+    <string name="settings_overlay_subtitle">Diğer uygulamaların üzerinde yer alan ve kaydı yönetmek için hızlı işlemler içeren yüzen kayıt butonu göster.</string>
 </resources>
