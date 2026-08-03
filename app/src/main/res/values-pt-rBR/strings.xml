@@ -186,4 +186,6 @@
     <string name="delete_recording_confirmation_title">Excluir gravação</string>
     <string name="delete_recording_confirmation_message">Tem certeza de que deseja excluir esta gravação? Esta ação não pode ser desfeita.</string>
     <string name="delete_recording_confirmation_failed">Falha ao excluir a gravação. Por favor, verifique os logs dos aplicativos.</string>
+    <string name="settings_overlay_title">Mostrar sobreposição de gravação</string>
+    <string name="settings_overlay_subtitle">Desenhe uma sobreposição sobre outros aplicativos com ações rápidas para gerenciar a gravação.</string>
 </resources>
