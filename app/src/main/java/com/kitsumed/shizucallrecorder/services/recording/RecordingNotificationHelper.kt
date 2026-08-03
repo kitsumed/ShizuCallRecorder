@@ -233,13 +233,11 @@ class RecordingNotificationHelper(private val context: Context) {
     fun showPostCallNotification(fileUri: Uri, callMetadata: EnrichedCallData) {
         val manager = context.getSystemService(NotificationManager::class.java)
         val number = callMetadata.getBestNumber()
-        val callerName = callMetadata.callerName?.takeIf {
-            it.isNotBlank() && AppPreferences(context).getFileNameTemplate().contains(RecordingFileNameFormatter.FileNamePlaceholder.CALLER_NAME.tag)
-        }
         val callerText = when {
-            callerName != null && number.isNotEmpty() -> "$callerName ($number)"
-            callerName != null -> callerName
-            else -> number
+            callMetadata.callerName != null && number.isNotEmpty() -> "${callMetadata.callerName} ($number)"
+            callMetadata.callerName != null -> callMetadata.callerName
+            number.isNotEmpty() -> number
+            else -> context.getString(R.string.post_recording_notification_unknown_caller)
         }
 
         // Play action
@@ -274,7 +272,7 @@ class RecordingNotificationHelper(private val context: Context) {
             .setSmallIcon(R.drawable.ic_audio_file)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
             .setContentTitle(context.getString(R.string.post_recording_notification_title))
-            .setContentText(callerText.ifEmpty { context.getString(R.string.post_recording_notification_unknown_caller) })
+            .setContentText(callerText)
             .setAutoCancel(true)
             .addAction(android.R.drawable.ic_media_play, context.getString(R.string.general_play), playPendingIntent)
             .addAction(android.R.drawable.ic_menu_share, context.getString(R.string.general_share), sharePendingIntent)
