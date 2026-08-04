@@ -40,6 +40,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
@@ -438,11 +440,13 @@ fun BioCard() {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            // Accessibility: title is now a semantic heading for TalkBack navigation
             Text(
                 text = stringResource(R.string.sponsor_body_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.semantics { heading() }
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
