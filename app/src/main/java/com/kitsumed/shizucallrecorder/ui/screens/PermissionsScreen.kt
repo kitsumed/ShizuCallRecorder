@@ -297,13 +297,13 @@ fun PermissionsContent(
 ) {
     Surface(
         modifier = modifier
-            .navigationBarsPadding()
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .safeDrawingPadding()
                 .padding(horizontal = 24.dp)
                 .padding(top = 24.dp, bottom = 16.dp)
         ) {
