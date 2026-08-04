@@ -31,6 +31,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -139,7 +141,13 @@ fun ContactSelectionContent(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 8.dp),
                 placeholder = { Text(stringResource(R.string.contact_search_hint)) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                // Accessibility: search icon has contentDescription for TalkBack
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = stringResource(R.string.contact_search_hint),
+                    )
+                },
                 shape = CircleShape,
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -279,8 +287,7 @@ private fun ContactListItem(
 
 /**
  * Circular avatar for a [ContactEntry].
- *
- * @param contact The contact whose avatar to render.
+ * Accessibility: photo image now has contentDescription for TalkBack.
  */
 @Composable
 private fun ContactAvatar(contact: ContactEntry) {
@@ -311,9 +318,10 @@ private fun ContactAvatar(contact: ContactEntry) {
     ) {
         val bitmap = contactBitmap
         if (bitmap != null) {
+            // Accessibility: photo has descriptive contentDescription
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.a11y_contact_photo, contact.name),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
