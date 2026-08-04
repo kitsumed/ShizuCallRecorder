@@ -22,7 +22,7 @@
     <string name="sponsor_title">دعم المشروع</string>
     <string name="disclaimer_wiki_link_KEYWORD">ويكي</string>
     <string name="sponsor_body_title">مرحباً، أنا kitsumed! 👋</string>
-    <string name="sponsor_body">لطالما كنتُ شغوفاً بالتكنولوجيا والحواسيب منذ صغري. تنبع معظم مشاريعي من إيجاد حلول لإعاقاتي الجسدية أو الذهنية، بينما تأتي مشاريع أخرى كشرارات إلهام عابرة.\n\nوُلِدَ تطبيق ShizuCallRecorder من حاجة شخصية تتعلق بإحدى إعاقاتي. لسنوات عديدة، بحثتُ عن تطبيق مجاني ومفتوح المصدر (FOSS) لتسجيل المكالمات يعمل على الأجهزة غير المُعدّلة (بدون Root)، لكنني لم أجد أي تطبيق مناسب. لذا، قررتُ إنشاء تطبيقي الخاص ونشره للجميع.\n\nأقضي الكثير من وقت فراغي في تعلّم وتطوير وصيانة البرمجيات مفتوحة المصدر. دعمكم يُساعدني بشكل مباشر في حياتي اليومية مادياً ويُحفّزني على الاستمرار في ابتكار أدوات عالية الجودة للمجتمع.\n\nأؤمن بضرورة إبقاء تطبيقاتي خالية من الإعلانات المُزعجة والتتبع المُتطفّل على الخصوصية. إذا كانت أدواتي مفيدة لكم في حياتكم اليومية، يُرجى التفكير في دعمي!</string>
+    <string name="sponsor_body">لطالما كنتُ شغوفاً بالتكنولوجيا والحواسيب منذ صغري. تنبع معظم مشاريعي من إيجاد حلول لإعاقاتي الجسدية أو الذهنية، بينما تأتي مشاريع أخرى كشرارات إلهام عابرة.\n\nوُلِدَ تطبيق ShizuCallRecorder من حاجة شخصية تتعلق بإحدى إعاقاتي. لسنوات عديدة، بحثتُ عن تطبيق مجاني ومفتوح المصدر (FOSS) لتسجيل المكالمات يعمل على الأجهزة غير المُعدّلة (بدون Root)، لكنني لم أجد أي تطبيق مناسب. لذا، قررتُ إنشاء تطبيقي الخاص ونشره للجميع.\nأقضي الكثير من وقت فراغي في تعلّم وتطوير وصيانة البرمجيات مفتوحة المصدر. دعمكم يُساعدني بشكل مباشر في حياتي اليومية مادياً ويُحفّزني على الاستمرار في ابتكار أدوات عالية الجودة للمجتمع.\nأؤمن بضرورة إبقاء تطبيقاتي خالية من الإعلانات المُزعجة والتتبع المُتطفّل على الخصوصية. إذا كانت أدواتي مفيدة لكم في حياتكم اليومية، يُرجى التفكير في دعمي!</string>
     <string name="sponsor_way_github_sponsor_title">كن داعماً على GitHub</string>
     <string name="sponsor_way_github_sponsor_description">احصل على إنجاز Public Sponsor، واعرض ملفك الشخصي على صفحتي، وساعدني مالياً في دعم نفسي وعملي في مجال المصادر المفتوحة.</string>
     <string name="sponsor_way_github_star_title">ضع نجمة على GitHub</string>
@@ -59,6 +59,23 @@
     <string name="permission_shizuku_description">مطلوب لبدء تسجيل الصوت (ShellService) باستخدام scrcpy.</string>
     <string name="permission_shizuku_not_running">لا يعمل</string>
     <string name="permission_shizuku_open">فتح Shizuku</string>
+
+    <!-- ========================================== -->
+    <!-- إمكانية الوصول (TalkBack)                 -->
+    <!-- ========================================== -->
+    <string name="a11y_overlay_action_start">بدء التسجيل</string>
+    <string name="a11y_overlay_action_pause">إيقاف التسجيل مؤقتاً</string>
+    <string name="a11y_overlay_action_resume">استئناف التسجيل</string>
+    <string name="a11y_overlay_recording_active">تسجيل جارٍ</string>
+    <string name="a11y_overlay_recording_paused">تم إيقاف التسجيل مؤقتاً</string>
+    <string name="a11y_overlay_recording_stopped">جاهز للتسجيل</string>
+    <string name="a11y_overlay_drag_handle">مسكة السحب، اضغط مطولاً واسحب لتحريك النافذة العائمة</string>
+    <string name="a11y_permission_status_granted">تم منح الصلاحية</string>
+    <string name="a11y_permission_status_required">الصلاحية مطلوبة</string>
+    <string name="a11y_permission_processing">جارٍ المعالجة</string>
+    <string name="a11y_contact_photo">صورة %1$s</string>
+    <string name="a11y_folder_select">فتح محدد المجلدات</string>
+
     <string name="settings_section_about">حول</string>
     <string name="settings_section_recording">التسجيل</string>
     <string name="settings_section_visual">الإعدادات المرئية</string>
@@ -77,7 +94,7 @@
     <string name="call_detection_mode_phonestate_description">استخدم بث حالة الهاتف القديم مع الحقول المهملة. هذا الوضع عرضة للغاية لحالات السباق (Race conditions) ويوفر لنا قدراً محدوداً من المعلومات.</string>
     <string name="call_detection_mode_phonestate_limited_support">طريقة اكتشاف المكالمات هذه غير موثوقة. نحن نسترد قيمة مهملة عند تلقي تحديثات حالة الهاتف، ومنطق الاكتشاف عرضة لحالات السباق. لا يمكننا أيضاً التمييز بين مكالمات شركة الاتصالات ومكالمات تطبيقات الطرف الثالث. ومع ذلك، يمكنك التغلب على هذا القيد عن طريق تجاهل المكالمات المجهولة.</string>
     <string name="call_detection_mode_incallservice_description">استخدم واجهة InCallService الحديثة. هذا الوضع أكثر كفاءة ويجب أن يوفر اكتشافاً أفضل مع الكثير من المعلومات.</string>
-    <string name="settings_record_third_party_calls">تسجيل تطبيقات الطرف الثالث</string>&gt;
+    <string name="settings_record_third_party_calls">تسجيل تطبيقات الطرف الثالث</string>>
     <string name="settings_record_third_party_calls_description">تسجيل المكالمات من تطبيقات الطرف الثالث التي تتكامل مع نظام اتصالات أندرويد. قد يؤدي ذلك إلى تسجيلات صامتة أو من طرف واحد.</string>
     <string name="settings_tap_to_select_folder">اضغط لتحديد المجلد...</string>
     <string name="settings_recording_folder_label">مجلد التسجيل</string>
