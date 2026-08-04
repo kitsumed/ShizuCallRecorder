@@ -59,23 +59,6 @@
     <string name="permission_shizuku_description">مطلوب لبدء تسجيل الصوت (ShellService) باستخدام scrcpy.</string>
     <string name="permission_shizuku_not_running">لا يعمل</string>
     <string name="permission_shizuku_open">فتح Shizuku</string>
-
-    <!-- ========================================== -->
-    <!-- إمكانية الوصول (TalkBack)                 -->
-    <!-- ========================================== -->
-    <string name="a11y_overlay_action_start">بدء التسجيل</string>
-    <string name="a11y_overlay_action_pause">إيقاف التسجيل مؤقتاً</string>
-    <string name="a11y_overlay_action_resume">استئناف التسجيل</string>
-    <string name="a11y_overlay_recording_active">تسجيل جارٍ</string>
-    <string name="a11y_overlay_recording_paused">تم إيقاف التسجيل مؤقتاً</string>
-    <string name="a11y_overlay_recording_stopped">جاهز للتسجيل</string>
-    <string name="a11y_overlay_drag_handle">مسكة السحب، اضغط مطولاً واسحب لتحريك النافذة العائمة</string>
-    <string name="a11y_permission_status_granted">تم منح الصلاحية</string>
-    <string name="a11y_permission_status_required">الصلاحية مطلوبة</string>
-    <string name="a11y_permission_processing">جارٍ المعالجة</string>
-    <string name="a11y_contact_photo">صورة %1$s</string>
-    <string name="a11y_folder_select">فتح محدد المجلدات</string>
-
     <string name="settings_section_about">حول</string>
     <string name="settings_section_recording">التسجيل</string>
     <string name="settings_section_visual">الإعدادات المرئية</string>
