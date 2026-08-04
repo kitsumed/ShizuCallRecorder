@@ -37,6 +37,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
@@ -44,6 +49,12 @@ import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 
 /**
  * The floating overlay UI for controlling the recording.
+ *
+ * Accessibility improvements:
+ * - Action button contentDescription changes dynamically based on recording state
+ * - Recording state is announced via liveRegion for TalkBack
+ * - Blinking dot has semantic state description
+ * - Drag handle uses localized string resource
  */
 @Composable
 fun RecordingOverlay(
@@ -79,6 +90,20 @@ fun RecordingOverlay(
         label = "buttonColorAnim"
     )
 
+    // --- Accessibility: dynamic contentDescription for the action button ---
+    val actionButtonDescription = when {
+        !isRecordingActive -> stringResource(R.string.a11y_overlay_action_start)
+        isRecordingPaused  -> stringResource(R.string.a11y_overlay_action_resume)
+        else               -> stringResource(R.string.a11y_overlay_action_pause)
+    }
+
+    // --- Accessibility: state description for live region announcement ---
+    val recordingStateDescription = when {
+        isActivelyRecording -> stringResource(R.string.a11y_overlay_recording_active)
+        isActivelyPaused    -> stringResource(R.string.a11y_overlay_recording_paused)
+        else                -> stringResource(R.string.a11y_overlay_recording_stopped)
+    }
+
     Surface(
         modifier = Modifier
             .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
@@ -89,6 +114,11 @@ fun RecordingOverlay(
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
+                // --- Accessibility: live region announces state changes to TalkBack ---
+                .semantics(mergeDescendants = true) {
+                    liveRegion = LiveRegionMode.Polite
+                    stateDescription = recordingStateDescription
+                }
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragEnd = onDragEnd,
@@ -137,7 +167,8 @@ fun RecordingOverlay(
                     ) { targetIconRes ->
                         Icon(
                             painter = painterResource(id = targetIconRes),
-                            contentDescription = "Control Recording",
+                            // --- Accessibility: dynamic description based on current state ---
+                            contentDescription = actionButtonDescription,
                             tint = if (isActivelyRecording)
                                 MaterialTheme.colorScheme.onErrorContainer
                             else
@@ -147,7 +178,7 @@ fun RecordingOverlay(
                     }
                 }
 
-                // Blinking red dot
+                // Blinking red dot — accessibility: semantic state description
                 if (isActivelyRecording) {
                     Box(
                         modifier = Modifier
@@ -158,11 +189,14 @@ fun RecordingOverlay(
                                 color = Color.Red,
                                 shape = CircleShape
                             )
+                            .semantics {
+                                contentDescription = recordingStateDescription
+                            }
                     )
                 }
             }
 
-            // Drag Handle
+            // Drag Handle — accessibility: localized description
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -171,7 +205,7 @@ fun RecordingOverlay(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_outline_drag_indicator),
-                    contentDescription = "Move Overlay",
+                    contentDescription = stringResource(R.string.a11y_overlay_drag_handle),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(42.dp)
                 )
