@@ -37,6 +37,7 @@ import com.kitsumed.shizucallrecorder.ui.screens.PermissionsScreen
 import com.kitsumed.shizucallrecorder.ui.screens.SettingsScreen
 import com.kitsumed.shizucallrecorder.ui.screens.SponsorScreen
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.SystemBarIconAppearance
 import com.kitsumed.shizucallrecorder.ui.viewmodels.AppNavigationViewModel
 import com.kitsumed.shizucallrecorder.ui.viewmodels.SettingsViewModel
 
@@ -111,6 +112,8 @@ fun AppNavigationScreen() {
         AppPreferences.ThemeMode.SYSTEM -> isSystemInDarkTheme()
     }
     val dynamicColor = preferences.isDynamicColorEnabled()
+
+    SystemBarIconAppearance(darkTheme)
 
     // -------- Show the right screen
     ShizucallrecorderTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {

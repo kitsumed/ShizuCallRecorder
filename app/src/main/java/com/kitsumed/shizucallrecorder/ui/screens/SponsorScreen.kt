@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -49,6 +50,7 @@ import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.system.openGithub
 import com.kitsumed.shizucallrecorder.system.openGithubSponsor
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.SystemBarIconAppearance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,6 +71,10 @@ fun SponsorScreen(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    SystemBarIconAppearance(
+        darkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    )
+
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
