@@ -46,6 +46,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -609,8 +612,11 @@ private fun RecordingSection(
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
 
+        // Accessibility: folder selection has Role.Button semantics and contentDescription
         ListItem(
-            modifier = Modifier.clickable { onSelectFolder() },
+            modifier = Modifier
+                .clickable { onSelectFolder() }
+                .semantics(mergeDescendants = true) { role = Role.Button },
             headlineContent = { Text(stringResource(R.string.settings_recording_folder_label)) },
             supportingContent = {
                 Text(
@@ -627,8 +633,11 @@ private fun RecordingSection(
             },
         )
 
+        // Accessibility: file name template has Role.Button semantics
         ListItem(
-            modifier = Modifier.clickable { showFileNameFormatDialog = true },
+            modifier = Modifier
+                .clickable { showFileNameFormatDialog = true }
+                .semantics(mergeDescendants = true) { role = Role.Button },
             headlineContent = { Text(stringResource(R.string.settings_file_name_template)) },
             supportingContent = {
                 Text(
@@ -1055,15 +1064,15 @@ private fun IgnoreContactsOptions(
 
         val enumEntries = AppPreferences.IgnoreContactsMode.entries
         enumEntries.forEach { ignoreContactMode ->
+            // Accessibility: Row uses Role.RadioButton semantics so TalkBack announces correctly
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    // This make the box/text next to the radio button clickable, not just the button itself, which is more user-friendly.
                     .clickable { onSelected(ignoreContactMode) }
+                    .semantics(mergeDescendants = true) { role = Role.RadioButton }
                     .padding(vertical = 4.dp)
             ) {
-                // Make the actual radio button (circle) clickable (it's quite small)
                 RadioButton(selected = selectedEnum == ignoreContactMode, onClick = { onSelected(ignoreContactMode) })
                 Text(
                     text = when (ignoreContactMode) {
@@ -1102,6 +1111,8 @@ private fun IgnoreContactsOptions(
 
 /**
  * A red warning card used to highlight important information or potential issues in the settings.
+ * Accessibility: contentDescription now uses localized string resource instead of hardcoded English.
+ *
  * @param message The main warning message to display.
  * @param modifier Modifier for styling the card.
  * @param title An optional title for the warning, shown in bold red text above the main message.
@@ -1128,7 +1139,8 @@ fun WarningCard(
             // Warning Icon aligned to the top of text lines
             Icon(
                 imageVector = Icons.Default.Warning,
-                contentDescription = "Warning Indicator",
+                // Accessibility: use localized string resource instead of hardcoded English
+                contentDescription = stringResource(R.string.general_system_limitation),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 2.dp)
             )
