@@ -76,7 +76,6 @@ fun PermissionsScreen(
     val activityContext = LocalContext.current
     var showDebugDialog by remember() { mutableStateOf(false) }
     val activityScope = rememberCoroutineScope()
-
     val isProcessingGrantingRequest by viewModel.isProcessingGrantingRequest.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorMessage.collectAsStateWithLifecycle()
 
@@ -86,8 +85,7 @@ fun PermissionsScreen(
     }
     val folderPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
         if (uri != null) {
-            activityContext.contentResolver.takePersistableUriPermission(uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            activityContext.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             AppPreferences(activityContext).setRecordingFolderUri(uri)
         }
         onPermissionGranted()
@@ -100,27 +98,13 @@ fun PermissionsScreen(
             if (missingPermissions.isNotEmpty()) {
                 val cleanPermissionsString = missingPermissions.joinToString("\n") { it.substringAfterLast(".") }
                 val dialogMessage = stringResource(R.string.general_system_limitation_message, cleanPermissionsString)
-                AlertDialog(
-                    onDismissRequest = { exitProcess(0) },
-                    title = { Text(text = stringResource(R.string.general_system_limitation)) },
-                    text = { Text(text = dialogMessage) },
-                    confirmButton = { TextButton(onClick = { exitProcess(0) }) { Text(text = stringResource(R.string.general_close)) } },
-                    dismissButton = null,
-                    properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
-                    icon = { Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.general_system_limitation)) }
-                )
+                AlertDialog(onDismissRequest = { exitProcess(0) }, title = { Text(text = stringResource(R.string.general_system_limitation)) }, text = { Text(text = dialogMessage) }, confirmButton = { TextButton(onClick = { exitProcess(0) }) { Text(text = stringResource(R.string.general_close)) } }, dismissButton = null, properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false), icon = { Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.general_system_limitation)) })
             }
         }
     }
 
     if (errorMessage != null) {
-        AlertDialog(
-            onDismissRequest = { viewModel.dissmissError() },
-            title = { Text(text = stringResource(R.string.general_system_limitation)) },
-            text = { Text(text = errorMessage.toString()) },
-            confirmButton = { TextButton(onClick = { viewModel.dissmissError() }) { Text(text = stringResource(R.string.general_close)) } },
-            icon = { Icon(Icons.Default.ErrorOutline, contentDescription = stringResource(R.string.general_system_limitation)) }
-        )
+        AlertDialog(onDismissRequest = { viewModel.dissmissError() }, title = { Text(text = stringResource(R.string.general_system_limitation)) }, text = { Text(text = errorMessage.toString()) }, confirmButton = { TextButton(onClick = { viewModel.dissmissError() }) { Text(text = stringResource(R.string.general_close)) } }, icon = { Icon(Icons.Default.ErrorOutline, contentDescription = stringResource(R.string.general_system_limitation)) })
     }
 
     if (showDebugDialog) {
@@ -187,9 +171,11 @@ fun PermissionsContent(
 
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(modifier = Modifier.padding(bottom = 16.dp))
+            // Accessibility: move stringResource OUTSIDE semantics block (not composable context)
+            val processingDescription = stringResource(R.string.a11y_permission_processing)
             Button(onClick = onGrantAccessButtonClick, modifier = Modifier.fillMaxWidth(), enabled = !isProcessingGrantingRequest, shape = MaterialTheme.shapes.medium) {
                 if (isProcessingGrantingRequest) {
-                    CircularProgressIndicator(modifier = Modifier.size(22.dp).semantics { contentDescription = stringResource(R.string.a11y_permission_processing) }, color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp).semantics { contentDescription = processingDescription }, color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                 } else {
                     Text(text = when { status.isComplete() -> stringResource(R.string.general_continue); !status.shizukuRunning -> stringResource(R.string.permission_shizuku_open); else -> stringResource(R.string.permissions_grant_access) })
                 }
