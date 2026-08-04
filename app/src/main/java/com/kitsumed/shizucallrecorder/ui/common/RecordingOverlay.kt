@@ -39,21 +39,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 
-/**
- * The floating overlay UI for controlling the recording.
- *
- * Accessibility improvements:
- * - Action button contentDescription changes dynamically based on recording state
- * - Recording state is announced via liveRegion for TalkBack
- * - Blinking dot has semantic state description
- * - Drag handle uses localized string resource
- */
 @Composable
 fun RecordingOverlay(
     isRecordingActive: Boolean,
@@ -65,7 +58,6 @@ fun RecordingOverlay(
     val isActivelyRecording = isRecordingActive && !isRecordingPaused
     val isActivelyPaused = isRecordingActive && isRecordingPaused
 
-    // Infinite transition for the blinking red dot alpha
     val dotAlpha by rememberInfiniteTransition(label = "recordingDotBlink").animateFloat(
         initialValue = 1f,
         targetValue = 0.2f,
@@ -76,7 +68,6 @@ fun RecordingOverlay(
         label = "dotAlpha"
     )
 
-    // Animate the button background color based on recording state
     val buttonBackgroundColor by animateColorAsState(
         targetValue = if (isActivelyRecording)
             MaterialTheme.colorScheme.errorContainer
@@ -88,14 +79,12 @@ fun RecordingOverlay(
         label = "buttonColorAnim"
     )
 
-    // --- Accessibility: dynamic contentDescription for the action button ---
     val actionButtonDescription = when {
         !isRecordingActive -> stringResource(R.string.a11y_overlay_action_start)
         isRecordingPaused  -> stringResource(R.string.a11y_overlay_action_resume)
         else               -> stringResource(R.string.a11y_overlay_action_pause)
     }
 
-    // --- Accessibility: state description for live region announcement ---
     val recordingStateDescription = when {
         isActivelyRecording -> stringResource(R.string.a11y_overlay_recording_active)
         isActivelyPaused    -> stringResource(R.string.a11y_overlay_recording_paused)
@@ -112,7 +101,6 @@ fun RecordingOverlay(
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
-                // --- Accessibility: live region announces state changes to TalkBack ---
                 .semantics(mergeDescendants = true) {
                     liveRegion = LiveRegionMode.Polite
                     stateDescription = recordingStateDescription
@@ -131,7 +119,6 @@ fun RecordingOverlay(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Action start/pause/resume
             Box(
                 modifier = Modifier.size(64.dp),
                 contentAlignment = Alignment.Center
@@ -140,11 +127,7 @@ fun RecordingOverlay(
                     onClick = onActionClick,
                     modifier = Modifier
                         .size(64.dp)
-                        .border(
-                            width = 4.dp,
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                            shape = CircleShape
-                        )
+                        .border(width = 4.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), shape = CircleShape)
                         .background(color = buttonBackgroundColor, shape = CircleShape)
                 ) {
                     val iconRes = when {
@@ -158,47 +141,34 @@ fun RecordingOverlay(
                         transitionSpec = {
                             val enterTransition = fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.7f)
                             val exitTransition = fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.7f)
-                            val combinedTransition = enterTransition.togetherWith(exitTransition)
-
-                            combinedTransition},
+                            enterTransition togetherWith exitTransition
+                        },
                         label = "iconChangeAnim"
                     ) { targetIconRes ->
                         Icon(
                             painter = painterResource(id = targetIconRes),
-                            // --- Accessibility: dynamic description based on current state ---
                             contentDescription = actionButtonDescription,
-                            tint = if (isActivelyRecording)
-                                MaterialTheme.colorScheme.onErrorContainer
-                            else
-                                MaterialTheme.colorScheme.onPrimaryContainer,
+                            tint = if (isActivelyRecording) MaterialTheme.colorScheme.onErrorContainer
+                            else MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.size(42.dp)
                         )
                     }
                 }
 
-                // Blinking red dot — accessibility: semantic state description
                 if (isActivelyRecording) {
                     Box(
                         modifier = Modifier
                             .size(18.dp)
                             .align(Alignment.TopEnd)
                             .alpha(dotAlpha)
-                            .background(
-                                color = Color.Red,
-                                shape = CircleShape
-                            )
-                            .semantics {
-                                stateDescription = recordingStateDescription
-                            }
+                            .background(color = Color.Red, shape = CircleShape)
+                            .semantics { stateDescription = recordingStateDescription }
                     )
                 }
             }
 
-            // Drag Handle — accessibility: localized description
             Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(26.dp),
+                modifier = Modifier.fillMaxHeight().width(26.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -211,7 +181,6 @@ fun RecordingOverlay(
         }
     }
 }
-
 
 @Preview(name = "Standby")
 @Composable
