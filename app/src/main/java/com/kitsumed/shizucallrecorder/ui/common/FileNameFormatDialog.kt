@@ -45,7 +45,7 @@ import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 
 /**
@@ -170,7 +170,7 @@ fun FileNameFormatDialog(
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         Surface(modifier = Modifier.fillMaxSize()) {
             FileNameFormatDialog(
                 initialFormat = AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE,

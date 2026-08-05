@@ -9,8 +9,6 @@
 package com.kitsumed.shizucallrecorder.ui.theme
 
 import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
@@ -57,20 +54,34 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ShizucallrecorderTheme(
+fun ShizuCallRecorderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val context = LocalContext.current
+    val view = LocalView.current
+
+    // Dynamic color scheme
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
+    }
+
+    // System Bar icon theme sync
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as? Activity)?.window
+            if (window != null) {
+                val insetsController = WindowCompat.getInsetsController(window, view)
+                insetsController.isAppearanceLightStatusBars = !darkTheme
+                insetsController.isAppearanceLightNavigationBars = !darkTheme
+            }
+        }
     }
 
     MaterialTheme(
@@ -78,35 +89,4 @@ fun ShizucallrecorderTheme(
         typography = Typography,
         content = content
     )
-}
-
-/**
- * Synchronizes status and navigation bar icon contrast with the app theme for both Activity
- * windows and full-screen Dialog windows.
- *
- * @see <a href="https://developer.android.com/develop/ui/views/layout/edge-to-edge">Edge-to-edge layouts</a>
- * @see <a href="https://developer.android.com/develop/ui/compose/system/insets">Window insets in Compose</a>
- * @see <a href="https://developer.android.com/reference/androidx/core/view/WindowInsetsControllerCompat">WindowInsetsControllerCompat</a>
- */
-@Composable
-fun SystemBarIconAppearance(darkTheme: Boolean) {
-    val context = LocalContext.current
-    val view = LocalView.current
-
-    SideEffect {
-        val window = (view.parent as? DialogWindowProvider)?.window
-            ?: context.findActivity()?.window
-            ?: return@SideEffect
-
-        WindowCompat.getInsetsController(window, view).apply {
-            isAppearanceLightStatusBars = !darkTheme
-            isAppearanceLightNavigationBars = !darkTheme
-        }
-    }
-}
-
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }

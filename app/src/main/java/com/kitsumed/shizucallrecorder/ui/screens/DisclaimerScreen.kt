@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.AppUrls
 import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 
@@ -98,7 +98,6 @@ fun DisclaimerScreen(onContinue: () -> Unit, modifier: Modifier = Modifier) {
         }
     }
 
-    // Surface ensures the Material 3 background colour fills the screen correctly.
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -268,7 +267,7 @@ fun HyperlinkText(
 @Preview(showBackground = true)
 @Composable
 private fun DisclaimerScreenPreview() {
-    ShizucallrecorderTheme {
+    ShizuCallRecorderTheme {
         DisclaimerScreen(onContinue = {})
     }
 }

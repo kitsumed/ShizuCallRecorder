@@ -40,7 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 
 /**
  * The floating overlay UI for controlling the recording.
@@ -184,7 +184,7 @@ fun RecordingOverlay(
 @Preview(name = "Standby")
 @Composable
 private fun PreviewRecordingOverlayStandby() {
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         RecordingOverlay(isRecordingActive = false, isRecordingPaused = false, onActionClick = {}, onDragY = {}, onDragEnd = {})
     }
 }
@@ -192,7 +192,7 @@ private fun PreviewRecordingOverlayStandby() {
 @Preview(name = "Recording")
 @Composable
 private fun PreviewRecordingOverlayRecording() {
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         RecordingOverlay(isRecordingActive = true, isRecordingPaused = false, onActionClick = {}, onDragY = {}, onDragEnd = {})
     }
 }
@@ -200,7 +200,7 @@ private fun PreviewRecordingOverlayRecording() {
 @Preview(name = "Paused")
 @Composable
 private fun PreviewRecordingOverlayPaused() {
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         RecordingOverlay(isRecordingActive = true, isRecordingPaused = true, onActionClick = {}, onDragY = {}, onDragEnd = {})
     }
 }

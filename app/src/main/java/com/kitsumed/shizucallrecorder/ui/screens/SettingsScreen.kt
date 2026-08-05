@@ -72,7 +72,7 @@ import com.kitsumed.shizucallrecorder.ui.common.FileNameFormatDialog
 import com.kitsumed.shizucallrecorder.ui.common.M3DropdownField
 import com.kitsumed.shizucallrecorder.ui.common.OptionItem
 import com.kitsumed.shizucallrecorder.ui.common.ToggleListItem
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerState
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerType
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerViewModel
@@ -178,9 +178,11 @@ fun SettingsContent(
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .safeDrawingPadding(),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 24.dp),
+                .fillMaxSize(),
+            // Equivalent to .safeDrawingPadding() but allow UI to extend behind the status bar when scrolling
+            contentPadding = WindowInsets.safeDrawing
+                .add(WindowInsets(left = 20.dp, right = 20.dp, top = 0.dp, bottom = 0.dp))
+                .asPaddingValues(),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             item {
@@ -205,6 +207,7 @@ fun SettingsContent(
             item { SecuritySection(preferences, updateTrigger, actions) }
             item { VisualSection(preferences, updateTrigger, actions) }
             item { DebugSection(preferences, updateTrigger, actions, onExportLogs) }
+            item {  } // extra padding at bottom
         }
     }
 
@@ -1190,7 +1193,7 @@ private fun DebugActionGrid(actions: SettingsActions) {
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
-    ShizucallrecorderTheme(darkTheme = false, dynamicColor = false) {
+    ShizuCallRecorderTheme(darkTheme = false, dynamicColor = false) {
         val mockContext = LocalContext.current
         val dummyPreferences = AppPreferences(mockContext)
         val dummyActions = object : SettingsActions {

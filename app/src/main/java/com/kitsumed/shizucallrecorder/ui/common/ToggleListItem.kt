@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 
 /** A list row with a switch. Tapping anywhere on the row toggles the switch.
  *
@@ -56,7 +56,7 @@ fun ToggleListItem(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewToggleListItem() {
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         Surface(
             modifier = Modifier.fillMaxWidth()
         ) {

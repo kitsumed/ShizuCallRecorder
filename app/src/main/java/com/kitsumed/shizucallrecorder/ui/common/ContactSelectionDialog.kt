@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.kitsumed.shizucallrecorder.R
@@ -338,7 +338,7 @@ fun PreviewContactSelectionDialog() {
     )
     val selectedContacts = setOf("2")
 
-    ShizucallrecorderTheme(darkTheme = true) {
+    ShizuCallRecorderTheme(darkTheme = true) {
         ContactSelectionContent(
             title = stringResource(R.string.settings_select_contacts, selectedContacts.count()),
             contacts = dummyContacts,
