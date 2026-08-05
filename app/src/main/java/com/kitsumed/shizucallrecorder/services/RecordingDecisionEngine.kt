@@ -216,18 +216,25 @@ class RecordingDecisionEngine private constructor(context: Context) {
         ignoredContactsLookupId: Set<String>
     ): Boolean {
 
+        // Fix error when phone number is blank: https://github.com/kitsumed/ShizuCallRecorder/issues/95
+        if (normalisedNumber.isBlank()) {
+            AppLogger.i( "Cannot determine if contact should be ignored: phone number is blank, returning false")
+            return false
+        }
+
         val lookupUri = Uri.withAppendedPath(
             ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
             Uri.encode(normalisedNumber)
         )
 
-        return when (mode) {
-            AppPreferences.IgnoreContactsMode.NONE -> false
+        try {
+            return when (mode) {
+                AppPreferences.IgnoreContactsMode.NONE -> false
 
-            AppPreferences.IgnoreContactsMode.ALL -> {
-                if (!PermissionChecks.hasContactsPermission(appContext)) {
-                    false
-                } else {
+                AppPreferences.IgnoreContactsMode.ALL -> {
+                    if (!PermissionChecks.hasContactsPermission(appContext)) {
+                        return false
+                    }
                     appContext.contentResolver.query(
                         lookupUri,
                         arrayOf(ContactsContract.PhoneLookup._ID),
@@ -238,31 +245,34 @@ class RecordingDecisionEngine private constructor(context: Context) {
                         cursor.moveToFirst()
                     } ?: false
                 }
-            }
 
-            AppPreferences.IgnoreContactsMode.SELECTED -> {
-                // If no contacts are selected, we can skip the query and return false directly
-                if (!PermissionChecks.hasContactsPermission(appContext) || ignoredContactsLookupId.isEmpty()) {
-                    return false
-                }
+                AppPreferences.IgnoreContactsMode.SELECTED -> {
+                    // If no contacts are selected, we can skip the query and return false directly
+                    if (!PermissionChecks.hasContactsPermission(appContext) || ignoredContactsLookupId.isEmpty()) {
+                        return false
+                    }
 
-                appContext.contentResolver.query(
-                    lookupUri,
-                    arrayOf(ContactsContract.PhoneLookup.LOOKUP_KEY),
-                    null,
-                    null,
-                    null
-                )?.use { cursor ->
-                    val lookupIdIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.LOOKUP_KEY)
-                    while (cursor.moveToNext()) {
-                        val contactLookupId = cursor.getString(lookupIdIndex)
-                        if (ignoredContactsLookupId.contains(contactLookupId)) {
-                            return true
+                    appContext.contentResolver.query(
+                        lookupUri,
+                        arrayOf(ContactsContract.PhoneLookup.LOOKUP_KEY),
+                        null,
+                        null,
+                        null
+                    )?.use { cursor ->
+                        val lookupIdIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.LOOKUP_KEY)
+                        while (cursor.moveToNext()) {
+                            val contactLookupId = cursor.getString(lookupIdIndex)
+                            if (ignoredContactsLookupId.contains(contactLookupId)) {
+                                return true
+                            }
                         }
                     }
+                    false
                 }
-                false
             }
+        } catch (e: Exception) {
+            AppLogger.e( "Error while checking contact ignore status for number: $normalisedNumber", e)
+            return false
         }
     }
 
