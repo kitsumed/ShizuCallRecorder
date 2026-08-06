@@ -272,16 +272,18 @@ private fun AboutSection(versionString: String) {
         Dialog(
             onDismissRequest = { showSponsorScreen = false },
             properties = DialogProperties(
-                usePlatformDefaultWidth = false,
+                usePlatformDefaultWidth = false, // False for edge-to-edge, since our SponsorScreen take full screen
                 decorFitsSystemWindows = false,
                 dismissOnClickOutside = false,
                 dismissOnBackPress = true,
+
             )
         ) {
             SponsorScreen(onDismiss = { showSponsorScreen = false })
         }
     }
 
+    // Handle license dialog
     if (showLicensesDialog) {
         Dialog(
             onDismissRequest = { showLicensesDialog = false },
@@ -335,14 +337,17 @@ private fun VisualSection(preferences: AppPreferences, updateTrigger: Int, actio
     val context = LocalContext.current
     val resources = LocalResources.current
 
+    // Read the current applied language without warnings
     val currentLanguage = remember {
         val currentLocales = AppCompatDelegate.getApplicationLocales()
         if (currentLocales.isEmpty) "" else currentLocales[0]?.toLanguageTag() ?: ""
     }
 
+    // Fetch available languages from dynamically generated XML resource file.
     val languageOptions = remember(context) {
         val options = mutableListOf(OptionItem("", resources.getString(R.string.settings_language_system)))
 
+        // Suppress the warning right here since AGP create this file dynamically at compile time
         @SuppressLint("DiscouragedApi")
         val resId = resources.getIdentifier("_generated_res_locale_config", "xml", context.packageName)
 
@@ -461,7 +466,9 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
                 var textState by remember(shizukuAuthKey) { mutableStateOf(shizukuAuthKey) }
                 var isFocused by remember { mutableStateOf(false) }
 
+                // Listen for textState updates
                 LaunchedEffect(textState) {
+                    // LaunchedEffect cancels the previous block and restarts when updating too quickly.
                     delay(100)
                     if (textState != shizukuAuthKey) {
                         actions.setShizukuAuthKey(textState)
@@ -535,6 +542,7 @@ private fun RecordingSection(
 ) {
     val context = LocalContext.current
     
+    // Evaluate these here so they are fetched on every recomposition.
     val recordingFolderLabel = remember(updateTrigger) { SafHelper.getFolderDisplayNameOrNull(context, preferences.getRecordingFolderUri()) }
     val callDetectionMode = remember(updateTrigger) { preferences.getCallDetectionMode() }
     val recordThirdPartyCalls = remember(updateTrigger) { preferences.isRecordThirdPartyCallsEnabled() }
@@ -559,6 +567,7 @@ private fun RecordingSection(
                 key = mode.key,
                 label = stringResource(mode.titleResId),
                 description = stringResource(mode.descriptionResId),
+                // Automatically grays out option if the user device's OS API level is incompatible
                 enabled = mode.isSupportedOnCurrentApi()
             )
         }
@@ -605,7 +614,6 @@ private fun RecordingSection(
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
 
-        // Accessibility: folder selection has Role.Button semantics
         ListItem(
             modifier = Modifier
                 .clickable { onSelectFolder() }
@@ -626,7 +634,6 @@ private fun RecordingSection(
             },
         )
 
-        // Accessibility: file name template has Role.Button semantics
         ListItem(
             modifier = Modifier
                 .clickable { showFileNameFormatDialog = true }
@@ -762,6 +769,11 @@ private fun RecordingSection(
 
 /** Shows the audio source, codec, and bit-rate dropdowns.
  *
+ * The audio-source list is generated from [ScrcpyAudioSource.entries], filtered by
+ * [ScrcpyAudioSource.isDebugOnly] based on [AppPreferences.isDebugEnabled]. Items whose
+ * [ScrcpyAudioSource.minApi]/[ScrcpyAudioSource.maxApi] range does not include the current
+ * device's API level are shown grayed out and cannot be selected.
+ *
  * @param preferences   The [AppPreferences] instance to read data from.
  * @param updateTrigger Trigger value to force recomposition when settings change.
  * @param actions       Implementation of [SettingsActions] to handle user interaction.
@@ -777,6 +789,8 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
     SettingsSection(title = stringResource(R.string.settings_section_audio)) {
         val currentSdk = Build.VERSION.SDK_INT
 
+        // Build the source list from the enum, hiding debug-only entries when debug is off.
+        // Items that require an API level not available on this device are shown as disabled.
         val audioSourceOptions = ScrcpyAudioSource.entries
             .filter { !it.isDebugOnly || isDebugEnabled }
             .map { source ->
@@ -784,6 +798,7 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
                     key         = source.cliKey,
                     label       = stringResource(source.titleResId),
                     description = stringResource(source.descriptionResId),
+                    // Enabled only when the current SDK is within the source's API range.
                     enabled     = currentSdk >= source.minApi &&
                                   (source.maxApi == null || currentSdk <= source.maxApi)
                 )
@@ -811,6 +826,8 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
             onOptionSelected = { actions.setAudioCodec(it.key) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
         )
+        // Show the AAC recommendation if the user has issues.
+        // LocalInspectionMode.current is true in Android Preview, it prevents a preview compilation error.
         if (!LocalInspectionMode.current && audioCodec != ScrcpyAudioCodec.AAC.cliKey) {
             Text(
                 text     = stringResource(R.string.settings_audio_bitrate_recommendation),
@@ -826,7 +843,7 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
         M3DropdownField(
             label    = stringResource(R.string.settings_audio_bitrate),
             selected = bitrateOptions.find { it.key == savedBitRate.toString() } 
-                ?: bitrateOptions.first(),
+                ?: bitrateOptions.first(), // fallback gracefully if bitrate was removed from expected options
             options  = bitrateOptions,
             onOptionSelected = { actions.setAudioBitRate(it.key.toInt()) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
@@ -961,7 +978,7 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
                 val allowedChars = "^[0-9+-]*$".toRegex()
 
                 LaunchedEffect(textState) {
-                    delay(100)
+                    delay(100) // Cancel current if new textState comes in within x time
                     if (textState != debugCallerNumber) {
                         actions.setDebugCallerNumber(textState)
                     }
@@ -988,6 +1005,12 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
 
 // ── Internal helper composables ────────────────────────────────────────────────────────────
 
+
+/** A titled card that groups related settings together.
+ *
+ * @param title   Section heading shown in the app's primary colour above the card.
+ * @param content The slot for child Composables rendered inside the [ElevatedCard].
+ */
 @Composable
 private fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1012,6 +1035,17 @@ private fun SettingsSection(title: String, content: @Composable ColumnScope.() -
     }
 }
 
+/**
+ * A radio-button group for choosing which contacts to ignore.
+ * When "selected" is active, shows a text field and a "Pick Contacts" button.
+ *
+ * @param label           Label shown above the radio buttons.
+ * @param selectedEnum     The currently active mode ("none", "all", or "selected").
+ * @param selectedCount    The number of contacts currently selected
+ * @param onSelected      Called with the new active mode when the user taps a radio button.
+ * @param onSelectContacts Called when the user taps the "Select Contacts" button; opens the
+ *                        [ContactSelectionDialog] via [ContactPickerViewModel].
+ */
 @Composable
 private fun IgnoreContactsOptions(
     label: String,
@@ -1030,15 +1064,16 @@ private fun IgnoreContactsOptions(
 
         val enumEntries = AppPreferences.IgnoreContactsMode.entries
         enumEntries.forEach { ignoreContactMode ->
-            // Accessibility: Row uses Role.RadioButton semantics
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
+                    // This make the box/text next to the radio button clickable, not just the button itself, which is more user-friendly.
                     .clickable { onSelected(ignoreContactMode) }
                     .semantics(mergeDescendants = true) {}
                     .padding(vertical = 4.dp)
             ) {
+                // Make the actual radio button (circle) clickable (it's quite small)
                 RadioButton(selected = selectedEnum == ignoreContactMode, onClick = { onSelected(ignoreContactMode) })
                 Text(
                     text = when (ignoreContactMode) {
@@ -1075,6 +1110,12 @@ private fun IgnoreContactsOptions(
     }
 }
 
+/**
+ * A red warning card used to highlight important information or potential issues in the settings.
+ * @param message The main warning message to display.
+ * @param modifier Modifier for styling the card.
+ * @param title An optional title for the warning, shown in bold red text above the main message.
+ */
 @Composable
 fun WarningCard(
     message: String,
@@ -1094,8 +1135,10 @@ fun WarningCard(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
+            // Warning Icon aligned to the top of text lines
             Icon(
                 imageVector = Icons.Default.Warning,
+                // Accessibility: localized contentDescription instead of hardcoded English
                 contentDescription = stringResource(R.string.general_system_limitation),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 2.dp)
@@ -1103,6 +1146,7 @@ fun WarningCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
+            // Text Content Block
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -1123,6 +1167,10 @@ fun WarningCard(
     }
 }
 
+/** A row of buttons for simulating different call events during testing.
+ *
+ * @param actions Called via proxy for each button press.
+ */
 @Composable
 private fun DebugActionGrid(actions: SettingsActions) {
     val items = listOf(
@@ -1146,6 +1194,9 @@ private fun DebugActionGrid(actions: SettingsActions) {
     }
 }
 
+/**
+ * Safe Compose Preview for Settings.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
@@ -1184,6 +1235,9 @@ private fun SettingsScreenPreview() {
             override fun setPostRecordingFileNotification(enabled: Boolean) {}
             override fun setOverlayEnabled(enabled: Boolean) {}
         }
+
+        // File name template selection dialog
+        //FileNameFormatDialog(AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE, {},{})
 
         SettingsContent(
             preferences = dummyPreferences,

@@ -47,6 +47,9 @@ import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 
+/**
+ * The floating overlay UI for controlling the recording.
+ */
 @Composable
 fun RecordingOverlay(
     isRecordingActive: Boolean,
@@ -58,6 +61,7 @@ fun RecordingOverlay(
     val isActivelyRecording = isRecordingActive && !isRecordingPaused
     val isActivelyPaused = isRecordingActive && isRecordingPaused
 
+    // Infinite transition for the blinking red dot alpha
     val dotAlpha by rememberInfiniteTransition(label = "recordingDotBlink").animateFloat(
         initialValue = 1f,
         targetValue = 0.2f,
@@ -68,6 +72,7 @@ fun RecordingOverlay(
         label = "dotAlpha"
     )
 
+    // Animate the button background color based on recording state
     val buttonBackgroundColor by animateColorAsState(
         targetValue = if (isActivelyRecording)
             MaterialTheme.colorScheme.errorContainer
@@ -79,12 +84,14 @@ fun RecordingOverlay(
         label = "buttonColorAnim"
     )
 
+    // Accessibility: dynamic contentDescription for the action button
     val actionButtonDescription = when {
         !isRecordingActive -> stringResource(R.string.a11y_overlay_action_start)
         isRecordingPaused  -> stringResource(R.string.a11y_overlay_action_resume)
         else               -> stringResource(R.string.a11y_overlay_action_pause)
     }
 
+    // Accessibility: state description for live region announcement
     val recordingStateDescription = when {
         isActivelyRecording -> stringResource(R.string.a11y_overlay_recording_active)
         isActivelyPaused    -> stringResource(R.string.a11y_overlay_recording_paused)
@@ -101,6 +108,7 @@ fun RecordingOverlay(
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
+                // Accessibility: live region announces state changes to TalkBack
                 .semantics(mergeDescendants = true) {
                     liveRegion = LiveRegionMode.Polite
                     stateDescription = recordingStateDescription
@@ -119,6 +127,7 @@ fun RecordingOverlay(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Action start/pause/resume
             Box(
                 modifier = Modifier.size(64.dp),
                 contentAlignment = Alignment.Center
@@ -127,7 +136,11 @@ fun RecordingOverlay(
                     onClick = onActionClick,
                     modifier = Modifier
                         .size(64.dp)
-                        .border(width = 4.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), shape = CircleShape)
+                        .border(
+                            width = 4.dp,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                            shape = CircleShape
+                        )
                         .background(color = buttonBackgroundColor, shape = CircleShape)
                 ) {
                     val iconRes = when {
@@ -141,34 +154,45 @@ fun RecordingOverlay(
                         transitionSpec = {
                             val enterTransition = fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.7f)
                             val exitTransition = fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.7f)
-                            enterTransition togetherWith exitTransition
-                        },
+                            val combinedTransition = enterTransition.togetherWith(exitTransition)
+
+                            combinedTransition},
                         label = "iconChangeAnim"
                     ) { targetIconRes ->
                         Icon(
                             painter = painterResource(id = targetIconRes),
                             contentDescription = actionButtonDescription,
-                            tint = if (isActivelyRecording) MaterialTheme.colorScheme.onErrorContainer
-                            else MaterialTheme.colorScheme.onPrimaryContainer,
+                            tint = if (isActivelyRecording)
+                                MaterialTheme.colorScheme.onErrorContainer
+                            else
+                                MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.size(42.dp)
                         )
                     }
                 }
 
+                // Blinking red dot
                 if (isActivelyRecording) {
                     Box(
                         modifier = Modifier
                             .size(18.dp)
                             .align(Alignment.TopEnd)
                             .alpha(dotAlpha)
-                            .background(color = Color.Red, shape = CircleShape)
+                            .background(
+                                color = Color.Red,
+                                shape = CircleShape
+                            )
+                            // Accessibility: semantic state description for the recording indicator
                             .semantics { stateDescription = recordingStateDescription }
                     )
                 }
             }
 
+            // Drag Handle
             Box(
-                modifier = Modifier.fillMaxHeight().width(26.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(26.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -181,6 +205,7 @@ fun RecordingOverlay(
         }
     }
 }
+
 
 @Preview(name = "Standby")
 @Composable

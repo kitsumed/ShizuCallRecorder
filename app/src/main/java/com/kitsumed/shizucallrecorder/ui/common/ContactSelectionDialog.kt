@@ -141,8 +141,8 @@ fun ContactSelectionContent(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 8.dp),
                 placeholder = { Text(stringResource(R.string.contact_search_hint)) },
-                // Accessibility: search icon has contentDescription for TalkBack
                 leadingIcon = {
+                    // Accessibility: search icon has contentDescription for TalkBack
                     Icon(
                         Icons.Default.Search,
                         contentDescription = stringResource(R.string.contact_search_hint),
@@ -287,7 +287,8 @@ private fun ContactListItem(
 
 /**
  * Circular avatar for a [ContactEntry].
- * Accessibility: photo image now has contentDescription for TalkBack.
+ *
+ * @param contact The contact whose avatar to render.
  */
 @Composable
 private fun ContactAvatar(contact: ContactEntry) {
