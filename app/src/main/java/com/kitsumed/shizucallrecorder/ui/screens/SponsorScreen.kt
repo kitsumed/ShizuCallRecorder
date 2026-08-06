@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.system.openGithub
 import com.kitsumed.shizucallrecorder.system.openGithubSponsor
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -135,7 +135,6 @@ fun SponsorScreen(
 
     Surface(
         modifier = modifier
-            .navigationBarsPadding()
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
     ) {
@@ -143,7 +142,6 @@ fun SponsorScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
-                .padding(top = 24.dp, bottom = 16.dp),
         ) {
             // Header
             StaggeredFadePop(index = 0) {
@@ -151,7 +149,8 @@ fun SponsorScreen(
                     text = stringResource(R.string.sponsor_title),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.statusBarsPadding().padding(top = 24.dp)
                 )
             }
 
@@ -161,23 +160,41 @@ fun SponsorScreen(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    // The fading edge mask logic
                     .graphicsLayer { alpha = 0.99f } // Forces composition layer for BlendMode
                     .drawWithCache {
-                        val fadeHeight = 66.dp.toPx() // Starts a bit earlier
-                        val fadeBrush = Brush.verticalGradient(
-                            // Adding a midway stop creates a progressive, curved fade out
+                        val topFadeHeight = 48.dp.toPx()
+                        val bottomFadeHeight = 48.dp.toPx()
+
+                        // --- TOP FADE BRUSH ---
+                        // Only apply a real fade if the user has scrolled down (scroll != 0).
+                        val isScrolled = scrollState.value > 0
+                        val topFadeBrush = Brush.verticalGradient(
+                            0.0f to if (isScrolled) Color.Transparent else Color.Black,
+                            0.6f to if (isScrolled) Color.Black.copy(alpha = 0.4f) else Color.Black,
+                            1.0f to Color.Black,
+                            startY = 0f,
+                            endY = topFadeHeight
+                        )
+
+                        // --- BOTTOM FADE BRUSH ---
+                        val bottomFadeBrush = Brush.verticalGradient(
                             0.0f to Color.Black,
-                            0.4f to Color.Black.copy(alpha = 0.4f),
                             1.0f to Color.Transparent,
-                            startY = (size.height - fadeHeight).coerceAtLeast(0f),
+                            startY = (size.height - bottomFadeHeight).coerceAtLeast(0f),
                             endY = size.height
                         )
+
                         onDrawWithContent {
                             drawContent()
+                            // Blend the Top Mask
                             drawRect(
-                                brush = fadeBrush,
-                                blendMode = BlendMode.DstIn // Keeps content where mask is solid, fades where transparent
+                                brush = topFadeBrush,
+                                blendMode = BlendMode.DstIn
+                            )
+                            // Blend the Bottom Mask
+                            drawRect(
+                                brush = bottomFadeBrush,
+                                blendMode = BlendMode.DstIn
                             )
                         }
                     }
@@ -266,7 +283,11 @@ fun SponsorScreen(
             }
 
             // Footer / Actions
-            Column {
+            Column(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = 16.dp)
+            ) {
                 StaggeredFadePop(index = 8) {
                     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
                 }
@@ -559,7 +580,7 @@ private fun StaggeredFadePop(
 @Preview(showBackground = true)
 @Composable
 private fun SponsorScreenPreview() {
-    ShizucallrecorderTheme(darkTheme = true, dynamicColor = true) {
+    ShizuCallRecorderTheme(darkTheme = true, dynamicColor = true) {
         SponsorScreen(onDismiss = {})
     }
 }

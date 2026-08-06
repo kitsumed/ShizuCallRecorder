@@ -40,7 +40,7 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.system.permissions.PermissionChecks
 import com.kitsumed.shizucallrecorder.ui.common.RecordingOverlay
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import kotlin.math.max
 import kotlin.math.min
 
@@ -90,7 +90,7 @@ class RecordingOverlayController(private val context: Context) {
             // State false -> true for the animation
             val isVisible = remember { MutableTransitionState(false).apply { targetState = true } }
 
-            ShizucallrecorderTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
+            ShizuCallRecorderTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
                 AnimatedVisibility(
                     visibleState = isVisible,
                     enter = slideInHorizontally(

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.tooling.preview.Preview
-import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
+import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 
 /**
  * A key/label/description/etc... data class used to populate dropdown menus.
@@ -117,7 +117,7 @@ fun PreviewM3DropdownField() {
         OptionItem("opt2", "Another Option", "Description for option 2"),
         OptionItem("opt3", "Disabled Option", "This cannot be selected", enabled = false)
     )
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizuCallRecorderTheme(darkTheme = false) {
         Surface {
             M3DropdownField(
                 label = "Select an option",

@@ -84,7 +84,8 @@ body:
       description: |        
         ### 📥 How to get your logs:
         1. **App Logs Exporter:** Open *ShizuCallRecorder*, go to the **Debug** section, and ensure **Log recording** is enabled. Replicate the bug, then export the file.
-        2. **System Logcat:** If the app crashes instantly, please capture a system logcat using a computer with [`adb logcat`](https://developer.android.com/tools/releases/platform-tools#downloads) or via a Shizuku-powered logcat tool. **You must capture logs by their tag `SCR:`**, do not target the package as it will cause some logs to be missing.
+        2. **Stuck On Permission Screen:** Long press on any of the permission cards, enable **Log recording**, restart the application, replicate the bug and export the file.
+        3. **System Logcat:** If the app crashes instantly, please capture a system logcat using a computer with [`adb logcat`](https://developer.android.com/tools/releases/platform-tools#downloads) or via a Shizuku-powered logcat tool. **You must capture logs by their tag `SCR:`**, do not target the package as it will cause some logs to be missing.
       placeholder: |
         If you have a file, please upload it instead of pasting its raw content here.
         Ensure you redact sensitive informations.

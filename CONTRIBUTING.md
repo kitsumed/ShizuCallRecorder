@@ -5,7 +5,9 @@ Hi! Thank you for considering contributing to this project.
 
 Please read the Rules and the Project Creation History to get an idea of how I see this project.
 
-If you want to help, **you can take a look at issues with the [help wanted](https://github.com/kitsumed/ShizuCallRecorder/issues?q=state%3Aopen%20label%3A%22help%20wanted%22) tag**, where I may want other users points of view (not just *"yes, it’s nice"* feedback) or am directly asking for help with pull requests and resources. Of course, nothing stops you from interacting with other issues, but issues that have been tagged are the ones I would like to target or have help with as a higher priority.
+If you want to help, **you can take a look at issues with the [help wanted](https://github.com/kitsumed/ShizuCallRecorder/issues?q=state%3Aopen%20label%3A%22help%20wanted%22) label**, where I may want other users points of view or am directly asking for help with PR and resources. Issues that have been tagged are the ones I would like to target or have help with as a higher priority.
+
+You can also take a look at issues with **[unresolved - ran out of ideas](https://github.com/kitsumed/ShizuCallRecorder/issues?q=label%3A%22unresolved%20-%20ran%20out%20of%20idea%22) label**. Most of these may be closed simply to clean up the open-issue list, but I use this tag to recognize that the problem still (*may not anymore in the future*) exists. I just don't know how to fix it and couldn't manage to resolve it myself. Pull requests and community contributions for these are welcome!
 
 ## Rules
 
