@@ -461,7 +461,6 @@ fun BioCard() {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Accessibility: title is now a semantic heading for TalkBack navigation
             Text(
                 text = stringResource(R.string.sponsor_body_title),
                 style = MaterialTheme.typography.titleMedium,

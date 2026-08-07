@@ -50,7 +50,6 @@ import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 
 /**
  * Dialog for selecting file name format.
- * Accessibility: OutlinedTextField now has a label for TalkBack.
  *
  * @param initialFormat The format string to show when the dialog opens, usually the currently saved user preference.
  * @param activeMode The currently active CallDetectionMode, used to filter and indicate which placeholders are supported/expected to work in the current mode.
@@ -109,7 +108,6 @@ fun FileNameFormatDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                // Accessibility: OutlinedTextField now has a label so TalkBack announces what this field is for
                 OutlinedTextField(
                     value = text,
                     isError = text.isBlank(),

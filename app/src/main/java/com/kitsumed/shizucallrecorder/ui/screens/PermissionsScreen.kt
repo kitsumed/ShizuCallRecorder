@@ -420,7 +420,6 @@ fun PermissionsContent(
                 shape = MaterialTheme.shapes.medium
             ) {
                 if (isProcessingGrantingRequest) {
-                    // Accessibility: stringResource must be called outside semantics block
                     val processingDescription = stringResource(R.string.a11y_permission_processing)
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -495,7 +494,6 @@ private fun PermissionCard(
 
                     Icon(
                         imageVector = if (granted) Icons.Default.CheckCircle else Icons.Default.ErrorOutline,
-                        // Accessibility: status icon now has descriptive contentDescription
                         contentDescription = if (granted)
                             stringResource(R.string.a11y_permission_status_granted)
                         else

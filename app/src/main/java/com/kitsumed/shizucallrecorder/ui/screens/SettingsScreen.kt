@@ -1138,7 +1138,6 @@ fun WarningCard(
             // Warning Icon aligned to the top of text lines
             Icon(
                 imageVector = Icons.Default.Warning,
-                // Accessibility: localized contentDescription instead of hardcoded English
                 contentDescription = stringResource(R.string.general_system_limitation),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 2.dp)
