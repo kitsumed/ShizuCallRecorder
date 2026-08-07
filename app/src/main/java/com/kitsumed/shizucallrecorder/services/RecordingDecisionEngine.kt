@@ -217,6 +217,7 @@ class RecordingDecisionEngine private constructor(context: Context) {
     ): Boolean {
 
         // Fix error when phone number is blank: https://github.com/kitsumed/ShizuCallRecorder/issues/95
+        // For example, this could happen with third-party app that define text in the phone numbers field, these get stripped out by us
         if (normalisedNumber.isBlank()) {
             AppLogger.i( "Cannot determine if contact should be ignored: phone number is blank, returning false")
             return false
