@@ -41,11 +41,7 @@
     <string name="a11y_overlay_recording_paused">Recording paused</string>
     <string name="a11y_overlay_recording_stopped">Ready to record</string>
     <string name="a11y_overlay_drag_handle">Drag handle, long press and drag to move the overlay</string>
-    <string name="a11y_permission_status_granted">Permission granted</string>
-    <string name="a11y_permission_status_required">Permission required</string>
-    <string name="a11y_permission_processing">Processing</string>
     <string name="a11y_contact_photo">Photo of %1$s</string>
-    <string name="a11y_folder_select">Open folder selector</string>
 
 
     <!-- ========================================== -->

@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -140,9 +139,12 @@ fun PermissionsScreen(
                 val dialogMessage = stringResource(R.string.general_system_limitation_message, cleanPermissionsString)
 
                 AlertDialog(
+                    modifier = Modifier.semantics(mergeDescendants = true) {},
                     onDismissRequest = { exitProcess(0) },
-                    title = { Text(text = stringResource(R.string.general_system_limitation)) },
-                    text = { Text(text = dialogMessage) },
+                    title = {
+                        Text(text = stringResource(R.string.general_system_limitation))
+                    },
+                    text = {Text(text = dialogMessage)},
                     confirmButton = {
                         TextButton(onClick = { exitProcess(0) }) {
                             Text(text = stringResource(R.string.general_close))
@@ -152,8 +154,9 @@ fun PermissionsScreen(
                     properties = DialogProperties(
                         dismissOnBackPress = false,
                         dismissOnClickOutside = false,
+
                     ),
-                    icon = { Icon(Icons.Default.Warning, contentDescription = stringResource(R.string.general_system_limitation)) }
+                    icon = { Icon(Icons.Default.Warning, contentDescription = null) }
                 )
             }
         }
@@ -420,13 +423,8 @@ fun PermissionsContent(
                 shape = MaterialTheme.shapes.medium
             ) {
                 if (isProcessingGrantingRequest) {
-                    val processingDescription = stringResource(R.string.a11y_permission_processing)
                     CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(22.dp)
-                            .semantics {
-                                contentDescription = processingDescription
-                            },
+                        modifier = Modifier.size(22.dp),
                         color = MaterialTheme.colorScheme.onPrimary,
                         strokeWidth = 2.dp
                     )
@@ -494,10 +492,7 @@ private fun PermissionCard(
 
                     Icon(
                         imageVector = if (granted) Icons.Default.CheckCircle else Icons.Default.ErrorOutline,
-                        contentDescription = if (granted)
-                            stringResource(R.string.a11y_permission_status_granted)
-                        else
-                            stringResource(R.string.a11y_permission_status_required),
+                        contentDescription = null,
                         modifier = Modifier.size(16.dp),
                         tint = statusColor // Used the animated color here
                     )

@@ -50,7 +50,6 @@ import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 
 /**
  * Dialog for selecting file name format.
- *
  * @param initialFormat The format string to show when the dialog opens, usually the currently saved user preference.
  * @param activeMode The currently active CallDetectionMode, used to filter and indicate which placeholders are supported/expected to work in the current mode.
  * @param onConfirm Called with the new format string when the user taps "OK".

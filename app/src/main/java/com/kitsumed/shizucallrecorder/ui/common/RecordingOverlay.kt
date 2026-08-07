@@ -84,14 +84,11 @@ fun RecordingOverlay(
         label = "buttonColorAnim"
     )
 
-    // Accessibility: dynamic contentDescription for the action button
     val actionButtonDescription = when {
         !isRecordingActive -> stringResource(R.string.a11y_overlay_action_start)
         isRecordingPaused  -> stringResource(R.string.a11y_overlay_action_resume)
         else               -> stringResource(R.string.a11y_overlay_action_pause)
     }
-
-    // Accessibility: state description for live region announcement
     val recordingStateDescription = when {
         isActivelyRecording -> stringResource(R.string.a11y_overlay_recording_active)
         isActivelyPaused    -> stringResource(R.string.a11y_overlay_recording_paused)
@@ -182,8 +179,6 @@ fun RecordingOverlay(
                                 color = Color.Red,
                                 shape = CircleShape
                             )
-                            // Accessibility: semantic state description for the recording indicator
-                            .semantics { stateDescription = recordingStateDescription }
                     )
                 }
             }

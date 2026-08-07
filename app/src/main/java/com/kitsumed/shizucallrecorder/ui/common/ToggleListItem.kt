@@ -11,6 +11,7 @@ package com.kitsumed.shizucallrecorder.ui.common
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 
@@ -43,13 +46,28 @@ fun ToggleListItem(
 ) {
     val contentAlpha = if (enabled) 1f else 0.38f
     ListItem(
-        modifier        = modifier.clickable(enabled = enabled) { onCheckedChange(!checked) },
-        headlineContent = { Text(label, color = MaterialTheme.colorScheme.onSurface.copy(alpha = contentAlpha)) },
+        modifier = modifier
+            .semantics(mergeDescendants = true) {}
+            .toggleable(
+                value = checked,
+                enabled = enabled,
+                role = Role.Switch,
+                onValueChange = { onCheckedChange(it) }
+            ),
+        headlineContent = {
+            Text(label, color = MaterialTheme.colorScheme.onSurface.copy(alpha = contentAlpha))
+        },
         supportingContent = if (description != null) {
             { Text(description, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = contentAlpha)) }
         } else null,
-        trailingContent = { Switch(checked = checked, onCheckedChange = onCheckedChange, enabled = enabled) },
-        colors          = ListItemDefaults.colors(containerColor = Color.Transparent)
+        trailingContent = {
+            Switch(
+                checked = checked,
+                onCheckedChange = null, // Only here for visuals
+                enabled = enabled
+            )
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent)
     )
 }
 

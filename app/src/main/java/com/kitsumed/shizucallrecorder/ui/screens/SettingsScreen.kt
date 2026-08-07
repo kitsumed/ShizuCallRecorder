@@ -30,6 +30,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -46,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -1064,24 +1066,32 @@ private fun IgnoreContactsOptions(
 
         val enumEntries = AppPreferences.IgnoreContactsMode.entries
         enumEntries.forEach { ignoreContactMode ->
+            val isCurrentlySelected = (selectedEnum == ignoreContactMode)
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    // This make the box/text next to the radio button clickable, not just the button itself, which is more user-friendly.
-                    .clickable { onSelected(ignoreContactMode) }
-                    .semantics(mergeDescendants = true) {}
+                    // This make the box/text next to the radio button selectable, not just the button itself, which is more user-friendly.
+                    .minimumInteractiveComponentSize()
+                    .selectable(
+                        selected = isCurrentlySelected,
+                        onClick = { onSelected(ignoreContactMode) },
+                        role = Role.RadioButton
+                    )
+                    .semantics(mergeDescendants = true) {
+                    }
                     .padding(vertical = 4.dp)
             ) {
-                // Make the actual radio button (circle) clickable (it's quite small)
-                RadioButton(selected = selectedEnum == ignoreContactMode, onClick = { onSelected(ignoreContactMode) })
+                RadioButton(selected = isCurrentlySelected, onClick = null)
                 Text(
                     text = when (ignoreContactMode) {
                         AppPreferences.IgnoreContactsMode.NONE -> stringResource(R.string.settings_ignore_contacts_none)
                         AppPreferences.IgnoreContactsMode.ALL -> stringResource(R.string.settings_ignore_contacts_all)
                         AppPreferences.IgnoreContactsMode.SELECTED   -> stringResource(R.string.settings_ignore_contacts_selected)
                     },
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(start = 12.dp)
                 )
             }
         }
@@ -1127,7 +1137,7 @@ fun WarningCard(
             containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.45f),
             contentColor = MaterialTheme.colorScheme.onErrorContainer
         ),
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
     ) {
         Row(
             modifier = Modifier
@@ -1138,7 +1148,7 @@ fun WarningCard(
             // Warning Icon aligned to the top of text lines
             Icon(
                 imageVector = Icons.Default.Warning,
-                contentDescription = stringResource(R.string.general_system_limitation),
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 2.dp)
             )
