@@ -175,4 +175,17 @@
     <string name="placeholder_date_minutes_desc">当前分（严格两位数，范围：00~59）</string>
     <string name="placeholder_date_seconds_desc">当前秒（严格两位数，范围：00~59）</string>
     <string name="general_permission_escalation_exhausted">无法获取“%1$s”权限“%2$s”。\n所有能够提高权限的途径均已被尝试过（%3$d）。\n\n注意：请确保 Shizuku 此刻正在运行。这也有可能会意外导致抛出此错误。\n\n您的 OEM 可能在自动地撤销已对权限所做的任何更改。请检查手机设置，看看是否有任何安全选项会导致这种行为。\n\nOPPO、vivo、小米等中国厂商的设备通常带有较为严格的安全限制，可能会完全阻止此类权限的访问。\n\n如果您找到了通过 ADB 手动授予所需权限的方法，请在 GitHub 上创建 Issue 告诉我们！</string>
+    <string name="general_play">播放</string>
+    <string name="general_share">分享</string>
+    <string name="general_delete">删除</string>
+    <string name="general_deleted">已删除</string>
+    <string name="settings_post_recording_notification">录音后通知</string>
+    <string name="settings_post_recording_notification_description">在录制结束后显示通知，并执行播放和删除等快速操作。</string>
+    <string name="settings_overlay_title">显示录音叠加层</string>
+    <string name="settings_overlay_subtitle">通过在其他应用上层显示一个带有快速操作的叠加层来管理录制。</string>
+    <string name="post_recording_notification_title">录音管理</string>
+    <string name="post_recording_notification_unknown_caller">匿名或未知来电人</string>
+    <string name="delete_recording_confirmation_title">删除录音</string>
+    <string name="delete_recording_confirmation_message">您确定要删除此录音吗？ 此操作无法撤消。</string>
+    <string name="delete_recording_confirmation_failed">删除录音失败。 请检查应用程序日志。</string>
 </resources>
