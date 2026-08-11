@@ -188,4 +188,12 @@
     <string name="delete_recording_confirmation_failed">Impossible de supprimer l\'enregistrement. Veuillez consulter les journaux de l\'application.</string>
     <string name="settings_overlay_title">Afficher la fenêtre flottante d\'enregistrement</string>
     <string name="settings_overlay_subtitle">Affichez une fenêtre superposée par-dessus les autres applications avec des actions rapides pour gérer l\'enregistrement.</string>
+    <string name="a11y_overlay_action_start">Démarrer l\'enregistrement</string>
+    <string name="a11y_overlay_action_pause">Mettre en pause l\'enregistrement</string>
+    <string name="a11y_overlay_action_resume">Reprendre l’enregistrement</string>
+    <string name="a11y_overlay_recording_active">Enregistrement en cours</string>
+    <string name="a11y_overlay_recording_paused">L\'enregistrement est en pause</string>
+    <string name="a11y_overlay_recording_stopped">Prêt à commencer l\'enregistrement</string>
+    <string name="a11y_overlay_drag_handle">Poignée de déplacement, appuyez longuement puis faites glisser pour déplacer la fenêtre superposer</string>
+    <string name="a11y_contact_photo">Image d\'%1$s</string>
 </resources>
