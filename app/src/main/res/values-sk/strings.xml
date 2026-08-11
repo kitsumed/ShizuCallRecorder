@@ -11,7 +11,7 @@
     <string name="general_resume">Obnoviť</string>
     <string name="general_incoming">prichádzajúce</string>
     <string name="general_outgoing">odchádzajúci</string>
-    <string name="general_reset">Obnoviť</string>
+    <string name="general_reset">Vrátiť do pôvodného stavu</string>
     <string name="general_play">Prehrať</string>
     <string name="general_share">Zdieľať</string>
     <string name="general_delete">Odstrániť</string>
@@ -39,7 +39,7 @@
     <string name="sponsor_way_share_title">Zdieľajte aplikáciu</string>
     <string name="sponsor_way_share_description">Povedzte svojim priateľom alebo komunite o aplikácii ShizuCallRecorder.</string>
     <string name="sponsor_github_sponsor_button">Podporiť na GitHub-e</string>
-    <string name="sponsor_github_star_button">Dať hviezdičku repozitáru</string>
+    <string name="sponsor_github_star_button">Dajte hviezdičku repozitáru</string>
     <string name="sponsor_maybe_later_button">Možno neskôr</string>
     <string name="sponsor_notification_body">Tento projekt je bezplatný, s otvoreným zdrojovým kódom a neobsahuje žiadne reklamy. Ak vám tento nástroj pomohol vo vašom každodennom živote, zvážte, ako by ste mohli podporiť jeho ďalší vývoj!</string>
     <string name="sponsor_notification_action">Zobraziť možnosti podpory</string>
@@ -78,12 +78,12 @@
     <string name="settings_shizuku_start_on_record">Spustiť až pri nahrávaní</string>
     <string name="settings_shizuku_start_on_record_desc">Shizuku sa spustí len vtedy, keď stlačíte tlačidlo nahrávania alebo sa uplatní pravidlo automatického nahrávania</string>
     <string name="settings_shizuku_keep_alive">Udržovať Shizuku stále spustené</string>
-    <string name="settings_shizuku_keep_alive_desc">Nezasielajte signál o zastavení</string>
+    <string name="settings_shizuku_keep_alive_desc">Nezasielať príkaz na zastavenie</string>
     <string name="settings_call_detection_method">Metóda detekcie hovoru</string>
     <string name="settings_call_detection_method_warning_title">Oznámenie o obmedzenej podpore</string>
-    <string name="call_detection_mode_phonestate_description">Použite staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie k zaseknutiu a poskytuje veľmi málo informácií.</string>
+    <string name="call_detection_mode_phonestate_description">Používa staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie k zaseknutiu a poskytuje veľmi málo informácií.</string>
     <string name="call_detection_mode_phonestate_limited_support">Táto metóda detekcie hovorov je nespoľahlivá. Pri prijímaní aktualizácií stavu telefónu získavame zastarané hodnoty a detekčná logika je náchylná na zaseknutia. Okrem toho nedokážeme rozlíšiť hovory od operátora a hovory od tretích strán. Toto obmedzenie však môžete obísť ignorovaním anonymných hovorov.</string>
-    <string name="call_detection_mode_incallservice_description">Použite moderné rozhranie API InCallService. Tento režim je efektívnejší a mal by zabezpečiť lepšiu detekciu s množstvom informácií.</string>
+    <string name="call_detection_mode_incallservice_description">Používa moderné rozhranie API InCallService. Tento režim je efektívnejší a mal by zabezpečiť lepšiu detekciu s množstvom informácií.</string>
     <string name="settings_record_third_party_calls">Zaznamenávanie aplikácií tretích strán</string>&gt;
     <string name="settings_record_third_party_calls_description">Nahrávajte hovory z aplikácií tretích strán, ktoré sú integrované s telekomunikačným systémom Android. Môže to viesť k tichým alebo jednostranným nahrávkam.</string>
     <string name="settings_tap_to_select_folder">Kliknutím vyberte priečinok...</string>
@@ -100,16 +100,16 @@
     <string name="placeholder_date_seconds_desc">Sekundy v aktuálnom čase, doplnené nulami (00–59)</string>
     <string name="placeholder_direction_desc">Smer hovoru (prichádzajúci/odchádzajúci)</string>
     <string name="placeholder_phone_number_desc">Telefónne číslo</string>
-    <string name="placeholder_caller_name_desc">Meno volajúceho – najskôr skontrolujte zoznam kontaktov, ak to nie je možné, použite identifikáciu volajúceho od telekomunikačného operátora, ak je k dispozícii</string>
-    <string name="placeholder_cross_country_desc">Udáva, či ide o medzimestský hovor (true/false)</string>
+    <string name="placeholder_caller_name_desc">Meno volajúceho – najskôr skontroluje zoznam kontaktov, ak to nie je možné, použite identifikáciu volajúceho od telekomunikačného operátora, ak je k dispozícii</string>
+    <string name="placeholder_cross_country_desc">Udáva, či ide o medzinárodný hovor (true/false)</string>
     <string name="placeholder_package_name_desc">Názov alebo názov balíka aplikácie, ktorá iniciovala volanie.</string>
     <string name="settings_post_recording_notification">Oznámenie po nahrávaní</string>
     <string name="settings_post_recording_notification_description">Po ukončení nahrávania zobraziť upozornenie s rýchlymi akciami, ako je prehrávanie a vymazanie.</string>
-    <string name="settings_vibration_enabled">Vibrovanie pri začiatku/ukončenia nahrávky</string>
+    <string name="settings_vibration_enabled">Vibrovanie pri začiatku/ukončení nahrávky</string>
     <string name="settings_auto_record_incoming">Automatické nahrávanie prichádzajúcich hovorov</string>
     <string name="settings_auto_record_outgoing">Automatické nahrávanie odchádzajúcich hovorov</string>
     <string name="settings_ignore_anonymous_incoming">Ignorovať anonymné prichádzajúce hovory</string>
-    <string name="settings_ignore_cross_country_incoming">Ignorovať prichádzajúce hovory z iných krajín</string>
+    <string name="settings_ignore_cross_country_incoming">Ignorovať prichádzajúce hovory zo zahraničia</string>
     <string name="settings_ignore_cross_country_outgoing">Ignorovať odchádzajúce hovory do zahraničia</string>
     <string name="settings_ignore_contacts_incoming">Ignorovať kontakty (prichádzajúce)</string>
     <string name="settings_ignore_contacts_outgoing">Ignorovať kontakty (odchádzajúce)</string>
@@ -133,7 +133,7 @@
     <string name="settings_audio_source">Zvukový zdroj</string>
     <string name="audio_source_voice_comm_description">Zvukový zdroj mikrofónu je prispôsobený na hlasovú komunikáciu. Vstavaná funkcia potlačenia ozveny.</string>
     <string name="audio_source_mic_description">Zaznamenáva zvuk priamo z hlavného mikrofónu zariadenia. Mierne potlačenie šumu.</string>
-    <string name="audio_source_voice_call_description">Nahráva obe strany telefonického hovoru. Surový zvukový záznam vrátane telefónnych tónov.</string>
+    <string name="audio_source_voice_call_description">Nahráva obidve strany telefonického hovoru. Surový zvukový záznam vrátane telefónnych tónov.</string>
     <string name="audio_source_playback_description">Zaznamenáva zvuk z iných aplikácií, s výnimkou tých, ktoré nahrávanie obmedzujú (rešpektuje nastavenia aplikácií, ktoré nahrávanie zakazujú).</string>
     <string name="audio_source_output_description">Zachytáva konečný, zosúladený zvuk presne tak, ako sa odosiela do vašich reproduktorov.</string>
     <string name="audio_source_mic_unprocessed_description">Zachytáva surový, prirodzený zvuk z mikrofónu bez akéhokoľvek automatického filtrovania alebo vylepšovania.</string>
@@ -151,7 +151,7 @@
     <string name="settings_debug_logging_generate_report">Vytvoriť správu</string>
     <string name="settings_debug_logging_report_on_github">Nahlásiť na GitHub</string>
     <string name="settings_debug_mode">Zapnúť režim ladenia</string>
-    <string name="settings_debug_mode_description">Zobraziť možnosti pre vývojárov, vypnúť redigovanie protokolov.</string>
+    <string name="settings_debug_mode_description">Zobraziť možnosti pre vývojárov a vypnúť prepisovanie protokolu.</string>
     <string name="settings_debug_caller_number">Číslo telefónu na odstraňovanie chýb</string>
     <string name="settings_view_licenses">Zobraziť licencie</string>
     <string name="settings_open_github_Wiki">Otvoriť Wiki</string>
@@ -188,4 +188,12 @@
     <string name="recording_shizuku_auth_key_missing">Chýba overovací kľúč aplikácie Shizuku Intents. Zadajte ho, prosím, v nastaveniach aplikácie.</string>
     <string name="settings_overlay_title">Zobraziť nahrávaciu lištu</string>
     <string name="settings_overlay_subtitle">Zobraziť plávajúcu lištu nad ostatnými aplikáciami s rýchlymi akciami na správu nahrávania.</string>
+    <string name="a11y_overlay_action_start">Spustiť nahrávanie</string>
+    <string name="a11y_overlay_action_pause">Pozastaviť nahrávanie</string>
+    <string name="a11y_overlay_action_resume">Pokračovať v nahrávaní</string>
+    <string name="a11y_overlay_recording_active">Prebieha nahrávanie</string>
+    <string name="a11y_overlay_recording_paused">Nahrávanie je pozastavené</string>
+    <string name="a11y_overlay_recording_stopped">Pripravený na nahrávanie</string>
+    <string name="a11y_overlay_drag_handle">Potiahnutím za okno dlhým stlačením a ťahaním presuniete plávajúce ovládanie</string>
+    <string name="a11y_contact_photo">Fotografia %1$s</string>
 </resources>
