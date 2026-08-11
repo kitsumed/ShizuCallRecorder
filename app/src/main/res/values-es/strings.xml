@@ -188,4 +188,12 @@
     <string name="delete_recording_confirmation_failed">No se pudo eliminar la grabación. Por favor, revisa los registros de la aplicación.</string>
     <string name="settings_overlay_title">Mostrar superposición de grabación</string>
     <string name="settings_overlay_subtitle">Mostrar una superposición sobre otras aplicaciones con acciones rápidas para gestionar la grabación.</string>
+    <string name="a11y_overlay_action_pause">Pausar grabación</string>
+    <string name="a11y_overlay_action_start">Iniciar grabación</string>
+    <string name="a11y_overlay_action_resume">Reanudar grabación</string>
+    <string name="a11y_overlay_recording_active">Grabación en curso</string>
+    <string name="a11y_overlay_recording_paused">Grabación pausada</string>
+    <string name="a11y_overlay_recording_stopped">Listo para grabar</string>
+    <string name="a11y_overlay_drag_handle">Control de arrastre; mantén pulsado y arrastra para mover la superposición</string>
+    <string name="a11y_contact_photo">Foto de %1$s</string>
 </resources>
