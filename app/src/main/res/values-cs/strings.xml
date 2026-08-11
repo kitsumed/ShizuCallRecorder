@@ -188,4 +188,12 @@
     <string name="recording_shizuku_auth_key_missing">Ověřovací klíč Shizuku Intents chybí. Zadejte jej prosím v nastavení aplikace.</string>
     <string name="settings_overlay_title">Zobrazovat plovoucí ovládání nahrávání</string>
     <string name="settings_overlay_subtitle">Zobrazí nad ostatními aplikacemi plovoucí ovládání s rychlými akcemi pro správu nahrávání.</string>
+    <string name="a11y_overlay_action_start">Spustit nahrávání</string>
+    <string name="a11y_overlay_action_pause">Pozastavit nahrávání</string>
+    <string name="a11y_overlay_action_resume">Pokračovat v nahrávání</string>
+    <string name="a11y_overlay_recording_active">Probíhá nahrávání</string>
+    <string name="a11y_overlay_recording_paused">Nahrávání pozastaveno</string>
+    <string name="a11y_overlay_recording_stopped">Připraveno k nahrávání</string>
+    <string name="a11y_overlay_drag_handle">Úchyt pro přesunutí. Dlouhým stisknutím a tažením přesunete plovoucí ovládání</string>
+    <string name="a11y_contact_photo">Fotka kontaktu %1$s</string>
 </resources>
