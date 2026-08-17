@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_close">Band karein</string>
+    <string name="general_continue">Aage chalein</string>
+    <string name="general_ok">Thik hai</string>
+    <string name="general_cancel">Radd karein</string>
+    <string name="general_record">Abhilekh</string>
+    <string name="general_pause">Ruko</string>
+    <string name="general_resume">Shuru</string>
+    <string name="general_incoming">Aane wali</string>
+    <string name="general_outgoing">Jane wali</string>
+    <string name="general_play">Chalana</string>
+    <string name="general_share">Bhejein</string>
+    <string name="general_delete">Mitade</string>
+    <string name="general_deleted">Mit gayi</string>
+    <string name="a11y_overlay_action_start">Abhilekh shuru karein</string>
+    <string name="a11y_overlay_action_pause">Abhilekh rokein</string>
+    <string name="a11y_overlay_action_resume">Abhilekh shuru karein</string>
+    <string name="a11y_overlay_recording_active">Abhilekh chal rahi hai</string>
+    <string name="a11y_overlay_recording_paused">Abhilekh ruki hui hai</string>
+    <string name="a11y_overlay_recording_stopped">Abhilekh ke liye taiyaar hai</string>
+    <string name="a11y_overlay_drag_handle">Pakadkar kheenchein, overlay ko hilane ke liye der tak dabayein aur kheenchein</string>
+    <string name="a11y_contact_photo">%1$s ka chitr</string>
+    <string name="disclaimer_title">ShizuCallRecorder mein swagat hai aapka</string>
+    <string name="disclaimer_wiki_link_KEYWORD">Gyaan kosh</string>
+    <string name="disclaimer_introduction">Aap shuru karne se pehle hamare Gyaan Kosh mein diye gaye setup nirdesh padhein. Phir, neeche diya gaya asvikaran padhein.</string>
+</resources>

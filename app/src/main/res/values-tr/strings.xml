@@ -186,6 +186,14 @@
     <string name="delete_recording_confirmation_title">Kaydı sil</string>
     <string name="delete_recording_confirmation_message">Bu kaydı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
     <string name="delete_recording_confirmation_failed">Kayıt silinemedi. Lütfen uygulama günlüklerini kontrol edin.</string>
-    <string name="settings_overlay_title">Yüzen kayıt butonu göster</string>
-    <string name="settings_overlay_subtitle">Diğer uygulamaların üzerinde yer alan ve kaydı yönetmek için hızlı işlemler içeren yüzen kayıt butonu göster.</string>
+    <string name="settings_overlay_title">Yüzen kayıt düğmesini göster</string>
+    <string name="settings_overlay_subtitle">Diğer uygulamaların üzerinde yer alan ve kaydı yönetmek için hızlı işlemler içeren yüzen kayıt düğmesi göster.</string>
+    <string name="a11y_overlay_action_start">Kaydı başlat</string>
+    <string name="a11y_overlay_action_pause">Kaydı duraklat</string>
+    <string name="a11y_overlay_action_resume">Kaydı devam ettir</string>
+    <string name="a11y_overlay_recording_active">Kayıt devam ediyor</string>
+    <string name="a11y_overlay_recording_paused">Kayıt duraklatıldı</string>
+    <string name="a11y_overlay_recording_stopped">Kayda hazır</string>
+    <string name="a11y_overlay_drag_handle">Sürükleme aracı; yüzen kayıt düğmesini taşımak için uzun basılı tutun ve sürükleyin</string>
+    <string name="a11y_contact_photo">%1$s fotoğrafı</string>
 </resources>
