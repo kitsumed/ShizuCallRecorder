@@ -8,20 +8,15 @@
 )](https://f-droid.org/packages/com.kitsumed.shizucallrecorder/)
 [![IzzyOnDroid Yearly Downloads](https://img.shields.io/badge/dynamic/json?url=https://dlstats.izzyondroid.org/iod-stats-collector/stats/basic/yearly/rolling.json&query=$.['com.kitsumed.shizucallrecorder']&logo=android&style=for-the-badge&label=Yearly%20downloads%20(IzzyOnDroid)&color=gold)](https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder)
 
-The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://android.googlesource.com/platform/frameworks/base/+/android16-release/packages/Shell/AndroidManifest.xml).
-[Latest URL](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml).
+The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml).
 
-It can also be seen as an on-device wrapper for [scrcpy-server](https://github.com/genymobile/scrcpy).
-
-**This application is intended to be a very basic call recorder that focuses solely on call recording for phone carriers**.
-
->[!NOTE]
-> I am not 100% opposed to adding support for third-party apps, but this is not the main focus and I want to keep the application simple. See [contributing](./CONTRIBUTING.md) for more information. We would first need to look into [this issue](https://github.com/kitsumed/ShizuCallRecorder/issues/1).
+**This app main focus are Cellular/VoLTE calls, however, we do attempt to support Wifi-Calling and VoIP when possible**. Third-party app support ***is not guaranteed***, they may work provided they use Android Telecom.
 
 ## Features
 
 - Records **both sides of phone calls** (incoming and outgoing)
     - Should work even when using Bluetooth or a remote headset
+- **Separate uplink and downlink audio** inside a stereo recording
 - **Security** toggles to **manage Shizuku on/off state**
     - An attempt to reduce the potential attack surface introduced by Shizuku
     - Helps with apps that detect / yells at you when USB Debugging or Shizuku is enabled
@@ -29,7 +24,7 @@ It can also be seen as an on-device wrapper for [scrcpy-server](https://github.c
     - Ignore anonymous calls
     - Ignore specific contacts
     - Ignore all contacts
-- Saves recordings with **Opus** or **AAC** codec.
+- Multiple codecs available: **Opus**, **AAC**, **HE-AAC-v1**, and more!
 - The app runs only on phone event changes, no persistent background process and notifications
 
 ## Requirements
@@ -54,7 +49,7 @@ It can also be seen as an on-device wrapper for [scrcpy-server](https://github.c
 </details>
 
 > [!IMPORTANT]  
-> This application makes use of hidden internal Android APIs. As such, it is prone to breaking in new Android releases or due to specific OEM modifications to the source code. There are multiple breaking points and dependencies. The two main ones right now are [scrcpy-server](https://github.com/genymobile/scrcpy) and Shizuku.
+> This application makes use of hidden internal Android APIs. As such, it is prone to breaking in new Android releases or due to specific OEM modifications to the source code.
 
 ## Installation
 ⚠️⚠️⬇️**YOU WILL NEED TO DO SOME INITIAL CONFIGURATIONS**.⬇️⚠️⚠️
