@@ -44,7 +44,16 @@ You can also take a look at issues with **[unresolved - ran out of ideas](https:
 10. **Keep dependencies minimal**. Avoid adding new libraries **unless they are clearly justified**.
 11. Try to keep the project simple. **Prefer understandable and maintainable solutions (if available) over complex or clever ones**.
 
-## Project Creation History
+## Major Version Changes
+
+| Version | Architecture | Major Changes |
+| :------ | :----------- | :------------ |
+| **1.x.x** | **scrcpy-based** | Initial implementation used scrcpy-server binary for audio capture. |
+| **2.x.x** | **Native / scrcpy-inspired** | Rebuilt to use internal Android API directly to have more control over audio capture, mixing and encoding. |
+
+
+<details>
+<summary><h1>The origins of this project</h1></summary>
 For a couple of years now, I have wanted the ability to record my phone calls on Android. At the time, all of the projects I could find that worked without root were proprietary apps with weird telemetry, unrelated permissions, and constant background API requests.
 
 Those apps also had bad recording quality and could not support Bluetooth devices or headsets, as they were using a workaround to record phone calls from the phone speaker. As for FOSS options, only root applications like BCR existed, as far as I am aware, I am the first, FOSS non-root call recorder app.
@@ -69,3 +78,4 @@ From there, I watched a 3 to 4 hour Kotlin introduction video and started trying
 
 At first, I wanted to make the application in C# since I'm more familar with the language, but Shizuku did not have a C# API package, and it seemed that Kotlin has a lot more resources online for Android devs beginners, so I decided to go ahead and figure it out as I went.
 Remember, I had never done any Android development before, and I still find many things in Android development really confusing. I also have difficulty with how things are named and using the right [architectures](https://developer.android.com/topic/architecture/recommendations).
+</details>
