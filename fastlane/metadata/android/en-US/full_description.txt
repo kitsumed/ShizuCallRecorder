@@ -1,7 +1,7 @@
 <b>ShizuCallRecorder</b> is the first <b>non-root FOSS call recorder app for Android 11+</b>. It empowers ADB through Shizuku to use an advanced list of permissions granted to the shell application (<a href="https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml">Shell AndroidManifest</a>).
 
 <p><b>Features</b></p>
-<ul><li>Records <b>both sides of phone calls</b> (incoming and outgoing)<ul><li>Should work even when using Bluetooth or a remote headset</li></ul></li><li><b>Security toggles</b> to manage Shizuku on/off state<ul><li>Helps reduce the potential attack surface introduced by Shizuku</li><li>Helps with apps that detect or warn when USB debugging or Shizuku is enabled</li></ul></li><li><b>Automatic call recording</b> option with basic exclusion rules:<ul><li>Ignore anonymous calls</li><li>Ignore specific contacts</li><li>Ignore all contacts</li></ul></li><li>Saves recordings using <b>Opus</b> or <b>AAC</b> codec</li><li>The app runs only on phone event changes, with no persistent background process and no notifications</li></ul>
+<ul><li>Records <b>both sides of phone calls</b> (incoming and outgoing)<ul><li>Should work even when using Bluetooth or a remote headset</li></ul></li><li><b>Separate uplink and downlink audio</b> inside a stereo recording</li><li><b>Security</b> toggles to <b>manage Shizuku on/off state</b><ul><li>An attempt to reduce the potential attack surface introduced by Shizuku</li><li>Helps with apps that detect / yells at you when USB Debugging or Shizuku is enabled</li></ul></li><li><b>Automatic call recording</b> option with basic <b>exclusion rules</b>:<ul><li>Ignore anonymous calls</li><li>Ignore specific contacts</li><li>Ignore all contacts</li></ul></li><li>Multiple codecs available: <b>Opus</b>, <b>AAC</b>, <b>HE-AAC-v1</b>, and more!</li><li>The app runs only on phone event changes, no persistent background process and notifications</li></ul>
 
 <p><b>Requirements</b></p>
 <ul><li><b>Android 11</b> or newer</li><li>See the <b>Android Tested Versions</b> table on <a href="https://github.com/kitsumed/ShizuCallRecorder#requirements">GitHub</a> for more information on limitations</li><li><a href="https://github.com/thedjchi/Shizuku">Shizuku</a> (recommended fork: <a href="https://github.com/thedjchi">thedjchi</a>)</li></ul>
@@ -9,7 +9,7 @@
 <p><b>Installation</b></p>
 Please follow the installation instructions in the <a href="https://github.com/kitsumed/ShizuCallRecorder/blob/main/docs/SUPPORT.md">SUPPORT documentation</a>, under <b>Installation &amp; Configuration</b>.
 
-<b>Please note that the official release source is GitHub. Builds are signed with my key, immutable, and attested so you can track them back to the Github Runner (Build CI). F-Droid builds are provided for convenience but are not directly controlled by the project maintainer.</b>
+<b>Please note that the official release source is GitHub.</b>
 
 
 <p><b>Support the Project</b></p>
