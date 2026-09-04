@@ -1,4 +1,6 @@
-<b>ShizuCallRecorder</b> is the first <b>non-root FOSS call recorder app for Android 11+</b>. It empowers ADB through Shizuku to use an advanced list of permissions granted to the shell application (<a href="https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml">Shell AndroidManifest</a>).
+<b>ShizuCallRecorder</b> is the first <b>non-root FOSS call recorder app for Android 11+</b>.
+
+<p><b>This app main focus are Cellular/VoLTE calls, however, we do attempt to support Wifi-Calling and VoIP when possible</b>. Third-party app support <em><b>is not guaranteed</b></em>, they may work provided they use Android Telecom.</p>
 
 <p><b>Features</b></p>
 <ul><li>Records <b>both sides of phone calls</b> (incoming and outgoing)<ul><li>Should work even when using Bluetooth or a remote headset</li></ul></li><li><b>Separate uplink and downlink audio</b> inside a stereo recording</li><li><b>Security</b> toggles to <b>manage Shizuku on/off state</b><ul><li>An attempt to reduce the potential attack surface introduced by Shizuku</li><li>Helps with apps that detect / yells at you when USB Debugging or Shizuku is enabled</li></ul></li><li><b>Automatic call recording</b> option with basic <b>exclusion rules</b>:<ul><li>Ignore anonymous calls</li><li>Ignore specific contacts</li><li>Ignore all contacts</li></ul></li><li>Multiple codecs available: <b>Opus</b>, <b>AAC</b>, <b>HE-AAC-v1</b>, and more!</li><li>The app runs only on phone event changes, no persistent background process and notifications</li></ul>
