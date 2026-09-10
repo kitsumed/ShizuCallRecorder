@@ -67,7 +67,12 @@ object SafHelper {
         val newFile = currentDir.createFile(mimeType, fileName) ?: return null
 
         // Open the file in read-write mode so MediaMuxer can seek back to write headers.
-        val fileDescriptor = context.contentResolver.openFileDescriptor(newFile.uri, "rw") ?: return null
+        val fileDescriptor = context.contentResolver.openFileDescriptor(newFile.uri, "rw") ?: run {
+            // The document was created but could not be opened (e.g. transient SAF/DocumentsProvider glitch).
+            // Delete it so we don't leave an orphaned, untracked empty file in the user's recordings folder.
+            newFile.delete()
+            return null
+        }
         val displayName = "${rootDir.name}/${filePath.trimStart('/')}"
         return SafResult(newFile.uri, fileDescriptor, displayName)
     }
