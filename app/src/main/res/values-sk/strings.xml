@@ -81,7 +81,7 @@
     <string name="settings_shizuku_keep_alive_desc">Nezasielať príkaz na zastavenie</string>
     <string name="settings_call_detection_method">Metóda detekcie hovoru</string>
     <string name="settings_call_detection_method_warning_title">Oznámenie o obmedzenej podpore</string>
-    <string name="call_detection_mode_phonestate_description">Používa staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie k zaseknutiu a poskytuje veľmi málo informácií.</string>
+    <string name="call_detection_mode_phonestate_description">Používa staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie vedúce k zaseknutiu a poskytuje obmedzené množstvo informácií.</string>
     <string name="call_detection_mode_phonestate_limited_support">Táto metóda detekcie hovorov je nespoľahlivá. Pri prijímaní aktualizácií stavu telefónu získavame zastarané hodnoty a detekčná logika je náchylná na zaseknutia. Okrem toho nedokážeme rozlíšiť hovory od operátora a hovory od tretích strán. Toto obmedzenie však môžete obísť ignorovaním anonymných hovorov.</string>
     <string name="call_detection_mode_incallservice_description">Používa moderné rozhranie API InCallService. Tento režim je efektívnejší a mal by zabezpečiť lepšiu detekciu s množstvom informácií.</string>
     <string name="settings_record_third_party_calls">Zaznamenávanie aplikácií tretích strán</string>&gt;

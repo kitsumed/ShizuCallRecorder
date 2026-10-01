@@ -188,4 +188,12 @@
     <string name="delete_recording_confirmation_failed">Nie udało się usunąć nagrania. Sprawdź logi aplikacji.</string>
     <string name="settings_overlay_title">Pokaż nakładkę nagrywania</string>
     <string name="settings_overlay_subtitle">Wyświetla nad innymi aplikacjami nakładkę umożliwiającą szybkie zarządzanie nagrywaniem.</string>
+    <string name="a11y_overlay_action_start">Rozpocznij nagrywanie</string>
+    <string name="a11y_overlay_action_pause">Wstrzymaj nagrywanie</string>
+    <string name="a11y_overlay_action_resume">Wznów nagrywanie</string>
+    <string name="a11y_overlay_recording_active">Trwa nagrywanie</string>
+    <string name="a11y_overlay_recording_paused">Nagrywanie wstrzymane</string>
+    <string name="a11y_overlay_recording_stopped">Gotowy do nagrywania</string>
+    <string name="a11y_overlay_drag_handle">Naciśnij i przytrzymaj a następnie przeciągnij aby przesunąć nakładkę</string>
+    <string name="a11y_contact_photo">Zdjęcie %1$s</string>
 </resources>

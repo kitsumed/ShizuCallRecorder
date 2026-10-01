@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_close">닫기</string>
+    <string name="general_continue">계속</string>
+    <string name="general_ok">확인</string>
+    <string name="general_cancel">취소</string>
+    <string name="general_settings">설정</string>
+    <string name="general_licenses">라이센스</string>
+    <string name="general_record">녹음</string>
+    <string name="general_share">공유</string>
+    <string name="general_delete">삭제</string>
+    <string name="general_deleted">삭제됨</string>
+    <string name="disclaimer_checkbox_label">면책 조항을 읽었으며, 이 소프트웨어의 법적 요구사항, 책임 및 기술적 한계를 이해했습니다.</string>
+    <string name="sponsor_days_used">ShizuCallRecorder를 사용한 지 %1$d일이 되었습니다!</string>
+    <string name="sponsor_body">어릴 때부터 기술과 컴퓨터에 관심이 많았습니다. 제가 진행하는 프로젝트의 대부분은 제 자신의 신체적 또는 정신적 장애와 관련된 문제에 대한 해결책을 찾는 과정에서 시작되었고, 나머지는 그저 우연히 떠오른 영감에서 비롯되었습니다.\n\nShizuCallRecorder는 제 장애 중 하나와 관련된 개인적인 필요에서 탄생했습니다. 몇 년 동안 루팅되지 않은 기기에서도 작동하는 무료 오픈 소스(FOSS) 통화 녹음 앱을 찾아봤지만, 결국 찾지 못했습니다. 그런 앱은 존재하지 않았습니다. 그래서 직접 만들기로 결심했고, 이를 공개하게 되었습니다.\n\n저는 여가 시간의 상당 부분을 오픈 소스 소프트웨어를 배우고, 개발하고, 유지 관리하는 데 사용합니다. 여러분의 후원은 제 일상생활에 재정적으로 직접적인 도움을 주며, 제가 커뮤니티를 위해 높은 품질의 도구를 계속 만들어 나갈 수 있도록 동기를 부여합니다.\n\n저는 제 앱을 과도한 광고와 개인정보를 침해하는 추적 기능으로부터 자유롭게 유지하는 것을 중요하게 생각합니다. 제 도구들이 여러분의 일상생활에 도움이 되었다면, 후원을 고려해 주세요!</string>
+    <string name="sponsor_notification_body">이 프로젝트는 무료 오픈 소스이며, 광고가 전혀 포함되어 있지 않습니다. 이 도구가 여러분의 일상생활에 도움이 되었다면, 프로젝트 개발을 지원할 수 있는 방법을 확인해 주세요!</string>
+    <string name="sponsor_notification_action">후원 옵션 보기</string>
+    <string name="sponsor_notification_call_to_action_title">ShizuCallRecorder를 유용하게 사용하고 계신가요?</string>
+    <string name="permissions_title">권한 설정</string>
+    <string name="permissions_intro">녹음을 시작하려면 몇 가지 권한이 필요합니다. ‘접근 권한 허용’을 누른 후 각 항목을 승인해 주세요.</string>
+    <string name="permissions_grant_access">접근 권한 허용</string>
+    <string name="permissions_status_required">필수</string>
+    <string name="permission_call_log_description">전화 상태 이벤트에서 가려지지 않은 전화번호를 수신하기 위해 필요합니다.</string>
+    <string name="permission_manage_ongoing_calls_label">진행 중인 통화 관리</string>
+    <string name="general_system_limitation">시스템 제한 사항</string>
+    <string name="general_permission_escalation_exhausted">‘%1$s’ 권한 ‘%2$s’를 획득하지 못했습니다.\n모든 권한 상승 단계(%3$d)를 시도했지만 실패했습니다.\n\nShizuku가 현재 실행 중인지 확인해 주세요. Shizuku가 실행되고 있지 않아 이 오류가 발생했을 수 있습니다.\n\n또한 사용 중인 기기의 제조사(OEM)가 모든 권한 변경을 적극적으로 차단하거나 원래 상태로 되돌리고 있을 수도 있습니다. 휴대전화 설정을 확인하여 이러한 동작을 비활성화할 수 있는 옵션이 있는지 살펴보세요.\n\nVivo, Oppo, Xiaomi, Huawei 및 기타 중국 제조사의 기기에는 공격적인 시스템 제한이 적용되는 경우가 많으며, 이로 인해 해당 권한에 대한 접근이 완전히 차단될 수 있습니다.\n\nADB를 사용하여 필요한 권한을 수동으로 부여할 방법을 찾으셨다면, GitHub에서 이슈를 생성하여 저희에게 알려 주세요!</string>
+</resources>
