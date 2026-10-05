@@ -235,8 +235,6 @@ class ShizukuConnectionManager(
 
         Shizuku.UserServiceArgs(ComponentName(context.packageName, ShellService::class.java.name))
             // daemon=false means the ShellService process exits when the app process dies.
-            // We want this because even if the ShellService kept running, we would no longer
-            // have the pipe read-end on the app side to write the output file.
             .daemon(false)
             .processNameSuffix("ElevatedShellService")
             .debuggable(isDebug)

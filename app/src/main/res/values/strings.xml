@@ -228,6 +228,14 @@
     <string name="settings_audio_bitrate_recommendation">If you have difficulties, try AAC, it is widely supported by OEMs.</string>
     <string name="audio_codec_opus" translatable="false">Opus</string>
     <string name="audio_codec_aac" translatable="false">AAC</string>
+    <string name="audio_codec_he_aac_v1" translatable="false">HE-AAC v1</string>
+    <string name="audio_codec_he_aac_v2" translatable="false">HE-AAC v2</string>
+    <string name="audio_codec_xhe_aac" translatable="false">xHE-AAC</string>
+    <string name="audio_codec_amr_wb" translatable="false">AMR-WB</string>
+    <string name="settings_audio_allow_playback_api">Allow capture via the Playback API</string>
+    <string name="settings_audio_allow_playback_api_desc">When VoIP or Wi-Fi Calling is detected, overrides the selected uplink/downlink sources with audio playback capture or any other equivalent source to attempt capturing the audio.</string>
+    <string name="settings_audio_channel_split">Split Uplink/Downlink audio</string>
+    <string name="settings_audio_channel_split_desc">Split uplink audio to the left channel, and downlink to right.</string>
 
     <string name="settings_audio_bitrate">Audio bit rate</string>
     <string name="audio_bitrate_kbps" translatable="false">%1$d kbps</string>
@@ -262,6 +270,9 @@
 
     <string name="audio_source_voice_call_downlink" translatable="false">Voice call downlink</string>
     <string name="audio_source_voice_call_downlink_description">Records only the other person side of a phone call (downlink).</string>
+    
+    <string name="audio_source_uplink_downlink" translatable="false">Uplink + Downlink</string>
+    <string name="audio_source_uplink_downlink_description">Records both sides of a phone call (mixing uplink + downlink) without any phone tones.</string>
 
     <string name="audio_source_voice_performance" translatable="false">Voice performance</string>
     <string name="audio_source_voice_performance_description">High-speed microphone mode designed for live music and real-time audio apps.</string>
@@ -326,8 +337,10 @@
     <string name="recording_error_folder_missing">Selected output folder is missing, invalid, or we do not have permission to write to it. Select one in the app settings.</string>
     <string name="recording_error_server_missing">Scrcpy-server binary is missing or the security SHA256 check failed. This should not happen, please report this.</string>
     <string name="recording_error_file_creation">Failed to create recording file. Please check the storage permissions and/or select a new recording folder in the app settings.</string>
-    <string name="recording_error_start_failed">Failed to start the recording. An error occurred when calling the ShellService binder method.</string>
+    <string name="recording_error_cannot_reach_binder">Failed to start the recording. An error occurred when calling the ShellService binder method.</string>
     <string name="recording_unexpected_error">An unexpected error occurred during recording. Please report this with the steps to reproduce and the apps logs.</string>
+    <string name="recording_failure_capture_start_failed">An error occurred when the audio capture started.</string>
+    <string name="recording_failure_capture_read_failed">An error occurred when reading and processing the captured audio.</string>
     <!-- Recording Service: Errors Shizuku -->
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku disconnected unexpectedly, causing the recording process to stop. (Shizuku-Server process died)</string>
     <string name="recording_shizuku_not_started">Shizuku-Server process is stopped. Please start Shizuku and ensure it is always able to run when the app wants to record audio.</string>

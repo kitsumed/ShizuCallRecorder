@@ -20,6 +20,7 @@ import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
+import com.kitsumed.shizucallrecorder.data.recording.RecordingFailure
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +72,7 @@ class RecordingForegroundService : Service() {
 
     private lateinit var appPreferences: AppPreferences
 
+    private lateinit var recordingPlanResolver: RecordingPlanResolver
     private lateinit var notificationHelper: RecordingNotificationHelper
 
     private lateinit var overlayController: RecordingOverlayController
@@ -98,6 +100,7 @@ class RecordingForegroundService : Service() {
         overlayController = RecordingOverlayController(this)
 
         appPreferences = AppPreferences(this)
+        recordingPlanResolver = RecordingPlanResolver(this)
 
         // Launch a collector to do actions on the service state changes
         serviceScope.launch(Dispatchers.Main.immediate) { // Use immediate to ensure we get the initial (oldState) value on launch
@@ -226,18 +229,22 @@ class RecordingForegroundService : Service() {
             ACTION_PAUSE_RECORDING -> {
                 _serviceState.update { currentState ->
                     if (currentState is RecordingServiceState.Active) {
-                        currentState.engine.isPaused = true // Pause the recording engine
+                        currentState.session.pause() // Pause the recording session
                         currentState.copy(isPaused = true) // Update the service state to reflect the paused state
-                    } else currentState
+                    } else {
+                        currentState
+                    }
                 }
             }
 
             ACTION_RESUME_RECORDING -> {
                 _serviceState.update { currentState ->
                     if (currentState is RecordingServiceState.Active) {
-                        currentState.engine.isPaused = false
+                        currentState.session.resume()
                         currentState.copy(isPaused = false)
-                    } else currentState
+                    } else {
+                        currentState
+                    }
                 }
             }
 
@@ -285,71 +292,98 @@ class RecordingForegroundService : Service() {
     // ── Service internal logic ───────────────────────────────────────
 
     /**
-     * Orchestrates the recording state at the Service level.
-     * Creates a new [AudioRecordingEngine], starts the I/O pipeline, updates the visible notification,
-     * and handles fatal [PipelineInitializationException].
+     * Starts a new recording session based on the provided parameters.
+     *
+     * If a session is already active, this method will log a warning and return without starting a new session.
+     *
+     * @param service The [IShellService] instance to use for recording.
+     * @param metadata The [EnrichedCallData] containing call information for the recording session.
      */
     private fun startNewRecordingSession(service: IShellService, metadata: EnrichedCallData) {
         if (_serviceState.value.isRecordingActive) {
-            AppLogger.w( "startNewRecordingSession() called while already active – ignoring")
+            AppLogger.w("startNewRecordingSession() called while a session is already active – ignoring")
             return
         }
 
-        // 1. Create a new session (declared here to allow cleanup if startPipeline fails)
-        val activeSession = AudioRecordingEngine()
+        val plan = recordingPlanResolver.resolve(metadata)
 
-        try {
-            // 2. Try to start the pipeline
-            activeSession.startPipeline(this, service, metadata)
-            // 3. Success
-            _serviceState.update { RecordingServiceState.Active(activeSession, false, metadata) }
-            AppLogger.i( "Recording pipeline started successfully")
-        } catch (e: PipelineInitializationException) {
-            AppLogger.e( e.message ?: "", e.cause ?: e)
+        AppLogger.i("Resolved final recording plan: $plan")
+
+        val activeSession = try {
+            RecordingSession(
+                context = this,
+                remoteService = service,
+                initializationMetadata = metadata,
+                plan = plan,
+                // Handle events reported by the remote recording engine
+                listener = object : RecordingSession.SessionListener {
+                    override fun onSessionFailed(failure: RecordingFailure) {
+                        val userFriendlyMessage = getString(failure.descriptionResId)
+                        AppLogger.w("Recording session was notified of a failure with error: $failure. Showing user-friendly message: $userFriendlyMessage")
+                        notificationHelper.showErrorNotification(userFriendlyMessage)
+                        stopRecordingSessionAndService()
+                    }
+                }
+            )
+        } catch (e: RecordingSession.InitializationException) {
+            AppLogger.e(e.message ?: "Empty Message.", "Remote recording engine reported: $e")
             notificationHelper.showErrorNotification(e.userFriendlyMessage)
-            // Ensure partial resources are cleaned up
-            activeSession.cancel(this, shellService)
-            _serviceState.update { RecordingServiceState.Standby(metadata) }
             stopRecordingSessionAndService()
+            return
         }
+
+        _serviceState.update {
+            RecordingServiceState.Active(
+                session = activeSession,
+                isPaused = false,
+                metadata = metadata
+            )
+        }
+
+        AppLogger.i("The recording session has been started successfully. Service state updated to Active.")
     }
 
     /**
-     * Stops the current recording session and stop the foreground recording service.
-     *
-     * Always trigger [AudioRecordingEngine.release] so that if we are currently recording,
-     * we safely shuts down the pipeline and saves the file, clears the current session,
-     * removes the foreground notification, and stops the service.
+     * Stops the current recording session (if any) and stops the foreground service.
      */
     private fun stopRecordingSessionAndService() {
-        val activeSession = (_serviceState.value as? RecordingServiceState.Active)?.engine
+        val activeSession = (_serviceState.value as? RecordingServiceState.Active)?.session
+
         if (activeSession == null) {
-            AppLogger.d( "No active session, exiting standby state, removing foreground notification and stopping service.")
+            AppLogger.d("No active session, exiting standby state, removing foreground notification and stopping service.")
             stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf() // Stop the service since the session is over
+            stopSelf()
             return
         }
-        AppLogger.i( "Stopping active recording session, remove foreground notification and stopping service...")
 
-        // Release all resources held by the recording session, and stop the remote shell service, finalizing the recording file.
-        activeSession.release(shellService)
+        AppLogger.i("Stopping active recording session, removing foreground notification and stopping service...")
+        activeSession.release()
 
         // If the user has enabled post-recording file actions, show a notification with options.
         if (appPreferences.isPostRecordingFileActionsNotificationEnabled()) {
             activeSession.currentRecordingUri?.let { filePathUri ->
-                activeSession.initializationMetadata?.let { metadata ->
+                activeSession.initializationMetadata.let { metadata ->
+
                     // Ensure the file was written and exists
                     val docFile = DocumentFile.fromSingleUri(applicationContext, filePathUri)
                     if (docFile != null && docFile.exists() && docFile.length() > 0) {
-                        AppLogger.d( "Showing post-recording notification for user actions.")
-                        notificationHelper.showPostCallNotification(filePathUri, metadata)
+                        AppLogger.d("Showing post-recording notification for user actions.")
+
+                        notificationHelper.showPostCallNotification(
+                            filePathUri,
+                            metadata
+                        )
                     }
                 }
             }
         }
 
-        _serviceState.update { RecordingServiceState.Standby(null) }
-        AppLogger.i( "The recording session has been stopped and resources have been released. Stopping foreground service. Goodbye >3")
+        _serviceState.update {
+            RecordingServiceState.Standby(null)
+        }
+
+        AppLogger.i("Recording session stopped and resources released. Stopping foreground service.")
+
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf() // Stop the service since the session is over
     }

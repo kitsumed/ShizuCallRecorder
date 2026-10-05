@@ -11,42 +11,49 @@ package com.kitsumed.shizucallrecorder.services.recording
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 
 /**
- * Represents the state of the recording service, including the current recording metadata and engine state.
+ * Represents the state of the recording service, including the current recording metadata and session state.
  */
 sealed class RecordingServiceState {
+
+    /** The metadata associated with the current recording session, or null if in standby/stopped. */
     abstract val metadata: EnrichedCallData?
 
     /** True if the recording service is in the process of starting a recording session. */
     val isStarting: Boolean
         get() = this is Starting
 
-    /** True if the recording service is actively recording a call. */
+    /** True if the recording service is currently managing an active, ongoing recording session (even if paused). */
     val isRecordingActive: Boolean
         get() = this is Active
 
-    /** True if the recording service is actively recording a call and the recording is currently paused. */
+    /** True if the recording service is currently managing an ongoing session and **the recording is currently paused**. */
     val isRecordingPaused: Boolean
         get() = (this as? Active)?.isPaused == true
 
     /**
      * Represents the initial state when the recording service is in standby mode, waiting for instructions to start a recording.
-     * @param metadata The metadata associated with the current recording session, or null if the service is not initialized or has stopped (ended) recording.
+     * @param metadata The metadata associated with the previous or upcoming recording session, or null if none exists.
      */
-    data class Standby(override val metadata: EnrichedCallData? = null) : RecordingServiceState()
+    data class Standby(
+        override val metadata: EnrichedCallData? = null
+    ) : RecordingServiceState()
 
     /**
      * Initial transient state when the service has received a start command and is setting things up.
+     * @param metadata The metadata associated with the recording session currently being initialized.
      */
-    data class Starting(override val metadata: EnrichedCallData) : RecordingServiceState()
+    data class Starting(
+        override val metadata: EnrichedCallData
+    ) : RecordingServiceState()
 
     /**
-     * Represents the state when the recording service is actively recording a call. Contains the current recording engine and metadata.
-     * @param engine The audio recording engine currently in use.
+     * Represents the state when the recording service is actively recording a call.
+     * @param session The application-side recording session owner ([RecordingSession]) currently in progress.
      * @param isPaused Indicates whether the recording is currently paused.
-     * @param metadata The metadata associated with the current recording session
+     * @param metadata The metadata associated with the active recording session.
      */
     data class Active(
-        val engine: AudioRecordingEngine,
+        val session: RecordingSession,
         val isPaused: Boolean = false,
         override val metadata: EnrichedCallData
     ) : RecordingServiceState()

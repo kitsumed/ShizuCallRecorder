@@ -32,3 +32,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ShizuCallRecorder"
 include(":app")
+include(":android-framework-hidden-stubs")

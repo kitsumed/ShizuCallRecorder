@@ -43,7 +43,7 @@ import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
@@ -74,7 +74,7 @@ fun FileNameFormatDialog(
             callerName = "John Doe"
         )
         val result = RecordingFileNameFormatter.formatFileName(
-            context, fakeMetadata, ScrcpyAudioCodec.OPUS, customFormat = text
+            context, fakeMetadata, RecordingCodec.OPUS, customFormat = text
         )
         result
     }

@@ -61,9 +61,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyConfig
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.system.PersistentFolderPickerContract
 import com.kitsumed.shizucallrecorder.system.openGithubReportIssue
@@ -89,6 +86,9 @@ import kotlinx.coroutines.delay
 import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
 import androidx.core.net.toUri
+import com.kitsumed.shizucallrecorder.data.recording.CapturePlan
+import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingSource
 
 /**
  * Stateful wrapper for the Settings screen that connects [SettingsViewModel] to [SettingsContent].
@@ -236,7 +236,6 @@ fun SettingsContent(
 @Composable
 private fun AboutSection(versionString: String) {
     val context = LocalContext.current
-    val serverVersion = ScrcpyConfig.SCRCPY_VERSION
 
     var showLicensesDialog by remember() { mutableStateOf(false) }
     var showSponsorScreen by remember() { mutableStateOf(false) }
@@ -244,9 +243,6 @@ private fun AboutSection(versionString: String) {
     SettingsSection(title = stringResource(R.string.settings_section_about)) {
         ListItem(
             headlineContent = { Text(versionString) },
-            supportingContent = {
-                Text(stringResource(R.string.settings_scrcpy_server, serverVersion))
-            },
             colors = ListItemDefaults.colors(containerColor = Color.Transparent)
         )
         Row(
@@ -771,84 +767,112 @@ private fun RecordingSection(
 
 /** Shows the audio source, codec, and bit-rate dropdowns.
  *
- * The audio-source list is generated from [ScrcpyAudioSource.entries], filtered by
- * [ScrcpyAudioSource.isDebugOnly] based on [AppPreferences.isDebugEnabled]. Items whose
- * [ScrcpyAudioSource.minApi]/[ScrcpyAudioSource.maxApi] range does not include the current
- * device's API level are shown grayed out and cannot be selected.
- *
  * @param preferences   The [AppPreferences] instance to read data from.
  * @param updateTrigger Trigger value to force recomposition when settings change.
  * @param actions       Implementation of [SettingsActions] to handle user interaction.
  */
 @Composable
 private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, actions: SettingsActions) {
-
     val isDebugEnabled = remember(updateTrigger) { preferences.isDebugEnabled() }
     val audioSource = remember(updateTrigger) { preferences.getAudioSource() }
     val audioCodec = remember(updateTrigger) { preferences.getAudioCodec() }
+    val isPlaybackCaptureAllowed = remember(updateTrigger) { preferences.isPlaybackCaptureAllowed() }
+    val isAudioChannelSplitEnabled = remember(updateTrigger) { preferences.isAudioChannelSplitEnabled() }
     val savedBitRate = remember(updateTrigger) { preferences.getAudioBitRate() }
         
     SettingsSection(title = stringResource(R.string.settings_section_audio)) {
-        val currentSdk = Build.VERSION.SDK_INT
-
         // Build the source list from the enum, hiding debug-only entries when debug is off.
         // Items that require an API level not available on this device are shown as disabled.
-        val audioSourceOptions = ScrcpyAudioSource.entries
+        val audioSourceOptions = RecordingSource.entries
             .filter { !it.isDebugOnly || isDebugEnabled }
             .map { source ->
                 OptionItem(
-                    key         = source.cliKey,
-                    label       = stringResource(source.titleResId),
+                    key = source.key,
+                    label = stringResource(source.titleResId),
                     description = stringResource(source.descriptionResId),
                     // Enabled only when the current SDK is within the source's API range.
-                    enabled     = currentSdk >= source.minApi &&
-                                  (source.maxApi == null || currentSdk <= source.maxApi)
+                    enabled = Build.VERSION.SDK_INT >= source.minApi &&
+                              (source.maxApi == null || Build.VERSION.SDK_INT <= source.maxApi)
                 )
             }
 
-        val selectedAudio = audioSourceOptions.find { it.key == audioSource }
+        val selectedAudio = audioSourceOptions.find { it.key == audioSource.key }
             ?: audioSourceOptions.first()
 
         M3DropdownField(
-            label    = stringResource(R.string.settings_audio_source),
+            label = stringResource(R.string.settings_audio_source),
             selected = selectedAudio,
-            options  = audioSourceOptions,
+            options = audioSourceOptions,
             onOptionSelected = { actions.setAudioSource(it.key) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
         )
 
-        val codecOptions = ScrcpyAudioCodec.entries
-            .map { OptionItem(it.cliKey, stringResource(it.titleResId)) }
+        val codecOptions = RecordingCodec.entries
+            .map { codec ->
+                // If stereo-only, then disable by default. If the user enable separate audio, enable all.
+                val meetsStereoRequirement = !codec.isStereoOnly || isAudioChannelSplitEnabled
+
+                OptionItem(
+                    key = codec.key,
+                    label = stringResource(codec.titleResId),
+                    enabled = codec.isSupported() && meetsStereoRequirement
+                )
+            }
         
         M3DropdownField(
-            label    = stringResource(R.string.settings_audio_codec),
-            selected = codecOptions.find { it.key == audioCodec } 
-                ?: codecOptions.first(),
-            options  = codecOptions,
+            label = stringResource(R.string.settings_audio_codec),
+            selected = codecOptions.find { it.key == audioCodec.key && it.enabled }
+                ?: codecOptions.first(), // "panic" fallback
+            options = codecOptions,
             onOptionSelected = { actions.setAudioCodec(it.key) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
         )
         // Show the AAC recommendation if the user has issues.
         // LocalInspectionMode.current is true in Android Preview, it prevents a preview compilation error.
-        if (!LocalInspectionMode.current && audioCodec != ScrcpyAudioCodec.AAC.cliKey) {
+        if (!LocalInspectionMode.current && audioCodec.key != RecordingCodec.AAC.key) {
             Text(
-                text     = stringResource(R.string.settings_audio_bitrate_recommendation),
-                style    = MaterialTheme.typography.labelSmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = stringResource(R.string.settings_audio_bitrate_recommendation),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
             )
         }
 
-        val bitrateOptions = listOf(8000, 16000, 32000, 64000, 128000)
-            .map { OptionItem(it.toString(), stringResource(R.string.audio_bitrate_kbps, it / 1000)) }
+        val bitrateOptions = listOf(6000, 8000, 10000, 12000, 16000, 32000, 64000, 128000)
+            .map { kbps ->
+                val isSupportedForCodec = audioCodec.isBitRateSupported(kbps)
+                // If the user has enabled separate audio channels, check if the kbps supports stereo.
+                val isStereoSupported = if (isAudioChannelSplitEnabled && audioCodec.minStereoBitRate != null) kbps >= audioCodec.minStereoBitRate else true
+
+                OptionItem(
+                    key = kbps.toString(),
+                    label = stringResource(R.string.audio_bitrate_kbps, kbps / 1000),
+                    enabled = isSupportedForCodec && isStereoSupported
+                )
+            }
 
         M3DropdownField(
-            label    = stringResource(R.string.settings_audio_bitrate),
-            selected = bitrateOptions.find { it.key == savedBitRate.toString() } 
-                ?: bitrateOptions.first(), // fallback gracefully if bitrate was removed from expected options
-            options  = bitrateOptions,
+            label = stringResource(R.string.settings_audio_bitrate),
+            selected = bitrateOptions.find { it.key == savedBitRate.toString() && it.enabled }
+                ?: bitrateOptions.first(), // "panic" fallback
+            options = bitrateOptions,
             onOptionSelected = { actions.setAudioBitRate(it.key.toInt()) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+        )
+
+        ToggleListItem(
+            label = stringResource(R.string.settings_audio_channel_split),
+            checked = isAudioChannelSplitEnabled,
+            onCheckedChange = { actions.setAudioChannelSplitEnabled(it) },
+            description = stringResource(R.string.settings_audio_channel_split_desc)
+        )
+
+        ToggleListItem(
+            label = stringResource(R.string.settings_audio_allow_playback_api),
+            checked = isPlaybackCaptureAllowed,
+            enabled = CapturePlan.AudioPlayback.isSupportedForAndroidVersion(),
+            onCheckedChange = { actions.setPlaybackCaptureAllowed(it) },
+            description = stringResource(R.string.settings_audio_allow_playback_api_desc)
         )
     }
 }
@@ -1243,6 +1267,8 @@ private fun SettingsScreenPreview() {
             override fun setRecordThirdPartyCalls(enabled: Boolean) {}
             override fun setPostRecordingFileNotification(enabled: Boolean) {}
             override fun setOverlayEnabled(enabled: Boolean) {}
+            override fun setPlaybackCaptureAllowed(enabled: Boolean) {}
+            override fun setAudioChannelSplitEnabled(enabled: Boolean) {}
         }
 
         // File name template selection dialog

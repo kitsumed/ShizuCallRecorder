@@ -15,6 +15,7 @@ import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.RawCallData
 import com.kitsumed.shizucallrecorder.services.RecordingDecisionEngine
 import com.kitsumed.shizucallrecorder.services.recording.RecordingForegroundService
+import com.kitsumed.shizucallrecorder.system.audio.AudioModeResolver
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import com.kitsumed.shizucallrecorder.utils.PhoneNumberManager
 import kotlinx.coroutines.CoroutineScope
@@ -135,6 +136,8 @@ class PhoneStateSessionManager private constructor(context: Context) {
     private val appContext: Context = context.applicationContext
     private val preferences = AppPreferences(appContext)
 
+    private val audioModeResolver = AudioModeResolver(appContext)
+
     private val temporaryCache = PhoneStateTemporaryCache(appContext)
 
     private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -254,8 +257,14 @@ class PhoneStateSessionManager private constructor(context: Context) {
                     return@withContext
                 }
 
+                // Now that we know the call is active, we can check if the audio mode is VoIP-based and update the metadata accordingly.
+                // This is the only way with PhoneState to determine if the call is VoIP-based, since we don't have access to the actual call data.
+                val updatedMetadata = currentMetadata.copy(
+                    isCallAudioVoIpBased = audioModeResolver.isVoipAudioMode()
+                )
+
                 // Execute pipeline asynchronously; only lock the state if it actually succeeded
-                val pipelineTriggered = RecordingDecisionEngine.getInstance(appContext).executeDecisionPipeline(currentMetadata)
+                val pipelineTriggered = RecordingDecisionEngine.getInstance(appContext).executeDecisionPipeline(updatedMetadata)
                 if (pipelineTriggered) {
                     session.wasRecordingServiceStartIntentSend = true
                 }

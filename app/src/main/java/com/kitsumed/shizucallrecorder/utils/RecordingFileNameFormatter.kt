@@ -16,7 +16,7 @@ import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import java.util.Date
 import java.util.Locale
@@ -57,7 +57,7 @@ object RecordingFileNameFormatter {
     fun formatFileName(
         context: Context,
         metadata: EnrichedCallData,
-        codec: ScrcpyAudioCodec,
+        codec: RecordingCodec,
         customFormat: String? = null
     ): String {
         val template = customFormat ?: AppPreferences(context).getFileNameTemplate()

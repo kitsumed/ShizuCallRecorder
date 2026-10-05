@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager
 import com.google.i18n.phonenumbers.MetadataLoader
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
+import com.google.i18n.phonenumbers.ShortNumberInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -114,7 +115,13 @@ class PhoneNumberManager private constructor(context: Context) {
                 // Prepend "+" and tell the library that it NEED to parse it as international ("ZZ" region code).
                 val internationalNumberStr = if (rawNumber.startsWith("+")) rawNumber else "+$rawNumber"
                 AppLogger.v("Parsed number ($rawNumber) is invalid in region ($defaultRegion), attempting to parse as international: $internationalNumberStr")
-                phoneUtil.parse(internationalNumberStr, "ZZ")
+                val parsedInternationalNumber = phoneUtil.parse(internationalNumberStr, "ZZ")
+                if (phoneUtil.isValidNumber(parsedInternationalNumber)) {
+                    AppLogger.v("Successfully parsed as international number: $parsedInternationalNumber")
+                    return@withContext parsedInternationalNumber
+                }
+                AppLogger.v("Parsed international number ($parsedInternationalNumber) is also invalid, returning null.")
+                return@withContext null
             }
         } catch (e: Exception) {
             AppLogger.e( "Error parsing phone number: ${e.message}", e)

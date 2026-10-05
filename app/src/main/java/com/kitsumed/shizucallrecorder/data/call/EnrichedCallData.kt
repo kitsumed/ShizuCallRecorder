@@ -26,6 +26,7 @@ import kotlinx.parcelize.Parcelize
  * @param direction Whether the call is incoming or outgoing.
  * @param isCrossCountry Whether the call is cross-country.
  * @param callerName The caller/contact name associated with the phone number in the user contacts, then fallback to Telecom/CallerID name, if available.
+ * @param isCallAudioVoIpBased A boolean indicating whether the call audio is VoIP-based or not. This can be used to determine if special handling is needed for VoIP calls.
  */
 @Parcelize
 data class EnrichedCallData(
@@ -34,7 +35,8 @@ data class EnrichedCallData(
     val direction: CallDirection,
     val isCrossCountry: Boolean = false,
     val callerName: String? = null,
-    val packageName: String? = null
+    val packageName: String? = null,
+    val isCallAudioVoIpBased: Boolean = false
 ) : Parcelable {
 
     /**
@@ -63,7 +65,8 @@ data class EnrichedCallData(
                         direction = base.direction,
                         isCrossCountry = true, // We should assume it's cross-country to be safe, since we don't know where its from.
                         callerName = base.osProvidedCallerName,
-                        packageName = base.packageName
+                        packageName = base.packageName,
+                        isCallAudioVoIpBased = base.isCallAudioVoIpBased,
                     )
                 }
 
@@ -77,7 +80,8 @@ data class EnrichedCallData(
                         direction = base.direction,
                         isCrossCountry = true, // If we can't parse the number, we should assume it's cross-country to be safe, since we don't know where it's from.
                         callerName = base.osProvidedCallerName,
-                        packageName = base.packageName
+                        packageName = base.packageName,
+                        isCallAudioVoIpBased = base.isCallAudioVoIpBased,
                     )
                 }
 
@@ -102,7 +106,8 @@ data class EnrichedCallData(
                     direction = base.direction,
                     isCrossCountry = crossCountry,
                     callerName = callerName,
-                    packageName = base.packageName
+                    packageName = base.packageName,
+                    isCallAudioVoIpBased = base.isCallAudioVoIpBased,
                 )
             }
 

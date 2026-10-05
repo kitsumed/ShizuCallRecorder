@@ -14,8 +14,9 @@ import android.os.Build
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.kitsumed.shizucallrecorder.R
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioSource
+import com.kitsumed.shizucallrecorder.data.recording.CapturePlan
+import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingSource
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 
@@ -65,11 +66,12 @@ class AppPreferences(context: Context) {
         const val DEBUG_ENABLED = false
         const val DEBUG_CALLER_NUMBER = ""
         
-        // --- Audio/Scrcpy Quality ---
-        val AUDIO_SOURCE = ScrcpyAudioSource.VOICE_CALL.cliKey
-        val AUDIO_CODEC = ScrcpyAudioCodec.OPUS.cliKey
-
-        val AUDIO_BITRATE = ScrcpyAudioCodec.OPUS.defaultBitRate
+        // --- Audio Quality / Capture Config ---
+        val AUDIO_SOURCE = RecordingSource.VOICE_CALL
+        val PLAYBACK_CAPTURE_ALLOWED = CapturePlan.AudioPlayback.isSupportedForAndroidVersion() // If supported, allow by default.
+        val AUDIO_CHANNEL_SPLIT = false
+        val AUDIO_CODEC = RecordingCodec.OPUS
+        val AUDIO_BITRATE = RecordingCodec.OPUS.defaultBitRate
 
         // --- File Naming ---
         const val FILE_NAME_TEMPLATE = "{date}_{direction}_{phone_number}"
@@ -114,6 +116,8 @@ class AppPreferences(context: Context) {
         DEBUG_ENABLED("debug_enabled"),
         DEBUG_CALLER_NUMBER("debug_caller_number"),
         AUDIO_SOURCE("audio_source"),
+        PLAYBACK_CAPTURE_ALLOWED("playback_capture_allowed"),
+        AUDIO_CHANNEL_SPLIT("audio_channel_split"),
         AUDIO_CODEC("audio_codec"),
         AUDIO_BITRATE("audio_bitrate"),
         FILE_NAME_TEMPLATE("file_name_template"),
@@ -361,19 +365,39 @@ class AppPreferences(context: Context) {
     /** Sets the caller number override used for debugging. */
     fun setDebugCallerNumber(number: String) = setString(Key.DEBUG_CALLER_NUMBER, number)
 
-    // -------- Audio/Scrcpy Quality --------
+    // -------- Audio Quality --------
 
-    /** Gets the configured audio source for scrcpy integration. */
-    fun getAudioSource() = getString(Key.AUDIO_SOURCE, DefaultsValue.AUDIO_SOURCE) ?: DefaultsValue.AUDIO_SOURCE
+    /** Gets the configured audio source. */
+    fun getAudioSource(): RecordingSource {
+        val audioSourceKey = getString(Key.AUDIO_SOURCE) ?: DefaultsValue.AUDIO_SOURCE.key
+        return RecordingSource.fromKey(audioSourceKey) ?: DefaultsValue.AUDIO_SOURCE
+    }
     
     /** Sets the configured audio source. */
-    fun setAudioSource(source: String) = setString(Key.AUDIO_SOURCE, source)
+    fun setAudioSource(source: RecordingSource) {
+        setString(Key.AUDIO_SOURCE, source.key)
+    }
 
-    /** Gets the configured audio codec for scrcpy integration. */
-    fun getAudioCodec() = getString(Key.AUDIO_CODEC, DefaultsValue.AUDIO_CODEC) ?: DefaultsValue.AUDIO_CODEC
-    
+    /** Gets the configured audio codec. */
+    fun getAudioCodec(): RecordingCodec {
+        val audioSourceKey = getString(Key.AUDIO_CODEC) ?: DefaultsValue.AUDIO_CODEC.key
+        return RecordingCodec.fromKey(audioSourceKey)
+
+    }
     /** Sets the configured audio codec. */
     fun setAudioCodec(codec: String) = setString(Key.AUDIO_CODEC, codec)
+
+    /** Sets if the playback API can be used for audio capture when necessary. */
+    fun setPlaybackCaptureAllowed(enabled: Boolean) = setBoolean(Key.PLAYBACK_CAPTURE_ALLOWED, enabled)
+
+    /** Checks if the playback API can be used for audio capture when necessary. */
+    fun isPlaybackCaptureAllowed() = getBoolean(Key.PLAYBACK_CAPTURE_ALLOWED, DefaultsValue.PLAYBACK_CAPTURE_ALLOWED)
+
+    /** Sets if the audio should be recorded in separate channels for each participant. */
+    fun setAudioChannelSplitEnabled(enabled: Boolean) = setBoolean(Key.AUDIO_CHANNEL_SPLIT, enabled)
+
+    /** Checks if the audio should be recorded in separate channels for each participant. */
+    fun isAudioChannelSplitEnabled() = getBoolean(Key.AUDIO_CHANNEL_SPLIT, DefaultsValue.AUDIO_CHANNEL_SPLIT)
 
     /** Gets the configured audio bitrate. */
     fun getAudioBitRate() = getInt(Key.AUDIO_BITRATE, DefaultsValue.AUDIO_BITRATE)

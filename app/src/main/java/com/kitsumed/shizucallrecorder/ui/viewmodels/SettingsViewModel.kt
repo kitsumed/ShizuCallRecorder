@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.data.AppPreferences
-import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
+import com.kitsumed.shizucallrecorder.data.recording.RecordingSource
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionOrchestrator
 import com.kitsumed.shizucallrecorder.services.callDetection.phoneState.PhoneStateSessionManager
@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 // -------- Screen state & action types owned by this ViewModel
 
@@ -78,6 +79,8 @@ interface SettingsActions {
     fun setRecordThirdPartyCalls(enabled: Boolean)
     fun setPostRecordingFileNotification(enabled: Boolean)
     fun setOverlayEnabled(enabled: Boolean)
+    fun setPlaybackCaptureAllowed(enabled: Boolean)
+    fun setAudioChannelSplitEnabled(enabled: Boolean)
 }
 
 /**
@@ -228,7 +231,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      * @param source The audio source key passed to scrcpy's `audio_source` parameter.
      */
     override fun setAudioSource(source: String) {
-        preferences.setAudioSource(source)
+        val sourceEnum = RecordingSource.fromKey(source)
+        if (sourceEnum == null) {
+            AppLogger.w("Invalid audio source key: $source")
+            return
+        }
+        preferences.setAudioSource(sourceEnum)
         refresh()
     }
 
@@ -238,9 +246,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setAudioCodec(codec: String) {
         preferences.setAudioCodec(codec)
-        ScrcpyAudioCodec.fromKey(codec).let {
+        RecordingCodec.fromKey(codec).let {
             // Automatically adjust the bitrate to recommended value when codec changes
-            preferences.setAudioBitRate(it.defaultBitRate)
+            if (preferences.isAudioChannelSplitEnabled() && it.minStereoBitRate != null) {
+                val recommendedBitrate = max(it.defaultBitRate, it.minStereoBitRate)
+                preferences.setAudioBitRate(recommendedBitrate)
+            } else {
+                preferences.setAudioBitRate(it.defaultBitRate)
+            }
         }
         refresh()
     }
@@ -430,6 +443,44 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setOverlayEnabled(enabled: Boolean) {
         preferences.setOverlayEnabled(enabled)
+        refresh()
+    }
+
+    /**
+     * Enables or disables if playback capture can be used when necessary.
+     */
+    override fun setPlaybackCaptureAllowed(enabled: Boolean) {
+        preferences.setPlaybackCaptureAllowed(enabled)
+        refresh()
+    }
+
+    /**
+     * Enables or disables separate audio channels for recording (stereo).
+     */
+    override fun setAudioChannelSplitEnabled(enabled: Boolean) {
+        preferences.setAudioChannelSplitEnabled(enabled)
+
+        val currentCodec = preferences.getAudioCodec()
+        // If turning off stereo and current codec is stereo only, fallback to the first codec that supports mono.
+        if (!enabled && currentCodec.isStereoOnly) {
+            val fallbackCodec = RecordingCodec.entries.first { !it.isStereoOnly }
+            preferences.setAudioCodec(fallbackCodec.key)
+            preferences.setAudioBitRate(fallbackCodec.defaultBitRate)
+        } else if (!enabled && currentCodec.minStereoBitRate != null) {
+            // If turning off stereo and current codec has a minimum stereo bitrate, ensure the bitrate is not above the default.
+            if (preferences.getAudioBitRate() > currentCodec.defaultBitRate) {
+                preferences.setAudioBitRate(currentCodec.defaultBitRate)
+            }
+        }
+
+        // If turning on stereo and current bitrate is below the minimum for stereo on the current codec, bump to the minimum.
+        val minStereoBitRate = currentCodec.minStereoBitRate
+        if (enabled && currentCodec.minStereoBitRate != null) {
+            if (preferences.getAudioBitRate() < minStereoBitRate) {
+                preferences.setAudioBitRate(minStereoBitRate)
+            }
+        }
+
         refresh()
     }
 }

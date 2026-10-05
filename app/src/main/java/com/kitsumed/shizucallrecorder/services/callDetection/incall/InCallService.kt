@@ -147,6 +147,7 @@ class InCallService : InCallService() {
             // This prevents multiple triggers if the state changes during the call session.
             if (isPipelineExecuted) return
             isPipelineExecuted = true
+            AppLogger.i( "Primary call became ACTIVE. Triggering Decision Engine Pipeline.")
 
             val details = call.details
             val rawNumber = details.handle?.schemeSpecificPart ?: ""
@@ -159,20 +160,21 @@ class InCallService : InCallService() {
 
             // First attempt to get the name from the user contacts list, then fallback to the telecom-provided caller name
             // (which may be defined by the caller or a third-party app)
-            val oscallerName = details.contactDisplayName ?: details.callerDisplayName
+            val osCallerName = details.contactDisplayName ?: details.callerDisplayName
+
+            val isSelfManaged = details.hasProperty(Call.Details.PROPERTY_SELF_MANAGED)
+            val isVoip = details.hasProperty(Call.Details.PROPERTY_VOIP_AUDIO_MODE) // VoIP means audio is routed outside MediaRecorder, we must use AudioPlayback.
+            val isWifiCall = details.hasProperty(Call.Details.PROPERTY_WIFI)
+            AppLogger.d( "Primary call details - isSelfManaged: $isSelfManaged, isVoip: $isVoip, isWifiCall: $isWifiCall")
+
 
             val rawCallData = RawCallData(
                 rawPhoneNumber = PhoneNumberManager.normalisePhoneNumber(rawNumber),
                 direction = direction,
-                osProvidedCallerName = oscallerName,
-                packageName = packageName
+                osProvidedCallerName = osCallerName,
+                packageName = packageName,
+                isCallAudioVoIpBased = isVoip,
             )
-
-            AppLogger.i( "Primary call became ACTIVE. Triggering Decision Engine Pipeline.")
-            val isSelfManaged = details.hasProperty(Call.Details.PROPERTY_SELF_MANAGED)
-            val isVoip = details.hasProperty(Call.Details.PROPERTY_VOIP_AUDIO_MODE)
-            val isWifiCall = details.hasProperty(Call.Details.PROPERTY_WIFI)
-            AppLogger.d( "Primary call details - isSelfManaged: $isSelfManaged, isVoip: $isVoip, isWifiCall: $isWifiCall")
 
             serviceScope.launch {
                 val intentSentSuccessfully = RecordingDecisionEngine.getInstance(this@InCallService).executeDecisionPipeline(rawCallData)

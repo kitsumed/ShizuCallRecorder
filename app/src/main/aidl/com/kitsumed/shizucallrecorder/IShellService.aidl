@@ -2,6 +2,8 @@ package com.kitsumed.shizucallrecorder;
 
 import android.os.ParcelFileDescriptor;
 import com.kitsumed.shizucallrecorder.ILogCallback;
+import com.kitsumed.shizucallrecorder.IRecordingCallback;
+import com.kitsumed.shizucallrecorder.data.recording.RecordingPlan;
 
 interface IShellService {
     /**
@@ -18,27 +20,36 @@ interface IShellService {
     ) = 1;
 
     /**
-     * Starts the audio-capture pipeline.
+     * Starts a recording session.
      *
-     * @param audioSource        scrcpy audio_source parameter (e.g. "mic-voice-communication").
-     * @param audioCodec         scrcpy audio_codec parameter (e.g. "opus", "aac").
-     * @param audioBitRate       scrcpy audio_bit_rate in bps (e.g. 16000 for 16 kbps Opus).
-     * @param serverPath      Absolute path to scrcpy-server.jar in shared storage.
-     * @param isDebuggingModeEnabled  When true, logs relay throughput every second.
-     * @return The read-end [ParcelFileDescriptor] of the audio pipe, or null on failure.
+     * The application provides the already-open output file descriptor,
+     * the shell process owns the capture/processing/encoding/
+     * output pipeline for the lifetime of the recording.
+     *
+     * @param outputFile The writable descriptor for the recording file.
+     * @param plan The recording configuration.
+     * @param callback The callback interface for recording events.
      */
-    ParcelFileDescriptor startRecording(
-        String audioSource,
-        String audioCodec,
-        int audioBitRate,
-        String serverPath,
-        boolean isDebuggingModeEnabled // For debugging purposes, if true, the service will log additional information and change some logging behavior.
+    void startRecording(
+        in ParcelFileDescriptor outputFile,
+        in RecordingPlan plan,
+        in IRecordingCallback callback
     ) = 2;
 
     /**
-     * Stops the audio capture pipeline and releases all resources.
-     */
+     * Stops the active recording session and finalizes the output.
+    */
     void stopRecording() = 3;
+
+    /**
+     * Pauses the active recording session.
+    */
+    void pauseRecording() = 4;
+
+    /**
+     * Resumes the active recording session.
+    */
+    void resumeRecording() = 5;
 
     /**
      * Grants an AppOp permission at the package level for a specific user profile.
@@ -47,7 +58,7 @@ interface IShellService {
      * @param userProfileId The user ID for which to grant the permission  (e.g. 0 for the primary user)..
      * @return True if the command was successful (exit code 0 and no error output), false otherwise.
     */
-    boolean grantAppOpByPackage(String packageName, String opName, int userProfileId) = 4;
+    boolean grantAppOpByPackage(String packageName, String opName, int userProfileId) = 6;
     /**
      * Grants an AppOp permission at the app UID level (prioritized over package value) for a specific user profile.
      * @param uid The UID of the app to grant the permission to.
@@ -55,7 +66,7 @@ interface IShellService {
      * @param userProfileId The user ID for which to grant the permission.
      * @return True if the command was successful, false otherwise.
     */
-    boolean grantAppOpByUid(int uid, String opName, int userProfileId) = 5;
+    boolean grantAppOpByUid(int uid, String opName, int userProfileId) = 7;
     /**
      * Grants a role to a package in a specific user profile.
      * @param packageName The package name of the app to grant the role to.
@@ -63,7 +74,7 @@ interface IShellService {
      * @param userProfileId The user ID for which to grant the role.
      * @return True if the command was successful, false otherwise.
     */
-    boolean grantRole(String packageName, String roleName, int userProfileId) = 6;
+    boolean grantRole(String packageName, String roleName, int userProfileId) = 8;
 
     /**
      * Called by Shizuku when it wants to shut down this user service.

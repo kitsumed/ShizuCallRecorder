@@ -11,7 +11,7 @@
     }
   ],
   "description": "Display and control your Android device. Mirrors video and audio via USB or TCP/IP.",
-  "name": "scrcpy (server binary only)",
+  "name": "scrcpy (for implementation references)",
   "website": "https://github.com/genymobile/scrcpy",
   "licenses": [
     "Apache-2.0"
