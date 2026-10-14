@@ -14,6 +14,8 @@
 package com.kitsumed.shizucallrecorder.services.shell.recording.capture
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.os.Build
@@ -22,8 +24,10 @@ import com.kitsumed.shizucallrecorder.data.recording.CapturePlan
 import com.kitsumed.shizucallrecorder.services.shell.recording.AudioConfig
 import com.kitsumed.shizucallrecorder.services.shell.utils.FakeContext
 import com.kitsumed.shizucallrecorder.services.shell.utils.ShellWorkarounds
+import com.kitsumed.shizucallrecorder.services.shell.utils.wrappers.ActivityManager
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import java.nio.ByteBuffer
+
 
 /**
  * Implementation of [IAudioCapture] using [AudioRecord] API and the physical/fake hardware inputs.
@@ -120,7 +124,7 @@ class AudioRecordCapture(override val plan: CapturePlan.AudioRecord) : IAudioCap
             // Creating an AudioRecord using an AudioRecord.Builder does not work on Vivo phones / maybe other OEMs:
             // - https://github.com/Genymobile/scrcpy/issues/3805
             // - https://github.com/Genymobile/scrcpy/pull/3862
-            AppLogger.w("AudioRecord.Builder failed (NullPointerException). Attempting fallback, creating AudioRecord manually with reflection.")
+            AppLogger.w("AudioRecord.Builder failed (NullPointerException). Attempting fallback, creating AudioRecord manually with reflection.", e)
             recorder = ShellWorkarounds.createAudioRecordViaReflection(plan.audioSource, AudioConfig.SAMPLE_RATE, AudioConfig.CAPTURE_CHANNEL_CONFIG, AudioConfig.CAPTURE_CHANNEL_COUNT, AudioConfig.CAPTURE_CHANNEL_CONFIG, AudioConfig.PCM_ENCODING)
         }
 
@@ -161,7 +165,16 @@ class AudioRecordCapture(override val plan: CapturePlan.AudioRecord) : IAudioCap
 
     private fun startWorkaroundAndroid11() {
         try {
-            Runtime.getRuntime().exec(arrayOf("am", "start", "-W", "-n", "${FakeContext.PACKAGE_NAME}/.HeapDumpActivity"))
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+            intent.component = ComponentName(
+                FakeContext.PACKAGE_NAME,
+                "com.android.shell.HeapDumpActivity"
+            )
+            ActivityManager.startActivity(intent)
+            // Wait for activity to start
+            SystemClock.sleep(150)
         } catch (e: Exception) {
             AppLogger.e("Failed to launch Android 11 foreground workaround", e)
         }
@@ -169,8 +182,7 @@ class AudioRecordCapture(override val plan: CapturePlan.AudioRecord) : IAudioCap
 
     private fun stopWorkaroundAndroid11() {
         try {
-            //TODO: Check this because im this may cause the whole shell to break. Well original scrcpy-server did it that way.
-            Runtime.getRuntime().exec(arrayOf("am", "force-stop", FakeContext.PACKAGE_NAME))
+            ActivityManager.forceStopPackage(FakeContext.PACKAGE_NAME)
         } catch (e: Exception) {
             AppLogger.e("Failed to stop Android 11 foreground workaround", e)
         }

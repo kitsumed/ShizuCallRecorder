@@ -22,7 +22,11 @@ object AudioConfig {
     /**
      * PCM sample rate (kHz) used by every native AudioRecord capture.
      *
-     * Note: Some Android native API enforces a maximum of 16 kHz when capture is defined with system level access/high-priority capture.
+     * Note: Some Android native API enforces a maximum of 16 kHz when capture is defined with system level access/high-priority capture. Most/all devices support 16 kHz as their best,
+     * which is conveniently known as HD voice quality so this is still good.
+     * Source Android16:
+     * - https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/av/services/audiopolicy/config/audio_policy_configuration.xml;l=76-79
+     * - https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/av/services/audiopolicy/enginedefault/src/Engine.cpp;l=598-781
      */
     const val SAMPLE_RATE = 16_000
 

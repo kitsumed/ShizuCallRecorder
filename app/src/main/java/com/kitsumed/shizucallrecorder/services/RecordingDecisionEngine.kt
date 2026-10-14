@@ -317,7 +317,6 @@ class RecordingDecisionEngine private constructor(context: Context) {
         // 31536000000 milliseconds = 1 year
         if (currentTime - lastNotificationTime > 31536000000L) {
             AppLogger.i( "Time threshold exceeded. Displaying project support notification.")
-            // Invoke your notification helper to push a standard background alert
             SponsorNotificationHelper.showSupportReminderNotification(appContext)
             // Set the preference to the current timestamp to restart the countdown timer
             appPreferences.setLastForcedReminderSupportProjectTimeNotification(currentTime)

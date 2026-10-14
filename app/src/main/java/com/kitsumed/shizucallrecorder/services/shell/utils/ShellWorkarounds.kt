@@ -45,7 +45,7 @@ object ShellWorkarounds {
             val currentMethod = activityThreadClass.getDeclaredMethod("currentActivityThread")
             currentMethod.isAccessible = true
             currentMethod.invoke(null) ?: createActivityThread()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             AppLogger.e("Failed to resolve ActivityThread", e)
             throw RuntimeException(e)
         }

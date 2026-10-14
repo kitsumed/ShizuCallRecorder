@@ -81,13 +81,13 @@ enum class RecordingCodec(
         key = "he_aac_v2",
         defaultBitRate = 12_000,
         outputFormat = MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4,
-        // When MediaFormat.MIMETYPE_AUDIO_AAC_HE_V1, the encoder may not be found on some devices, so we use MIMETYPE_AUDIO_AAC instead.
-        mimeType = MediaFormat.MIMETYPE_AUDIO_AAC, // MediaFormat.MIMETYPE_AUDIO_AAC_HE_V1,
+        // When MediaFormat.MIMETYPE_AUDIO_AAC_HE_V2, the encoder may not be found on some devices, so we use MIMETYPE_AUDIO_AAC instead.
+        mimeType = MediaFormat.MIMETYPE_AUDIO_AAC, // MediaFormat.MIMETYPE_AUDIO_AAC_HE_V2,
         containerExtension = ".m4a",
         titleResId = R.string.audio_codec_he_aac_v2,
         isStereoOnly = true,
         profile = MediaCodecInfo.CodecProfileLevel.AACObjectHE_PS,
-        // TODO: Test
+        // TODO: If I can find a device that supports it, try lower bitrates until stereo breaks.
         minStereoBitRate = 10_000
     ),
     // Not all devices support XHE-AAC.
@@ -101,7 +101,7 @@ enum class RecordingCodec(
         isStereoOnly = false,
         profile = MediaCodecInfo.CodecProfileLevel.AACObjectXHE,
         // Cannot test it in my emulator as not available, I see online it can go lower.
-        // TODO: If I can find a device that supports it, try lower bitrates.
+        // TODO: If I can find a device that supports it, try lower bitrates until stereo breaks.
         minStereoBitRate = 32_000
     ),
     AMR_WB( // Only supports 16kHz, which is the hard-coded output we use. Stereo also works, but should not?

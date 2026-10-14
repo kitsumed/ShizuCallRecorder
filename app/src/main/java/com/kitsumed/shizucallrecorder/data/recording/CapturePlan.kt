@@ -60,7 +60,7 @@ sealed class CapturePlan : Parcelable {
      * Captures system audio output with [AudioRecord] and the dynamic software routing at the mixer level `AudioFlinger`.
      *
      * This is the equivalent of using the "Playback Capture" public API added in Android 10, but we use the lower-level API
-     * to bypass the restrictions of the public API and without requiring the user to grant the "Media projection" permission.
+     * (AudioPolicy) to bypass the restrictions of the public API and without requiring the user to grant the "Media projection" permission.
      */
     @Parcelize
     object AudioPlayback : CapturePlan() {
@@ -68,9 +68,17 @@ sealed class CapturePlan : Parcelable {
         override fun createCapture(): IAudioCapture<*> { return AudioPlaybackCapture(this) }
 
         override fun isSupportedForAndroidVersion(): Boolean {
-            // The public API was added in Android 10, but the shell has the required permissions (MODIFY_AUDIO_ROUTING) since Android 13.
+            /*
+             The public API was added in Android 10, but the shell has the required AudioPolicy permissions (MODIFY_AUDIO_ROUTING) since Android 13.
+
+             That said, we specifically want to capture voice comms, (CAPTURE_VOICE_COMMUNICATION_OUTPUT) is only available to shell since Android 14.
+
+             AS.AudioService  system_server  E  Audio capture for voice communication requires CAPTURE_VOICE_COMMUNICATION_OUTPUT system permission
+             AS.AudioService  system_server  W  Permission denied to register audio policy for pid 16773 / uid 2000, need system permission or a MediaProjection that can project audio
+             */
+
             // Source: https://cs.android.com/android/platform/superproject/+/android13-release:frameworks/base/packages/Shell/AndroidManifest.xml;l=623
-            return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU
+            return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE
         }
     }
 }

@@ -17,7 +17,7 @@ The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder
 - Records **both sides of phone calls** (incoming and outgoing)
     - Should work even when using Bluetooth or a remote headset
 - **Separate uplink and downlink audio** inside a stereo recording
-- **Cellular/VoLTE capture**, with **best-effort support for *VoIP*** (and third-party apps) ***starting* Android 13+**
+- **Cellular/VoLTE capture**, with **best-effort support for *VoIP*** (and third-party apps) ***starting* Android 14+**
 - **Security** toggles to **manage Shizuku on/off state**
     - An attempt to reduce the potential attack surface introduced by Shizuku
     - Helps with apps that detect / yells at you when USB Debugging or Shizuku is enabled

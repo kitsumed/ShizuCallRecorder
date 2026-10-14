@@ -296,7 +296,7 @@ class ShellRecordingEngine {
             }
         } catch (t: Throwable) {
             AppLogger.e("Audio encoding loop failed.", t)
-            reportFailure(RecordingFailure.CAPTURE_READ_FAILED) // TODO: Capture encoding failed error type?
+            reportFailure(RecordingFailure.CAPTURE_READ_FAILED)
             stop()
         }
     }

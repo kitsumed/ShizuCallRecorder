@@ -19,10 +19,13 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.IContentProvider
+import android.os.Binder
 import android.os.Build
 import android.os.Process
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
+import com.kitsumed.shizucallrecorder.services.shell.utils.wrappers.ActivityManager
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * A mock [Context] that spoofs the system identity as `com.android.shell` (UID 2000).
@@ -43,6 +46,11 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         const val PACKAGE_NAME = "com.android.shell"
 
         /**
+         * The root (UID) user value. Equivalent of UserHandle.USER_SYSTEM (0) in Android.
+         */
+        const val ROOT_UID = 0
+
+        /**
          * Singleton instance of [FakeContext].
          */
         val instance: FakeContext by lazy { FakeContext() }
@@ -53,6 +61,16 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
          * @return The [FakeContext] instance.
          */
         fun get(): FakeContext = instance
+
+        /**
+         * A shared [Binder] token used for content provider access.
+         */
+        private val sharedProviderToken = Binder("FakeContextProviderToken")
+
+        /**
+         * A cache for content providers, mapping provider names to their corresponding [IContentProvider] instances.
+         */
+        private val providerCache = ConcurrentHashMap<String, IContentProvider>()
     }
 
 
@@ -77,7 +95,19 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         // @Override (but super-class method not visible)
         // Android 11-16: https://cs.android.com/android/platform/superproject/+/android-latest-release:frameworks/base/core/java/android/content/ContentResolver.java;l=893-896
         protected fun acquireProvider(c: Context?, name: String?): IContentProvider? {
-            return null // TODO: Scrcpy return an object here to prevent 2000 UID security exceptions
+            if (name == null) return null
+
+            // return cached provider if binder is still alive
+            val cached = providerCache[name]
+            if (cached != null && cached.asBinder().isBinderAlive) {
+                return cached
+            }
+
+            synchronized(providerCache) {
+                val provider = ActivityManager.getContentProviderExternal(name, sharedProviderToken) ?: return null
+                providerCache[name] = provider
+                return provider
+            }
         }
 
         @Suppress("unused")
@@ -85,7 +115,7 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         // @Override (but super-class method not visible)
         // Android 11-16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/content/ContentResolver.java;l=887-889
         fun releaseProvider(icp: IContentProvider?): Boolean {
-            return false
+            return true
         }
 
         @Suppress("unused", "ProtectedInFinal")
@@ -93,7 +123,7 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         // @Override (but super-class method not visible)
         // Android 11-16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/content/ContentResolver.java;l=891-893
         protected fun acquireUnstableProvider(c: Context?, name: String?): IContentProvider? {
-            return null
+            return acquireProvider(c, name)
         }
 
         @Suppress("unused")
@@ -101,7 +131,7 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         // @Override (but super-class method not visible)
         // Android 11-16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/content/ContentResolver.java;l=895-897
         fun releaseUnstableProvider(icp: IContentProvider?): Boolean {
-            return false
+            return true
         }
 
         @Suppress("unused")
@@ -109,7 +139,8 @@ class FakeContext private constructor() : ContextWrapper(ShellWorkarounds.getSys
         // @Override (but super-class method not visible)
         // Android 11-16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/java/android/content/ContentResolver.java;l=899-901
         fun unstableProviderDied(icp: IContentProvider?) {
-            // ignore
+            if (icp == null) return
+            providerCache.values.remove(icp)
         }
     }
 

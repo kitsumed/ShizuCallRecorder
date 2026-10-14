@@ -238,20 +238,9 @@ class AudioPlaybackCapture(override val plan: CapturePlan.AudioPlayback) : IAudi
                 throw IllegalStateException("Failed to register audio policy. registerAudioPolicyStatic() returned error code: $result")
             }
 
-            // createAudioRecordSink internally checks the permissions using the binder calling UID, so make sure the calling identify match the shell uid...
-            // By default, since we use AIDL the identity tree starts with our lower-privileged app-UID, which will cause the check to fail.
-
-            val createAudioRecordSinkMethod =
-                audioPolicyClass.getMethod("createAudioRecordSink", audioMixClass)
-            val audioRecord: AudioRecord
-            val identity = Binder.clearCallingIdentity()
-            try {
-                audioRecord =
-                    createAudioRecordSinkMethod.invoke(audioPolicy, audioMix) as AudioRecord?
-                        ?: throw IllegalStateException("Failed to create AudioRecord sink. createAudioRecordSink() returned null")
-            } finally {
-                Binder.restoreCallingIdentity(identity) // Restore identity tree
-            }
+            val createAudioRecordSinkMethod = audioPolicyClass.getMethod("createAudioRecordSink", audioMixClass)
+            // AudioRecord audioRecord = audioPolicy.createAudioRecordSink(audioMix);
+            val audioRecord: AudioRecord = createAudioRecordSinkMethod.invoke(audioPolicy, audioMix) as AudioRecord? ?: throw IllegalStateException("Failed to create AudioRecord sink. createAudioRecordSink() returned null");
 
             return audioRecord
         } catch (e: Throwable) {

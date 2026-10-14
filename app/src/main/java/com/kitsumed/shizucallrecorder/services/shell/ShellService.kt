@@ -9,6 +9,8 @@
 package com.kitsumed.shizucallrecorder.services.shell
 
 import android.content.Context
+import android.media.AudioRecord
+import android.os.Binder
 import android.os.ParcelFileDescriptor
 import androidx.annotation.Keep
 import com.kitsumed.shizucallrecorder.ILogCallback
@@ -63,7 +65,7 @@ class ShellService : IShellService.Stub {
         if (isInitialized.compareAndSet(false, true)) {
             AppLogger.d("ShellService is running its first initialization, running as UID ${android.os.Process.myUid()}")
             ShellWorkarounds.apply()
-            AppLogger.d("Applied workarounds to replicate a valid shell ActivityThread context")
+            AppLogger.d("Applied workarounds to replicate a valid app (shell) ActivityThread context")
         } else {
             AppLogger.d("ShellService already initialized")
         }
@@ -71,7 +73,7 @@ class ShellService : IShellService.Stub {
 
     // -------- IShellService AIDL implementation
 
-    override fun setLogCallback(listener: ILogCallback, isRedactionEnabled: Boolean) {
+    override fun setLogCallback(listener: ILogCallback, isRedactionEnabled: Boolean) = clearIdentity {
         AppLogger.initAsRemote(listener, isRedactionEnabled)
         ensureInitialized() // Call after so AppLogger can send output via IPC
     }
@@ -80,7 +82,7 @@ class ShellService : IShellService.Stub {
         outputFile: ParcelFileDescriptor,
         plan: RecordingPlan,
         callback: IRecordingCallback
-    ) {
+    ) = clearIdentity {
         ensureInitialized()
         recordingEngine.start(
             outputFile = outputFile,
@@ -89,32 +91,32 @@ class ShellService : IShellService.Stub {
         )
     }
 
-    override fun stopRecording() {
+    override fun stopRecording() = clearIdentity {
         ensureInitialized()
         recordingEngine.stop()
     }
 
-    override fun pauseRecording() {
+    override fun pauseRecording() = clearIdentity {
         ensureInitialized()
         recordingEngine.pause()
     }
 
-    override fun resumeRecording() {
+    override fun resumeRecording() = clearIdentity {
         ensureInitialized()
         recordingEngine.resume()
     }
 
-    override fun grantAppOpByPackage(packageName: String, opName: String, userProfileId: Int): Boolean {
+    override fun grantAppOpByPackage(packageName: String, opName: String, userProfileId: Int): Boolean = clearIdentity {
         ensureInitialized()
         return commandExecutor.grantAppOpByPackage(packageName, opName, userProfileId)
     }
 
-    override fun grantAppOpByUid(uid: Int, opName: String, userProfileId: Int): Boolean {
+    override fun grantAppOpByUid(uid: Int, opName: String, userProfileId: Int): Boolean = clearIdentity {
         ensureInitialized()
         return commandExecutor.grantAppOpByUid(uid, opName, userProfileId)
     }
 
-    override fun grantRole(packageName: String, roleName: String, userProfileId: Int): Boolean {
+    override fun grantRole(packageName: String, roleName: String, userProfileId: Int): Boolean = clearIdentity {
         ensureInitialized()
         return commandExecutor.grantRole(packageName, roleName, userProfileId)
     }
@@ -128,5 +130,28 @@ class ShellService : IShellService.Stub {
         AppLogger.i("ShellService.destroy() – terminating shell process")
         stopRecording()
         exitProcess(0)
+    }
+
+    /**
+     * Clears the calling identity and work source for the duration of the provided block, restoring them afterward.
+     *
+     * @param block The code block to execute with cleared identity and work source.
+     * @return The result of the block execution.
+     */
+    private inline fun <T> clearIdentity(block: () -> T): T {
+        /*
+            NOTE: This is not always needed but here to be safe. Without it, AudioRecord createRecord() log warnings
+            about mismatching UID ("createRecord uid 2000 tried to pass itself off as 10176") on AOSP, which may cause failure on other OEMs.
+            In other cases, some permission checks fully fails, for example, for the AudioPlayback workaround via AudioPolicy, createAudioRecordSink
+            checks the calling UID at a lower-level and fails.
+         */
+        val identityToken = Binder.clearCallingIdentity()
+        val workSourceToken = Binder.clearCallingWorkSource()
+        try {
+            return block()
+        } finally {
+            Binder.restoreCallingWorkSource(workSourceToken)
+            Binder.restoreCallingIdentity(identityToken)
+        }
     }
 }
