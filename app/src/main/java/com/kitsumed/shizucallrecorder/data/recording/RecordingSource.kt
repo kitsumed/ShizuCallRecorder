@@ -21,6 +21,7 @@ import com.kitsumed.shizucallrecorder.services.recording.RecordingPlanResolver
  * @param minApi The minimum Android API level required for this source.
  * @param maxApi The maximum Android API level that supports this source, or null if not defined.
  * @param isDebugOnly When true, the entry should be hidden in the UI unless the debug mode is enabled
+ * @param isChannelSplitAllowed When false, the audio channel split (stereo uplink/downlink) logic is not proposed to the user.
  */
 enum class RecordingSource(
         val key: String,
@@ -28,7 +29,8 @@ enum class RecordingSource(
         val descriptionResId: Int,
         val minApi: Int,
         val maxApi: Int?,
-        val isDebugOnly: Boolean
+        val isDebugOnly: Boolean,
+        val isChannelSplitAllowed: Boolean
 ) {
     // Single Type Sources
     VOICE_CALL(
@@ -38,7 +40,8 @@ enum class RecordingSource(
         descriptionResId  = R.string.audio_source_voice_call_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = false
+        isDebugOnly       = false,
+        isChannelSplitAllowed = false
     ),
 
     UPLINK(
@@ -47,7 +50,8 @@ enum class RecordingSource(
         descriptionResId  = R.string.audio_source_voice_call_uplink_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = false
+        isDebugOnly       = false,
+        isChannelSplitAllowed = false
     ),
     DOWNLINK(
         key            = "downlink",
@@ -55,7 +59,8 @@ enum class RecordingSource(
         descriptionResId  = R.string.audio_source_voice_call_downlink_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = false
+        isDebugOnly       = false,
+        isChannelSplitAllowed = false
     ),
 
     MIC_VOICE_COMMUNICATION(
@@ -64,7 +69,8 @@ enum class RecordingSource(
         descriptionResId  = R.string.audio_source_voice_comm_description,
         minApi            = 11,
         maxApi            = null,
-        isDebugOnly       = false
+        isDebugOnly       = false,
+        isChannelSplitAllowed = false
     ),
 
     // Dual Type Sources
@@ -74,7 +80,8 @@ enum class RecordingSource(
         descriptionResId  = R.string.audio_source_uplink_downlink_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = false
+        isDebugOnly       = false,
+        isChannelSplitAllowed = true
     );
 
     companion object {

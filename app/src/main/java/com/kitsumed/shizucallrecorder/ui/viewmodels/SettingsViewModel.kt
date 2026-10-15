@@ -237,6 +237,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             return
         }
         preferences.setAudioSource(sourceEnum)
+        // If the new source does not support channel split, disable it.
+        if (!sourceEnum.isChannelSplitAllowed) {
+            setAudioChannelSplitEnabled(false)
+        }
         refresh()
     }
 
@@ -250,9 +254,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             // Automatically adjust the bitrate to recommended value when codec changes
             if (preferences.isAudioChannelSplitEnabled() && it.minStereoBitRate != null) {
                 val recommendedBitrate = max(it.defaultBitRate, it.minStereoBitRate)
-                preferences.setAudioBitRate(recommendedBitrate)
+                setAudioBitRate(recommendedBitrate)
             } else {
-                preferences.setAudioBitRate(it.defaultBitRate)
+                setAudioBitRate(it.defaultBitRate)
             }
         }
         refresh()
@@ -464,12 +468,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         // If turning off stereo and current codec is stereo only, fallback to the first codec that supports mono.
         if (!enabled && currentCodec.isStereoOnly) {
             val fallbackCodec = RecordingCodec.entries.first { !it.isStereoOnly }
-            preferences.setAudioCodec(fallbackCodec.key)
-            preferences.setAudioBitRate(fallbackCodec.defaultBitRate)
+            setAudioCodec(fallbackCodec.key)
         } else if (!enabled && currentCodec.minStereoBitRate != null) {
             // If turning off stereo and current codec has a minimum stereo bitrate, ensure the bitrate is not above the default.
             if (preferences.getAudioBitRate() > currentCodec.defaultBitRate) {
-                preferences.setAudioBitRate(currentCodec.defaultBitRate)
+                setAudioBitRate(currentCodec.defaultBitRate)
             }
         }
 
@@ -477,7 +480,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         val minStereoBitRate = currentCodec.minStereoBitRate
         if (enabled && currentCodec.minStereoBitRate != null) {
             if (preferences.getAudioBitRate() < minStereoBitRate) {
-                preferences.setAudioBitRate(minStereoBitRate)
+                setAudioBitRate(minStereoBitRate)
             }
         }
 

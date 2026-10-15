@@ -863,6 +863,7 @@ private fun AudioSection(preferences: AppPreferences, updateTrigger: Int, action
         ToggleListItem(
             label = stringResource(R.string.settings_audio_channel_split),
             checked = isAudioChannelSplitEnabled,
+            enabled = audioSource.isChannelSplitAllowed,
             onCheckedChange = { actions.setAudioChannelSplitEnabled(it) },
             description = stringResource(R.string.settings_audio_channel_split_desc)
         )

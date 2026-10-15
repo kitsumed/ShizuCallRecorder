@@ -69,8 +69,9 @@ class RecordingPlanResolver(
                     MediaRecorder.AudioSource.VOICE_CALL
                 ),
                 secondary = null,
-                // VOICE_CALL cannot be isAudioChannelSplitEnabled true since it is a single source that provide both uplink & downlink.
-                isAudioChannelSplitEnabled = false,
+                // VOICE_CALL has no interest having isAudioChannelSplitEnabled true since it is a single source that mix both uplink & downlink.
+                // However, this flag is handled on the UI level by our RecordingSource enum.
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
                 codec = codec,
                 bitrate = bitrate
             )
@@ -135,8 +136,7 @@ class RecordingPlanResolver(
                     MediaRecorder.AudioSource.VOICE_COMMUNICATION
                 ),
                 secondary = CapturePlan.AudioPlayback,
-                // We could allow isAudioChannelSplitEnable to true, but for parity with the standard VOICE_CALL plan, we force false.
-                isAudioChannelSplitEnabled = false,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
                 codec = codec,
                 bitrate = bitrate
             )
