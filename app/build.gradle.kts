@@ -13,6 +13,10 @@ plugins {
     alias(libs.plugins.aboutlibraries)
 }
 val libphonenumberMetadataDir = layout.buildDirectory.dir("generated/libphonenumber/assets")
+val libphonenumberArtifact by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
 
 // Detect if we're running in a CI environment (e.g., GitHub Actions).
 val isEnvironmentGithubCI = providers.environmentVariable("GITHUB_ACTIONS").isPresent
@@ -26,12 +30,9 @@ abstract class ExtractMetadataTask : Sync() {
 }
 
 val extractLibphonenumberMetadata = tasks.register<ExtractMetadataTask>("extractLibphonenumberMetadata") {
-    val lib = libs.libphonenumber.get()
-    val jarFile = project.configurations
-        .detachedConfiguration(project.dependencies.create(lib))
-        .singleFile
+    val jarFiles = libphonenumberArtifact
 
-    from(zipTree(jarFile)) {
+    from(jarFiles.elements.map { files -> files.map { zipTree(it) } }) {
         include("com/google/i18n/phonenumbers/data/**")
         eachFile {
             relativePath = RelativePath(true, "phonenumber_data", name)
@@ -192,6 +193,7 @@ dependencies {
 
     // Libphonenumber
     implementation(libs.libphonenumber)
+    libphonenumberArtifact(libs.libphonenumber)
 
     // Shizuku
     implementation(libs.shizukuApi)
