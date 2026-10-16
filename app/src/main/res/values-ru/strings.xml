@@ -115,7 +115,7 @@
     <string name="recording_error_folder_missing">Выбранная папка для сохранения отсутствует, недоступна или у приложения нет прав на запись в неё. Выберите другую папку в настройках приложения.</string>
     <string name="recording_error_server_missing">Исполняемый файл scrcpy-server отсутствует или не прошёл проверку безопасности SHA256. Этого не должно было случиться, пожалуйста, сообщите об ошибке разработчикам.</string>
     <string name="recording_error_file_creation">Не удалось создать файл записи. Пожалуйста, проверьте разрешения на доступ к памяти и/или выберите новую папку в настройках приложения.</string>
-    <string name="recording_error_start_failed">Не удалось зачать запись. Произошла ошибка при вызове метода Binder в ShellService.</string>
+    <string name="recording_error_start_failed">Не удалось начать запись. Произошла ошибка при вызове метода Binder в ShellService.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Связь с Shizuku неожиданно прервалась, из-за чего запись была остановлена (процесс Shizuku-Server завершил работу)</string>
     <string name="recording_shizuku_not_started">Процесс Shizuku-Server остановлен. Пожалуйста, запустите Shizuku и убедитесь, что службе разрешено работать в фоновом режиме, когда приложению требуется записать аудио.</string>
     <string name="recording_shizuku_permission_denied">Пожалуйста, разрешите приложению использовать Shizuku. Доступ был отклонен.</string>
@@ -129,7 +129,7 @@
     <string name="settings_shizuku_keep_alive">Оставлять Shizuku активным</string>
     <string name="settings_file_name_template">Шаблон имени файла</string>
     <string name="settings_file_name_template_placeholders">Заполнители для %s:</string>
-    <string name="settings_file_name_template_placeholders_preview">Представительный просмотр: %1$s</string>
+    <string name="settings_file_name_template_placeholders_preview">Предпросмотр: %1$s</string>
     <string name="placeholder_date_desc">Текущая дата и время</string>
     <string name="placeholder_direction_desc">Направление звонка(входящий/исходящий)</string>
     <string name="placeholder_phone_number_desc">Телефонный номер</string>
@@ -186,4 +186,14 @@
     <string name="general_play">Воспроизвести</string>
     <string name="general_deleted">Удаленно</string>
     <string name="sponsor_body">Я с детства увлекаюсь технологиями и компьютерами. Большинство моих проектов связаны с поиском решений для моих собственных физических или умственных недостатков, в то время как другие - это просто случайные искры вдохновения.\n\nShizuCallRecorder появился из-за личной потребности, связанной с одним из моих недостатков. В течение нескольких лет я искал бесплатное приложение для записи звонков с открытым исходным кодом (FOSS), которое работало бы на устройствах без рутинга, но так и не смог его найти. Его не было. Поэтому я решил создать свое собственное и обнародовал его.\n\nЯ трачу много свободного времени на изучение, создание и сопровождение программного обеспечения с открытым исходным кодом. Ваша поддержка напрямую помогает мне в моей повседневной жизни финансово и мотивирует меня продолжать создавать высококачественные инструменты для сообщества.\n\nЯ верю в то, что в моих приложениях не должно быть агрессивной рекламы и отслеживания, нарушающего конфиденциальность. Если мои инструменты были полезны в вашей повседневной жизни, пожалуйста, подумайте о поддержке!</string>
+    <string name="a11y_overlay_action_start">Начать запись</string>
+    <string name="a11y_overlay_action_pause">Приостановить запись</string>
+    <string name="a11y_overlay_action_resume">Продолжить запись</string>
+    <string name="a11y_overlay_recording_active">Идёт запись</string>
+    <string name="a11y_overlay_recording_paused">Запись приостановлена</string>
+    <string name="a11y_overlay_recording_stopped">Готов к записи</string>
+    <string name="settings_overlay_title">Показывать плавающую кнопку записи</string>
+    <string name="settings_overlay_subtitle">Показывает плавающую кнопку поверх других приложений с быстрыми действиями для управления записью.</string>
+    <string name="a11y_overlay_drag_handle">Перетащить кнопку, удерживайте и перемешайте плавающую кнопку</string>
+    <string name="a11y_contact_photo">Фото %1$s</string>
 </resources>
