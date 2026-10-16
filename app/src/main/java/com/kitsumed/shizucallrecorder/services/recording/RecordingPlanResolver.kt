@@ -117,6 +117,26 @@ class RecordingPlanResolver(
                 codec = codec,
                 bitrate = bitrate
             )
+
+            RecordingSource.MIC_VOICE_RECOGNITION -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_RECOGNITION
+                ),
+                secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.REMOTE_SUBMIX -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.REMOTE_SUBMIX
+                ),
+                secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
         }
     }
 
@@ -172,6 +192,27 @@ class RecordingPlanResolver(
             RecordingSource.MIC_VOICE_COMMUNICATION -> RecordingPlan(
                 primary = CapturePlan.AudioRecord(
                     MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                ),
+                secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.MIC_VOICE_RECOGNITION -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_RECOGNITION
+                ),
+                secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            // In this specific case, we don't capture downlink via playback because it is intended to capture the whole speaker audio, without any opt-out possibility from apps.
+            RecordingSource.REMOTE_SUBMIX -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.REMOTE_SUBMIX
                 ),
                 secondary = null,
                 isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,

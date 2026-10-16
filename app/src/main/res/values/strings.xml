@@ -244,26 +244,14 @@
     <string name="audio_source_voice_comm" translatable="false">Voice communication mic</string>
     <string name="audio_source_voice_comm_description">Microphone audio source tuned for voice communications. Built-in echo cancellation.</string>
 
-    <string name="audio_source_mic" translatable="false">Standard microphone</string>
-    <string name="audio_source_mic_description">Captures audio directly from the device main microphone. Minor noise reduction.</string>
-
     <string name="audio_source_voice_call" translatable="false">Voice call</string>
     <string name="audio_source_voice_call_description">Records both sides of a phone calls. The raw audio, with phone tones.</string>
 
-    <string name="audio_source_playback" translatable="false">Audio playback</string>
-    <string name="audio_source_playback_description">Capture audio from other apps, except those that restrict recording (respects app opt-out flags).</string>
+    <string name="audio_source_voice_rec" translatable="false">Voice recognition mic</string>
+    <string name="audio_source_voice_rec_description">Microphone audio source tuned for voice recognition.</string>
 
-    <string name="audio_source_output" translatable="false">Audio output (remote submix)</string>
-    <string name="audio_source_output_description">Captures the final, combined audio exactly as it is sent to your speakers.</string>
-
-    <string name="audio_source_mic_unprocessed" translatable="false">Unprocessed mic</string>
-    <string name="audio_source_mic_unprocessed_description">Captures raw, natural microphone audio without any automatic filtering or enhancement.</string>
-
-    <string name="audio_source_mic_camcorder" translatable="false">Camcorder mic</string>
-    <string name="audio_source_mic_camcorder_description">Tuned for video recording, focusing on audio from the direction of the camera.</string>
-
-    <string name="audio_source_mic_voice_recognition" translatable="false">Voice recognition mic</string>
-    <string name="audio_source_mic_voice_recognition_description">Microphone with processing tuned for speech recognition (reduced noise).</string>
+    <string name="audio_source_remote_submix" translatable="false">Remote submix</string>
+    <string name="audio_source_remote_submix_description">Captures audio exactly as it is sent to the speakers. The device will stop making sound.</string>
 
     <string name="audio_source_voice_call_uplink" translatable="false">Voice call uplink</string>
     <string name="audio_source_voice_call_uplink_description">Records only your side of a phone call (uplink).</string>
@@ -273,9 +261,6 @@
     
     <string name="audio_source_uplink_downlink" translatable="false">Uplink + Downlink</string>
     <string name="audio_source_uplink_downlink_description">Records both sides of a phone call (mixing uplink + downlink) without any phone tones.</string>
-
-    <string name="audio_source_voice_performance" translatable="false">Voice performance</string>
-    <string name="audio_source_voice_performance_description">High-speed microphone mode designed for live music and real-time audio apps.</string>
 
     <!-- Settings Screen: Debug Section -->
     <string name="settings_debug_logging_enabled">Enable log recording</string>
@@ -300,7 +285,6 @@
 
     <!-- Settings Screen: About/Server Section -->
     <string name="settings_view_licenses">View Licenses</string>
-    <string name="settings_scrcpy_server" translatable="false">Scrcpy-Server: %1$s</string>
     <string name="settings_open_github_Wiki">Open Wiki</string>
 
     <!-- ContactSelection Dialog -->
@@ -335,7 +319,6 @@
     <!-- Recording Service: Errors -->
     <string name="recording_error_title">Recording Error</string>
     <string name="recording_error_folder_missing">Selected output folder is missing, invalid, or we do not have permission to write to it. Select one in the app settings.</string>
-    <string name="recording_error_server_missing">Scrcpy-server binary is missing or the security SHA256 check failed. This should not happen, please report this.</string>
     <string name="recording_error_file_creation">Failed to create recording file. Please check the storage permissions and/or select a new recording folder in the app settings.</string>
     <string name="recording_error_cannot_reach_binder">Failed to start the recording. An error occurred when calling the ShellService binder method.</string>
     <string name="recording_unexpected_error">An unexpected error occurred during recording. Please report this with the steps to reproduce and the apps logs.</string>

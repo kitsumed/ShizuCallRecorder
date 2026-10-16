@@ -73,6 +73,26 @@ enum class RecordingSource(
         isChannelSplitAllowed = false
     ),
 
+    MIC_VOICE_RECOGNITION(
+        key            = "mic-voice-recognition",
+        titleResId        = R.string.audio_source_voice_rec,
+        descriptionResId  = R.string.audio_source_voice_rec_description,
+        minApi            = 7,
+        maxApi            = null,
+        isDebugOnly       = false,
+        isChannelSplitAllowed = false
+    ),
+
+    REMOTE_SUBMIX(
+        key            = "remote-submix",
+        titleResId        = R.string.audio_source_remote_submix,
+        descriptionResId  = R.string.audio_source_remote_submix_description,
+        minApi            = 19,
+        maxApi            = null,
+        isDebugOnly       = true,
+        isChannelSplitAllowed = false
+    ),
+
     // Dual Type Sources
     UPLINK_DOWNLINK(
         key            = "uplink-downlink",
@@ -82,7 +102,10 @@ enum class RecordingSource(
         maxApi            = null,
         isDebugOnly       = false,
         isChannelSplitAllowed = true
-    );
+    ),
+
+
+    ;
 
     companion object {
         /**
