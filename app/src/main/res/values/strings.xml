@@ -247,8 +247,8 @@
     <string name="audio_source_voice_call" translatable="false">Voice call</string>
     <string name="audio_source_voice_call_description">Records both sides of a phone calls. The raw audio, with phone tones.</string>
 
-    <string name="audio_source_voice_rec" translatable="false">Voice recognition mic</string>
-    <string name="audio_source_voice_rec_description">Microphone audio source tuned for voice recognition.</string>
+    <string name="audio_source_voice_recognition" translatable="false">Voice recognition mic</string>
+    <string name="audio_source_voice_recognition_description">Microphone audio source tuned for voice recognition.</string>
 
     <string name="audio_source_remote_submix" translatable="false">Remote submix</string>
     <string name="audio_source_remote_submix_description">Captures audio exactly as it is sent to the speakers. The device will stop making sound.</string>
@@ -261,6 +261,12 @@
     
     <string name="audio_source_uplink_downlink" translatable="false">Uplink + Downlink</string>
     <string name="audio_source_uplink_downlink_description">Records both sides of a phone call (mixing uplink + downlink) without any phone tones.</string>
+
+    <string name="audio_source_mic_voice_communication_downlink" translatable="false">Voice communication mic + Downlink</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Records both sides of a phone call (mixing voice communication mic + downlink) without any phone tones.</string>
+
+    <string name="audio_source_mic_voice_recognition_downlink" translatable="false">Voice recognition mic + Downlink</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Records both sides of a phone call (mixing voice recognition mic + downlink) without any phone tones.</string>
 
     <!-- Settings Screen: Debug Section -->
     <string name="settings_debug_logging_enabled">Enable log recording</string>

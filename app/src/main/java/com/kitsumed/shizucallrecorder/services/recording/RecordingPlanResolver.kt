@@ -96,18 +96,6 @@ class RecordingPlanResolver(
                 bitrate = bitrate
             )
 
-            RecordingSource.UPLINK_DOWNLINK -> RecordingPlan(
-                primary = CapturePlan.AudioRecord(
-                    MediaRecorder.AudioSource.VOICE_UPLINK
-                ),
-                secondary = CapturePlan.AudioRecord(
-                    MediaRecorder.AudioSource.VOICE_DOWNLINK
-                ),
-                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
-                codec = codec,
-                bitrate = bitrate
-            )
-
             RecordingSource.MIC_VOICE_COMMUNICATION -> RecordingPlan(
                 primary = CapturePlan.AudioRecord(
                     MediaRecorder.AudioSource.VOICE_COMMUNICATION
@@ -133,6 +121,42 @@ class RecordingPlanResolver(
                     MediaRecorder.AudioSource.REMOTE_SUBMIX
                 ),
                 secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.UPLINK_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_UPLINK
+                ),
+                secondary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_DOWNLINK
+                ),
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.MIC_VOICE_COMMUNICATION_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                ),
+                secondary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_DOWNLINK
+                ),
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.MIC_VOICE_RECOGNITION_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_RECOGNITION
+                ),
+                secondary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_DOWNLINK
+                ),
                 isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
                 codec = codec,
                 bitrate = bitrate
@@ -179,16 +203,6 @@ class RecordingPlanResolver(
                 bitrate = bitrate
             )
 
-            RecordingSource.UPLINK_DOWNLINK -> RecordingPlan(
-                primary = CapturePlan.AudioRecord(
-                    MediaRecorder.AudioSource.VOICE_COMMUNICATION
-                ),
-                secondary = CapturePlan.AudioPlayback,
-                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
-                codec = codec,
-                bitrate = bitrate
-            )
-
             RecordingSource.MIC_VOICE_COMMUNICATION -> RecordingPlan(
                 primary = CapturePlan.AudioRecord(
                     MediaRecorder.AudioSource.VOICE_COMMUNICATION
@@ -215,6 +229,36 @@ class RecordingPlanResolver(
                     MediaRecorder.AudioSource.REMOTE_SUBMIX
                 ),
                 secondary = null,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.UPLINK_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                ),
+                secondary = CapturePlan.AudioPlayback,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.MIC_VOICE_COMMUNICATION_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                ),
+                secondary = CapturePlan.AudioPlayback,
+                isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
+                codec = codec,
+                bitrate = bitrate
+            )
+
+            RecordingSource.MIC_VOICE_RECOGNITION_DOWNLINK -> RecordingPlan(
+                primary = CapturePlan.AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_RECOGNITION
+                ),
+                secondary = CapturePlan.AudioPlayback,
                 isAudioChannelSplitEnabled = isAudioChannelSplitEnabled,
                 codec = codec,
                 bitrate = bitrate

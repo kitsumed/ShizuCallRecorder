@@ -75,8 +75,8 @@ enum class RecordingSource(
 
     MIC_VOICE_RECOGNITION(
         key            = "mic-voice-recognition",
-        titleResId        = R.string.audio_source_voice_rec,
-        descriptionResId  = R.string.audio_source_voice_rec_description,
+        titleResId        = R.string.audio_source_voice_recognition,
+        descriptionResId  = R.string.audio_source_voice_recognition_description,
         minApi            = 7,
         maxApi            = null,
         isDebugOnly       = false,
@@ -104,8 +104,25 @@ enum class RecordingSource(
         isChannelSplitAllowed = true
     ),
 
+    MIC_VOICE_COMMUNICATION_DOWNLINK(
+        key            = "mic-voice-communication-downlink",
+        titleResId        = R.string.audio_source_mic_voice_communication_downlink,
+        descriptionResId  = R.string.audio_source_mic_voice_communication_downlink_description,
+        minApi            = 11,
+        maxApi            = null,
+        isDebugOnly       = false,
+        isChannelSplitAllowed = true
+    ),
 
-    ;
+    MIC_VOICE_RECOGNITION_DOWNLINK(
+        key            = "mic-voice-recognition-downlink",
+        titleResId        = R.string.audio_source_mic_voice_recognition_downlink,
+        descriptionResId  = R.string.audio_source_mic_voice_recognition_downlink_description,
+        minApi            = 7,
+        maxApi            = null,
+        isDebugOnly       = false,
+        isChannelSplitAllowed = true
+    );
 
     companion object {
         /**

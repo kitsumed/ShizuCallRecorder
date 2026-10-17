@@ -18,6 +18,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
+import android.media.MediaRecorder
 import android.os.Build
 import android.os.SystemClock
 import com.kitsumed.shizucallrecorder.data.recording.CapturePlan
@@ -147,6 +148,20 @@ class AudioRecordCapture(override val plan: CapturePlan.AudioRecord) : IAudioCap
         }
 
         builder.setAudioSource(audioSource)
+
+        // Privacy Sensitive flag prevent concurrent capture of normal apps for microphone, this may result in the third-party call app receiving silence from the microphone.
+        // We are not affected by this as shell has the special permissions that bypass concurrent capture logic, but privacy may still default to true, so we set false.
+        when (audioSource) {
+            MediaRecorder.AudioSource.MIC,
+            MediaRecorder.AudioSource.CAMCORDER,
+            MediaRecorder.AudioSource.VOICE_RECOGNITION,
+            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+            MediaRecorder.AudioSource.UNPROCESSED,
+            MediaRecorder.AudioSource.VOICE_PERFORMANCE -> {
+                builder.setPrivacySensitive(false)
+            }
+        }
+
         builder.setAudioFormat(
             AudioFormat.Builder()
                 .setEncoding(AudioConfig.PCM_ENCODING)

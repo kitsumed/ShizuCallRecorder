@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.AudioRecord
+import android.media.MediaRecorder
 import android.os.Build
 import android.os.Looper
 import android.os.Parcel
@@ -207,6 +208,22 @@ object ShellWorkarounds {
             val audioAttributesBuilder = AudioAttributes.Builder()
             val setInternalCapturePresetMethod = AudioAttributes.Builder::class.java.getMethod("setInternalCapturePreset", Int::class.javaPrimitiveType)
             setInternalCapturePresetMethod.invoke(audioAttributesBuilder, source)
+
+            // Privacy Sensitive flag prevent concurrent capture of normal apps for microphone, this may result in the third-party call app receiving silence from the microphone.
+            // We are not affected by this as shell has the special permissions that bypass concurrent capture logic, but privacy may still default to true, so we set false.
+            when (source) {
+                MediaRecorder.AudioSource.MIC,
+                MediaRecorder.AudioSource.CAMCORDER,
+                MediaRecorder.AudioSource.VOICE_RECOGNITION,
+                MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                MediaRecorder.AudioSource.UNPROCESSED,
+                MediaRecorder.AudioSource.VOICE_PERFORMANCE -> {
+                    // https://cs.android.com/android/platform/superproject/+/android11-release:frameworks/base/media/java/android/media/AudioAttributes.java;l=1078-1090
+                    val setPrivacySensitiveMethod = AudioAttributes.Builder::class.java.getMethod("setPrivacySensitive", Boolean::class.javaPrimitiveType)
+                    setPrivacySensitiveMethod.invoke(audioAttributesBuilder, false)
+                }
+            }
+
             val attributes = audioAttributesBuilder.build()
 
             // audioRecord.mAudioAttributes = attributes;
@@ -238,7 +255,7 @@ object ShellWorkarounds {
             val session = intArrayOf(AudioManager.AUDIO_SESSION_ID_GENERATE)
             val initResult: Int
 
-            // Step 6: Execute C++ native_setup
+            // 6: Execute C++ native_setup
             // Binds the Java instance to the underlying hardware audio stream.
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) { // API 30 (Android 11)
