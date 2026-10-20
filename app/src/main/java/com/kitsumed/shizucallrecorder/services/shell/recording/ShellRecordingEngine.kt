@@ -63,7 +63,7 @@ class ShellRecordingEngine {
     private var recordingCallback: IRecordingCallback? = null
 
     // Make the pool size 2 second worth of audio frames (blocks). Calculation is in milliseconds.
-    private val poolSize: Int = (1_000L / AudioConfig.BLOCK_DURATION_MS).toInt()
+    private val poolSize: Int = (2_000L / AudioConfig.BLOCK_DURATION_MS).toInt()
     private val emptyQueue = ArrayBlockingQueue<AudioFrame>(poolSize)
     private val readyQueue = ArrayBlockingQueue<AudioFrame>(poolSize)
 
@@ -131,13 +131,13 @@ class ShellRecordingEngine {
                 secondaryCapture?.start()
 
                 encoderThread = thread(name = "ShellRecordingEngine-EncoderThread", isDaemon = false) {
-                    Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
+                    Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
                     encoderLoop()
                 }
 
                 captureThread = thread(name = "ShellRecordingEngine-CaptureThread", isDaemon = false) {
                     // Set thread priority to reduce logging "RecordThread: buffer overflow" and audio glitches.
-                    Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
+                    Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO)
                     captureLoop()
                 }
 

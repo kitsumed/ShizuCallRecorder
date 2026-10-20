@@ -187,17 +187,7 @@ class RecordingSession(
      * **This method should be called when the output file should not be kept. When no data are expected.**
      */
     fun cancel(context: Service) {
-        runCatching {
-            shellService?.stopRecording()
-        }
-
-        runCatching {
-            outputPfd?.close()
-        }
-
-        outputPfd = null
-        shellService = null
-
+        release()
         currentRecordingUri?.let { uri ->
             try {
                 DocumentFile.fromSingleUri(context, uri)?.delete()
