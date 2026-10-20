@@ -172,40 +172,41 @@ object ShellWorkarounds {
     /**
      * Fallback mechanism to initialize an [AudioRecord] instance using reflection.
      *
-     * Certain OEMs (notably Vivo) modify the standard [AudioRecord] constructor and add code that in our case may throw errors during init.
-     * We try to work around this by calling Android internal `native_setup` method directly, which is normally invoked by the constructor.
-     * From there we manually perform the necessary initialization steps to create a valid [AudioRecord] instance.
+     * Certain OEMs (notably Vivo) modify the standard public [AudioRecord] constructor and add code that in our case may throw errors during init.
+     * We try to work around this by using the private constructor at a lower-level and configure it ourselves.
+     *
+     * This is the private constructor we replicateL
+     * Source Android 16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/media/java/android/media/AudioRecord.java;l=375-493
      */
     @SuppressLint("PrivateApi", "SoonBlockedPrivateApi", "DiscouragedPrivateApi", "BlockedPrivateApi")
     fun createAudioRecordViaReflection(
         source: Int, sampleRate: Int, channelConfig: Int, channels: Int, channelMask: Int, encoding: Int
     ): AudioRecord {
 
-        // This method invokes the `AudioRecord(long nativeRecordInJavaObj)` constructor to create an empty `AudioRecord` instance, then uses
-        // reflections to initialize it like the normal constructor do (or the `AudioRecord.Builder.build()` method do).
+        // We invoke an alternate private constructor `AudioRecord(long nativeRecordInJavaObj)` to create an empty `AudioRecord` UNINITIALIZED instance.
+        // This is a quick hack so we don't use Unsafe and need more complex implementations.
         // Source: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/media/java/android/media/AudioRecord.java;l=495-512
         try {
             val audioRecordClass = AudioRecord::class.java
+            // AudioRecord audioRecord = new AudioRecord(0L);  --> This create an empty AudioRecord instance of STATE_UNINITIALIZED.
+            val audioRecordConstructor = audioRecordClass.getDeclaredConstructor(Long::class.javaPrimitiveType).apply { isAccessible = true }
+            val audioRecord = audioRecordConstructor.newInstance(0L)
 
-            // 1: Bypass Constructor
-            // AudioRecord audioRecord = new AudioRecord(0L);  --> This create an AudioRecord instance of STATE_UNINITIALIZED.
-            val constructor = audioRecordClass.getDeclaredConstructor(Long::class.javaPrimitiveType)
-            constructor.isAccessible = true
-            val audioRecord = constructor.newInstance(0L)
-
-            // 2: Initialize Basic State & Looper
+            //---- Initialize AudioRecord Basic State & Looper ----
             // audioRecord.mRecordingState = RECORDSTATE_STOPPED;
             val mRecordingStateField = audioRecordClass.getDeclaredField("mRecordingState").apply { isAccessible = true }
             mRecordingStateField.set(audioRecord, AudioRecord.RECORDSTATE_STOPPED)
 
-            val looper = Looper.myLooper() ?: Looper.getMainLooper()
             // audioRecord.mInitializationLooper = looper;
+            val looper = Looper.myLooper() ?: Looper.getMainLooper()
             val mInitializationLooperField = audioRecordClass.getDeclaredField("mInitializationLooper").apply { isAccessible = true }
             mInitializationLooperField.set(audioRecord, looper)
 
-            // 3: Configure AudioAttributes
-            // Create `AudioAttributes` with fixed capture preset
+
+            //---- Configure AudioAttribute & its privacy config ----
+            // AudioAttribute.Builder Source Android 16: https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/media/java/android/media/AudioAttributes.java;l=759-1340
             val audioAttributesBuilder = AudioAttributes.Builder()
+            // audioAttributesBuilder.setInternalCapturePreset(source)
             val setInternalCapturePresetMethod = AudioAttributes.Builder::class.java.getMethod("setInternalCapturePreset", Int::class.javaPrimitiveType)
             setInternalCapturePresetMethod.invoke(audioAttributesBuilder, source)
 
@@ -218,7 +219,7 @@ object ShellWorkarounds {
                 MediaRecorder.AudioSource.VOICE_COMMUNICATION,
                 MediaRecorder.AudioSource.UNPROCESSED,
                 MediaRecorder.AudioSource.VOICE_PERFORMANCE -> {
-                    // https://cs.android.com/android/platform/superproject/+/android11-release:frameworks/base/media/java/android/media/AudioAttributes.java;l=1078-1090
+                    // audioAttributesBuilder.setPrivacySensitive(false)
                     val setPrivacySensitiveMethod = AudioAttributes.Builder::class.java.getMethod("setPrivacySensitive", Boolean::class.javaPrimitiveType)
                     setPrivacySensitiveMethod.invoke(audioAttributesBuilder, false)
                 }
@@ -230,12 +231,15 @@ object ShellWorkarounds {
             val mAudioAttributesField = audioRecordClass.getDeclaredField("mAudioAttributes").apply { isAccessible = true }
             mAudioAttributesField.set(audioRecord, attributes)
 
-            // 4: Perform Parameter Validation
+
+            //---- Perform Parameter Check & Population ----
+            // Configures sample rate and encoding, throw if invalid.
             // audioRecord.audioParamCheck(capturePreset, sampleRate, encoding);
             val audioParamCheckMethod = audioRecordClass.getDeclaredMethod("audioParamCheck", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType, Int::class.javaPrimitiveType).apply { isAccessible = true }
             audioParamCheckMethod.invoke(audioRecord, source, sampleRate, encoding)
 
-            // 5: Configure Channels & Buffer Size
+
+            //---- Configure Channels & Buffer Size ----
             // audioRecord.mChannelCount = channels
             val mChannelCountField = audioRecordClass.getDeclaredField("mChannelCount").apply { isAccessible = true }
             mChannelCountField.set(audioRecord, channels)
@@ -246,17 +250,16 @@ object ShellWorkarounds {
 
             val minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, encoding)
             val bufferSizeInBytes = minBufferSize * 8
-
             // audioRecord.audioBuffSizeCheck(bufferSizeInBytes)
             val audioBuffSizeCheckMethod = audioRecordClass.getDeclaredMethod("audioBuffSizeCheck", Int::class.javaPrimitiveType).apply { isAccessible = true }
             audioBuffSizeCheckMethod.invoke(audioRecord, bufferSizeInBytes)
 
+
+            //---- Execute C++ native_setup ----
+            // Create a new native C++ AudioRecord instance to interact with AudioFlinger, we bind it to our java instance.
             val sampleRateArray = intArrayOf(sampleRate)
             val session = intArrayOf(AudioManager.AUDIO_SESSION_ID_GENERATE)
             val initResult: Int
-
-            // 6: Execute C++ native_setup
-            // Binds the Java instance to the underlying hardware audio stream.
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) { // API 30 (Android 11)
                 // Source: https://cs.android.com/android/platform/superproject/+/android11-release:frameworks/base/media/java/android/media/AudioRecord.java;l=1990-1995
@@ -278,8 +281,6 @@ object ShellWorkarounds {
                 ) as Int
             } else { // API 31+ (Android 12 and above)
                 val attributionSource = FakeContext.get().attributionSource
-                // Assume `attributionSource.getPackageName()` is never null
-
                 // Lint warns that reflective access to asScopedParcelState is forbidden on API 36+,
                 // but our shell UID 2000 environment bypasses standard app-facing hidden API restrictions.
                 // ScopedParcelState attributionSourceState = attributionSource.asScopedParcelState()
@@ -333,7 +334,6 @@ object ShellWorkarounds {
                 // https://cs.android.com/android/platform/superproject/+/android16-release:frameworks/base/core/jni/android_media_AudioRecord.cpp;l=131-135
             }
 
-            // 7: Finalize Initialization
             // mSampleRate = sampleRate[0]
             val mSampleRateField = audioRecordClass.getDeclaredField("mSampleRate").apply { isAccessible = true }
             mSampleRateField.set(audioRecord, sampleRateArray[0])
