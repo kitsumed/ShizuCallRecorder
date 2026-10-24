@@ -93,9 +93,7 @@
     <string name="recording_started">Aufnahme gestartet.</string>
     <string name="recording_error_title">Aufnahmefehler</string>
     <string name="recording_error_folder_missing">Der ausgewählte Ausgabeordner fehlt, ist ungültig, oder wir haben keine Berechtigung, in ihn zu schreiben. Wählen Sie einen in den App-Einstellungen aus.</string>
-    <string name="recording_error_server_missing">Die Scrcpy-Server-Binärdatei fehlt, oder die SHA256-Sicherheitsprüfung ist fehlgeschlagen. Dies sollte nicht vorkommen; bitte melden Sie dies.</string>
     <string name="recording_error_file_creation">Die Aufnahmedatei konnte nicht erstellt werden. Bitte überprüfen Sie die Speicherberechtigungen und/oder wählen Sie in den App-Einstellungen einen neuen Aufnahmeordner aus.</string>
-    <string name="recording_error_start_failed">Aufnahme konnte nicht gestartet werden. Beim Aufruf der ShellService-Binder-Methode ist ein Fehler aufgetreten.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku hat die Verbindung unerwartet getrennt, wodurch der Aufnahmeprozess gestoppt wurde. (Der Shizuku-Server-Prozess wurde beendet.)</string>
     <string name="recording_shizuku_not_started">Der Shizuku-Serverprozess wurde beendet. Bitte starten Sie Shizuku und stellen Sie sicher, dass es jederzeit ausgeführt werden kann, wenn die App Audio aufnehmen möchte.</string>
     <string name="recording_shizuku_permission_denied">Bitte erlauben Sie der Anwendung, Shizuku zu verwenden. Die Berechtigung wurde verweigert.</string>
@@ -109,16 +107,9 @@
     <string name="permission_shizuku_description">Erforderlich, um die Audioaufnahme (ShellService) mit scrcpy zu starten.</string>
     <string name="settings_shizuku_start_on_record_desc">Shizuku startet erst, wenn du auf Aufnehmen drückst oder eine automatische Aufnahmeregel zutrifft</string>
     <string name="audio_source_voice_comm_description">Optimiert für klare Sprachaufnahmen mit integrierter Echounterdrückung.</string>
-    <string name="audio_source_mic_description">Erfasst Audio direkt über das Hauptmikrofon des Geräts. Leichte Rauschunterdrückung.</string>
     <string name="audio_source_voice_call_description">Zeichnet beide Seiten eines Telefongesprächs auf. Das Rohmaterial, inklusive der Telefontöne.</string>
-    <string name="audio_source_playback_description">Erfasst Audio von anderen Apps, mit Ausnahme jener, die die Aufnahme einschränken (berücksichtigt App-Opt-out-Flags).</string>
-    <string name="audio_source_output_description">Erfasst das endgültige, kombinierte Audiosignal exakt so, wie es an Ihre Lautsprecher gesendet wird.</string>
-    <string name="audio_source_mic_unprocessed_description">Erfasst rohes, natürliches Mikrofon-Audio ohne jegliche automatische Filterung oder Optimierung.</string>
-    <string name="audio_source_mic_camcorder_description">Für Videoaufnahmen optimiert, mit Fokus auf den Ton aus Richtung der Kamera.</string>
-    <string name="audio_source_mic_voice_recognition_description">Mikrofon mit auf Spracherkennung abgestimmter Signalverarbeitung (reduziertes Rauschen).</string>
     <string name="audio_source_voice_call_uplink_description">Zeichnet nur Ihre Seite eines Telefonats auf (Uplink).</string>
     <string name="audio_source_voice_call_downlink_description">Zeichnet nur die Seite der anderen Person bei einem Telefonat auf (Downlink).</string>
-    <string name="audio_source_voice_performance_description">Hochgeschwindigkeits-Mikrofonmodus, konzipiert für Live-Musik und Echtzeit-Audioanwendungen.</string>
     <string name="settings_debug_mode_description">Entwickleroptionen anzeigen, Log-Redaktion deaktivieren.</string>
     <string name="settings_debug_caller_number">Telefonnummer debuggen</string>
     <string name="general_reset">zurücksetzten</string>
