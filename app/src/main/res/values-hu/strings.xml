@@ -85,16 +85,9 @@
     <string name="settings_audio_bitrate">Hang bitráta</string>
     <string name="settings_audio_source">Hangforrás</string>
     <string name="audio_source_voice_comm_description">Mikrofon hangforrás beszédhangra hangolva - beépített visszhangszűréssel.</string>
-    <string name="audio_source_mic_description">A hangot közvetlenül az eszköz elsődleges (fő) mikrofonjából veszi fel enyhe zajszűrés mellett.</string>
     <string name="audio_source_voice_call_description">A hívás mindkét oldalát rögzíti - a nyers hangfelvétel a telefonhangokkal együtt.</string>
-    <string name="audio_source_playback_description">Hangrögzítés akár más alkalmazásokból is - kivéve azokat, amelyek korlátozzák a felvételt (figyelembe veszi az alkalmazások ezirányú tiltását).</string>
-    <string name="audio_source_output_description">A végső, már kevert hangot rögzíti úgy, ahogyan az a hangszórókból szól.</string>
-    <string name="audio_source_mic_unprocessed_description">A mikrofonból érkező nyers hangot rögzíti, automatikus szűrés vagy bármilyen feljavítás nélkül.</string>
-    <string name="audio_source_mic_camcorder_description">Videofelvételre hangolt rögzítés, a kamera irányából érkező hangra fókuszálva.</string>
-    <string name="audio_source_mic_voice_recognition_description">Mikrofon, ami a beszédfelismerésre van hangolva (csökkentett zajszint mellett).</string>
     <string name="audio_source_voice_call_uplink_description">Csak a saját oldalt rögzíti a telefonbeszélgetésből (kimenő irány).</string>
     <string name="audio_source_voice_call_downlink_description">Csak a másik fél oldalát rögzíti a telefonbeszélgetésből (bejövő irány).</string>
-    <string name="audio_source_voice_performance_description">Nagy sebességű mikrofon üzemmód - leginkább élő zenei előadásokhoz és valós idejű hangalkalmazásokhoz.</string>
     <string name="settings_debug_logging_enabled">Naplózás bekapcsolása</string>
     <string name="settings_debug_logging_enabled_description">Hibajelentéshez engedélyezze a beállítást, indítsa újra az alkalmazást majd próbálja reprodukálni az esetet.</string>
     <string name="settings_debug_logging_title">A hibajelentés lépései</string>
@@ -125,9 +118,7 @@
     <string name="recording_started">A felvétel elindult.</string>
     <string name="recording_error_title">Felvétel hiba</string>
     <string name="recording_error_folder_missing">A kiválasztott könyvtár nem létezik, érvénytelen, vagy nincs írási jogosultság hozzá. Válasszon másikat az alkalmazás beállításaiban.</string>
-    <string name="recording_error_server_missing">Hiányzik az Scrcpy-server bináris fájl vagy az SHA256 biztonsági ellenőrzés sikertelen volt. Ennek nem szabadna előfordulnia, jelezze a problémát felénk.</string>
     <string name="recording_error_file_creation">A felvétel létrehozása sikertelen. Ellenőrizze a tárhely jogosultságot és/vagy válasszon ki egy másik mappát az alkalmazás beállításaiban.</string>
-    <string name="recording_error_start_failed">A felvétel indítása sikertelen. Hiba történt a ShellService binder meghívásakor.</string>
     <string name="recording_unexpected_error">A felvétel közben váratlan hiba történt. Jelezze a hibát a reprodukáláshoz szükséges lépésekkel és az alkalmazás naplófájljainak megadásával.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">A Shizuku kapcsolat váratlanul megszakadt, ami miatt a felvétel leállt. (A Shizuku szerver folyamat leállt)</string>
     <string name="recording_shizuku_not_started">A Shizuku szerver folyamat leállt. Indítsa el a Shizuku alkalmazást és gondoskodjon arról, hogy a Shizuku szerver fusson, amikor az alkalmazás hangot rögzítene.</string>
