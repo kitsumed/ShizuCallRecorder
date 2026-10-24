@@ -78,16 +78,9 @@
     <string name="settings_audio_bitrate">Bitrate audio</string>
     <string name="settings_audio_source">Źródło dźwięku</string>
     <string name="audio_source_voice_comm_description">Źródło dźwięku z mikrofonu dostosowane do komunikacji głosowej. Wbudowana funkcja eliminacji echa.</string>
-    <string name="audio_source_mic_description">Nagrywa dźwięk bezpośrednio z głównego mikrofonu urządzenia. Nieznaczna redukcja szumów.</string>
     <string name="audio_source_voice_call_description">Nagrywa obie strony rozmowy telefonicznej. Surowe nagranie audio wraz z sygnałami telefonicznymi.</string>
-    <string name="audio_source_playback_description">Nagrywanie dźwięku z innych aplikacji, z wyjątkiem tych, które ograniczają możliwość nagrywania (z uwzględnieniem flag blokujących nagrywanie w aplikacjach).</string>
-    <string name="audio_source_output_description">Przechwytuje ostateczny, połączony sygnał audio dokładnie w takiej postaci, w jakiej jest on przesyłany do głośników.</string>
-    <string name="audio_source_mic_unprocessed_description">Rejestruje surowy, naturalny dźwięk z mikrofonu bez żadnego automatycznego filtrowania ani poprawiania.</string>
-    <string name="audio_source_mic_camcorder_description">Ustawione pod kątem nagrywania filmów, z naciskiem na dźwięk dochodzący z kierunku kamery.</string>
-    <string name="audio_source_mic_voice_recognition_description">Mikrofon z przetwarzaniem dostosowanym do rozpoznawania mowy (zmniejszony poziom szumów).</string>
     <string name="audio_source_voice_call_uplink_description">Nagrywa tylko Twoją część rozmowy telefonicznej (sygnał wychodzący).</string>
     <string name="audio_source_voice_call_downlink_description">Nagrywa wyłącznie sygnał przychodzący podczas rozmowy telefonicznej (downlink).</string>
-    <string name="audio_source_voice_performance_description">Tryb mikrofonu o dużej czułości przeznaczony do nagrywania muzyki na żywo i aplikacji audio działających w czasie rzeczywistym.</string>
     <string name="settings_debug_logging_enabled">Włącz rejestrowanie logów</string>
     <string name="settings_debug_logging_enabled_description">Aby zgłosić błąd, włącz tę opcję, uruchom ponownie aplikację i spróbuj odtworzyć problem.</string>
     <string name="settings_debug_logging_title">Jak zgłaszać błędy</string>
@@ -118,9 +111,7 @@
     <string name="recording_started">Rozpoczęto nagrywanie.</string>
     <string name="recording_error_title">Błąd nagrywania</string>
     <string name="recording_error_folder_missing">Wybrany folder wyjściowy nie istnieje, jest nieprawidłowy lub nie mamy uprawnień do zapisu w nim. Wybierz folder w ustawieniach aplikacji.</string>
-    <string name="recording_error_server_missing">Brakuje pliku wykonywalnego serwera Scrcpy lub nie powiodła się kontrola bezpieczeństwa SHA256. Nie powinno tak być, prosimy o zgłoszenie tego problemu.</string>
     <string name="recording_error_file_creation">Nie udało się utworzyć pliku nagrania. Sprawdź uprawnienia do dostępu do pamięci i/lub wybierz nowy folder na nagrania w ustawieniach aplikacji.</string>
-    <string name="recording_error_start_failed">Nie udało się rozpocząć nagrywania. Wystąpił błąd podczas wywoływania metody wiązania ShellService.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku niespodziewanie się rozłączyło, co spowodowało przerwanie procesu nagrywania. (Proces Shizuku-Server zakończył działanie)</string>
     <string name="recording_shizuku_not_started">Proces serwera Shizuku został zatrzymany. Uruchom Shizuku i upewnij się, że będzie on zawsze gotowy do działania, gdy aplikacja będzie chciała nagrywać dźwięk.</string>
     <string name="recording_shizuku_permission_denied">Zezwól aplikacji na korzystanie z Shizuku. Odmówiono zgody.</string>
@@ -188,4 +179,12 @@
     <string name="delete_recording_confirmation_failed">Nie udało się usunąć nagrania. Sprawdź logi aplikacji.</string>
     <string name="settings_overlay_title">Pokaż nakładkę nagrywania</string>
     <string name="settings_overlay_subtitle">Wyświetla nad innymi aplikacjami nakładkę umożliwiającą szybkie zarządzanie nagrywaniem.</string>
+    <string name="a11y_overlay_action_start">Rozpocznij nagrywanie</string>
+    <string name="a11y_overlay_action_pause">Wstrzymaj nagrywanie</string>
+    <string name="a11y_overlay_action_resume">Wznów nagrywanie</string>
+    <string name="a11y_overlay_recording_active">Trwa nagrywanie</string>
+    <string name="a11y_overlay_recording_paused">Nagrywanie wstrzymane</string>
+    <string name="a11y_overlay_recording_stopped">Gotowy do nagrywania</string>
+    <string name="a11y_overlay_drag_handle">Naciśnij i przytrzymaj a następnie przeciągnij aby przesunąć nakładkę</string>
+    <string name="a11y_contact_photo">Zdjęcie %1$s</string>
 </resources>
