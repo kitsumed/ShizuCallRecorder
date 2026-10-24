@@ -104,9 +104,7 @@
     <string name="recording_started">تم بدء التسجيل.</string>
     <string name="recording_error_title">خطأ في التسجيل</string>
     <string name="recording_error_folder_missing">مجلد الإخراج المحدد مفقود أو غير صالح، أو لا نملك إذن الكتابة فيه. حدد مجلداً آخر في إعدادات التطبيق.</string>
-    <string name="recording_error_server_missing">ملف scrcpy-server الثنائي مفقود أو فشل التحقق من أمان SHA256. لا ينبغي أن يحدث هذا، يرجى الإبلاغ عن ذلك.</string>
     <string name="recording_error_file_creation">فشل إنشاء ملف التسجيل. يرجى التحقق من أذونات التخزين و/أو تحديد مجلد تسجيل جديد في إعدادات التطبيق.</string>
-    <string name="recording_error_start_failed">فشل بدء التسجيل. حدث خطأ أثناء استدعاء طريقة ShellService.</string>
     <string name="recording_unexpected_error">حدث خطأ غير متوقع أثناء التسجيل. يرجى الإبلاغ عن ذلك مع خطوات إعادة الإنتاج وسجلات التطبيق.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">انقطع اتصال Shizuku بشكل غير متوقع، مما أدى إلى توقف عملية التسجيل. (ماتت عملية Shizuku-Server)</string>
     <string name="recording_shizuku_not_started">عملية Shizuku-Server متوقفة. يرجى تشغيل Shizuku والتأكد من قدرته الدائمة على العمل عندما يطلب التطبيق تسجيل الصوت.</string>
@@ -153,16 +151,9 @@
     <string name="settings_audio_bitrate">معدل بت الصوت</string>
     <string name="settings_audio_source">مصدر الصوت</string>
     <string name="audio_source_voice_comm_description">مصدر صوت الميكروفون مُعدّ خصيصاً للاتصالات الصوتية. مزود بخاصية إلغاء الصدى المدمجة.</string>
-    <string name="audio_source_mic_description">يلتقط الصوت مباشرة من الميكروفون الرئيسي للجهاز. تقليل طفيف للضوضاء.</string>
     <string name="audio_source_voice_call_description">يسجل كلا طرفي المكالمات الهاتفية. الصوت الخام، مع نغمات الهاتف.</string>
-    <string name="audio_source_playback_description">التقاط الصوت من التطبيقات الأخرى، باستثناء تلك التي تقيد التسجيل (يحترم علامات إلغاء الاشتراك للتطبيق).</string>
-    <string name="audio_source_output_description">يلتقط الصوت النهائي المدمج تماماً كما يتم إرساله إلى مكبرات الصوت الخاصة بك.</string>
-    <string name="audio_source_mic_unprocessed_description">يلتقط الصوت الخام والطبيعي للميكروفون دون أي ترشيح أو تحسين تلقائي.</string>
-    <string name="audio_source_mic_camcorder_description">تم ضبطه خصيصاً لتسجيل الفيديو، مع التركيز على الصوت القادم من اتجاه الكاميرا.</string>
-    <string name="audio_source_mic_voice_recognition_description">ميكروفون مزود بمعالجة مضبوطة للتعرف على الكلام (تقليل الضوضاء).</string>
     <string name="audio_source_voice_call_uplink_description">يسجل فقط جانبك من المكالمة الهاتفية (الوصلة الصاعدة).</string>
     <string name="audio_source_voice_call_downlink_description">يسجل فقط طرف الشخص الآخر من المكالمة الهاتفية (الوصلة الهابطة).</string>
-    <string name="audio_source_voice_performance_description">وضع الميكروفون عالي السرعة مصمم خصيصاً للموسيقى الحية وتطبيقات الصوت في الوقت الفعلي.</string>
     <string name="settings_debug_logging_enabled">تمكين تسجيل السجلات</string>
     <string name="settings_debug_logging_enabled_description">للإبلاغ عن خطأ، قم بتمكين هذا الخيار، وأعد تشغيل التطبيق، ثم أعد إنتاج المشكلة.</string>
     <string name="settings_debug_logging_title">خطوات الإبلاغ عن الأخطاء</string>
