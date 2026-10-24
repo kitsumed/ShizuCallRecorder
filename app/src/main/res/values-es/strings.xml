@@ -78,16 +78,9 @@
     <string name="settings_audio_bitrate">Tasa de bits de audio</string>
     <string name="settings_audio_source">Fuente de audio</string>
     <string name="audio_source_voice_comm_description">Fuente de audio del micrófono optimizada para comunicaciones de voz. Incluye cancelación de eco integrada.</string>
-    <string name="audio_source_mic_description">Captura el audio directamente del micrófono principal del dispositivo. Reducción de ruido mínima.</string>
     <string name="audio_source_voice_call_description">Graba ambos lados de las llamadas telefónicas. Audio sin procesar, con los tonos del teléfono.</string>
-    <string name="audio_source_playback_description">Captura el audio de otras aplicaciones, excepto de aquellas que restringen la grabación (respeta las señales de exclusión de las aplicaciones).</string>
-    <string name="audio_source_output_description">Captura el audio final combinado exactamente como se envía a tus altavoces.</string>
-    <string name="audio_source_mic_unprocessed_description">Captura el audio tal cual, de forma natural del micrófono, sin ningún filtrado ni mejora automática.</string>
-    <string name="audio_source_mic_camcorder_description">Optimizado para la grabación de vídeo, enfocándose en el audio proveniente de la dirección de la cámara.</string>
-    <string name="audio_source_mic_voice_recognition_description">Micrófono con procesamiento optimizado para reconocimiento de voz (ruido reducido).</string>
     <string name="audio_source_voice_call_uplink_description">Graba solo tu lado de la llamada telefónica (uplink).</string>
     <string name="audio_source_voice_call_downlink_description">Graba solo el lado de la otra persona en la llamada (downlink).</string>
-    <string name="audio_source_voice_performance_description">Modo de micrófono de alta velocidad diseñado para música en vivo y aplicaciones de audio en tiempo real.</string>
     <string name="settings_debug_logging_enabled">Activar el registro de eventos</string>
     <string name="settings_debug_logging_enabled_description">Para informar de un error, activa esta opción, reinicia la aplicación y reproduce el problema.</string>
     <string name="settings_debug_logging_title">Pasos para reportar errores</string>
@@ -118,9 +111,7 @@
     <string name="recording_started">Grabación iniciada.</string>
     <string name="recording_error_title">Error de grabación</string>
     <string name="recording_error_folder_missing">La carpeta de salida seleccionada no existe, no es válida o no tenemos permiso para escribir en ella. Selecciona una en los ajustes de la aplicación.</string>
-    <string name="recording_error_server_missing">Falta el binario de scrcpy‑server o la verificación de seguridad SHA256 ha fallado. Esto no debería ocurrir; por favor, informa de este problema.</string>
     <string name="recording_error_file_creation">No se pudo crear el archivo de grabación. Comprueba los permisos de almacenamiento y/o selecciona una nueva carpeta de grabación en los ajustes de la aplicación.</string>
-    <string name="recording_error_start_failed">No se pudo iniciar la grabación. Ocurrió un error al llamar al método Binder de ShellService.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku se desconectó inesperadamente, lo que provocó que el proceso de grabación se detuviera. (El proceso Shizuku-Server se cerró)</string>
     <string name="recording_shizuku_not_started">Inicia Shizuku y asegúrate de que pueda ejecutarse siempre que la aplicación necesite grabar audio.</string>
     <string name="recording_shizuku_permission_denied">Por favor, permite que la aplicación use Shizuku. El permiso fue denegado.</string>
@@ -196,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Listo para grabar</string>
     <string name="a11y_overlay_drag_handle">Control de arrastre; mantén pulsado y arrastra para mover la superposición</string>
     <string name="a11y_contact_photo">Foto de %1$s</string>
+    <string name="recording_failure_capture_read_failed">Ocurrió un error al leer y procesar el audio capturado.</string>
+    <string name="recording_failure_capture_start_failed">Ocurrió un error cuando comenzó la captura del audio.</string>
+    <string name="recording_error_cannot_reach_binder">Fallo al comenzar la grabación. Ocurrió un error al llamar al método del enlazador ShellService.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el micrófono de reconocimiento de voz y el canal de bajada) sin tonos telefónicos.</string>
+    <string name="audio_source_uplink_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el canal de subida y el de bajada) sin tonos telefónicos.</string>
+    <string name="audio_source_remote_submix_description">Captura el audio exactamente como se envía a los altavoces. El dispositivo dejará de emitir sonido.</string>
+    <string name="audio_source_voice_recognition_description">Fuente de audio del micrófono optimizada para el reconocimiento de voz.</string>
+    <string name="settings_audio_channel_split_desc">Dividir el audio de subida al canal izquierdo y el de bajada al derecho.</string>
+    <string name="settings_audio_channel_split">Audio de subida/bajada dividido</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el micrófono de comunicación de voz y el canal de bajada) sin tonos telefónicos.</string>
+    <string name="settings_audio_allow_playback_api_desc">Cuando se detecta una llamada VoIP o Wi-Fi, se anulan las fuentes de enlace ascendente/descendente seleccionadas con la captura de reproducción de audio o cualquier otra fuente equivalente para intentar capturar el audio.</string>
+    <string name="settings_audio_allow_playback_api">Permitir la captura a través de la API de reproducción</string>
 </resources>
