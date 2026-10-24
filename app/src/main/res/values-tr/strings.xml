@@ -88,16 +88,9 @@
     <string name="settings_audio_bitrate">Ses bit hızı</string>
     <string name="settings_audio_source">Ses kaynağı</string>
     <string name="audio_source_voice_comm_description">Sesli iletişim için ayarlanmış mikrofon kaynağı. Yerleşik eko giderme özelliğine sahiptir.</string>
-    <string name="audio_source_mic_description">Sesi doğrudan cihazın ana mikrofonundan yakalar. Minimal gürültü azaltma.</string>
     <string name="audio_source_voice_call_description">Aramanın her iki tarafını da kaydeder. Telefon tonları dahil ham ses.</string>
-    <string name="audio_source_playback_description">Kaydı kısıtlayan uygulamalar dışında diğer uygulamaların sesini yakalar (uygulama devre dışı bırakma etiketini gözetir).</string>
-    <string name="audio_source_output_description">Hoparlörlerinize gönderilen nihai birleşik sesi olduğu gibi yakalar.</string>
-    <string name="audio_source_mic_unprocessed_description">Herhangi bir otomatik filtreleme veya iyileştirme uygulanmadan ham, doğal mikrofon sesini yakalar.</string>
-    <string name="audio_source_mic_camcorder_description">Video kaydı için optimize edilmiş; kamera yönündeki sese odaklanır.</string>
-    <string name="audio_source_mic_voice_recognition_description">Konuşma tanıma için ayarlanmış işlemeye sahip mikrofon (azaltılmış gürültü).</string>
     <string name="audio_source_voice_call_uplink_description">Aramada yalnızca kendi tarafınızı (uplink) kaydeder.</string>
     <string name="audio_source_voice_call_downlink_description">Aramada yalnızca karşı tarafı (downlink) kaydeder.</string>
-    <string name="audio_source_voice_performance_description">Canlı müzik ve gerçek zamanlı ses uygulamaları için tasarlanmış yüksek hızlı mikrofon modu.</string>
     <string name="settings_debug_logging_enabled">Günlük kaydını etkinleştir</string>
     <string name="settings_debug_logging_enabled_description">Hata bildirmek için bunu etkinleştirin, uygulamayı yeniden başlatın ve sorunu yeniden oluşturun.</string>
     <string name="settings_debug_logging_title">Hata bildirme adımları</string>
@@ -128,9 +121,7 @@
     <string name="recording_started">Kayıt başladı.</string>
     <string name="recording_error_title">Kayıt hatası</string>
     <string name="recording_error_folder_missing">Seçilen kayıt klasörü mevcut değil, geçersiz veya yazma iznimiz yok. Lütfen uygulama ayarlarından bir klasör seçin.</string>
-    <string name="recording_error_server_missing">Scrcpy-sunucu ikili dosyası mevcut değil ya da güvenlik SHA256 denetimi başarısız oldu. Bu olmamalıydı; lütfen bildirin.</string>
     <string name="recording_error_file_creation">Kayıt dosyası oluşturulamadı. Lütfen depolama izinlerini kontrol edin ve/veya uygulama ayarlarından yeni bir kayıt klasörü seçin.</string>
-    <string name="recording_error_start_failed">Kayıt başlatılamadı. ShellService binder yöntemi çağrılırken bir hata oluştu.</string>
     <string name="recording_unexpected_error">Kayıt sırasında beklenmedik bir hata oluştu. Lütfen nasıl gerçekleştiğini uygulama günlükleriyle birlikte bildirin.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku uygulamasıyla beklenmedik şekilde bağlantısı kesildi ve kayıt işlemi durdu. (Shizuku-Server işlemi sonlandı)</string>
     <string name="recording_shizuku_not_started">Shizuku-Server işlemi durdurulmuş. Lütfen Shizuku uygulamasını başlatın ve uygulama ses kaydetmek istediğinde her zaman çalışabildiğinden emin olun.</string>
@@ -186,6 +177,14 @@
     <string name="delete_recording_confirmation_title">Kaydı sil</string>
     <string name="delete_recording_confirmation_message">Bu kaydı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
     <string name="delete_recording_confirmation_failed">Kayıt silinemedi. Lütfen uygulama günlüklerini kontrol edin.</string>
-    <string name="settings_overlay_title">Yüzen kayıt butonu göster</string>
-    <string name="settings_overlay_subtitle">Diğer uygulamaların üzerinde yer alan ve kaydı yönetmek için hızlı işlemler içeren yüzen kayıt butonu göster.</string>
+    <string name="settings_overlay_title">Yüzen kayıt düğmesini göster</string>
+    <string name="settings_overlay_subtitle">Diğer uygulamaların üzerinde yer alan ve kaydı yönetmek için hızlı işlemler içeren yüzen kayıt düğmesi göster.</string>
+    <string name="a11y_overlay_action_start">Kaydı başlat</string>
+    <string name="a11y_overlay_action_pause">Kaydı duraklat</string>
+    <string name="a11y_overlay_action_resume">Kaydı devam ettir</string>
+    <string name="a11y_overlay_recording_active">Kayıt devam ediyor</string>
+    <string name="a11y_overlay_recording_paused">Kayıt duraklatıldı</string>
+    <string name="a11y_overlay_recording_stopped">Kayda hazır</string>
+    <string name="a11y_overlay_drag_handle">Sürükleme aracı; yüzen kayıt düğmesini taşımak için uzun basılı tutun ve sürükleyin</string>
+    <string name="a11y_contact_photo">%1$s fotoğrafı</string>
 </resources>
