@@ -75,7 +75,6 @@
     <string name="settings_audio_bitrate">音声ビットレート</string>
     <string name="settings_audio_source">音声ソース</string>
     <string name="audio_source_voice_comm_description">通話用に調整されたマイク音声ソース. エコーキャンセルあり.</string>
-    <string name="audio_source_mic_description">デバイスのメインのマイクから直接キャプチャされた音声ソース. 軽いノイズリダクションあり.</string>
     <string name="audio_source_voice_call_description">通話の送受信の両方. 通話音声のrawオーディオ.</string>
     <string name="audio_source_voice_call_uplink_description">通話の自分側の音声のみ録音 (uplink).</string>
     <string name="audio_source_voice_call_downlink_description">通話の相手側の音声のみ録音 (downlink).</string>
@@ -104,7 +103,6 @@
     <string name="recording_started">録音を開始しました。</string>
     <string name="recording_error_title">録音エラー</string>
     <string name="recording_error_folder_missing">選択されたフォルダが見つからないか、無効であるか、あるいは書き込み権限がありません。設定から選択し直してください。</string>
-    <string name="recording_error_server_missing">Scrcpy-server のバイナリが見つからないか、SHA256のセキュリティチェックに失敗しました。起こるべき事態ではありませんので、レポートしてください。</string>
     <string name="recording_error_file_creation">録音ファイルの作成に失敗しました。ストレージの権限を確認し、アプリ設定から新しいフォルダを選択してください。</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizukuが予期せず切断されたため、録音プロセスが停止しました。(Shizuku-Server process died)</string>
     <string name="recording_shizuku_not_started">Shizuku-Server プロセスが停止しました。Shizukuを起動し、録音の際は常に実行出来るようにしてください。</string>
