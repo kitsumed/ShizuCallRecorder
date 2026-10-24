@@ -88,8 +88,6 @@
     <string name="settings_theme_mode">主题样式</string>
     <string name="settings_dynamic_color">动态配色（安卓）</string>
     <string name="settings_show_toasts">显示一句话消息（Toast）</string>
-    <string name="audio_source_mic_description">直接从您的设备麦克风中录音。降噪效果较差。</string>
-    <string name="audio_source_mic_unprocessed_description">录制原始的麦克风音频，不做任何优化和过滤。</string>
     <string name="audio_source_voice_call_uplink_description">仅录制您的声音（仅上行）。</string>
     <string name="audio_source_voice_call_downlink_description">仅录制对方的声音（仅下行）。</string>
     <string name="settings_debug_logging_step_warning">上传文件之前，请务必先检查一下文件内容是否涉及您的隐私信息。操作完毕后，请立即禁用此功能。</string>
@@ -117,7 +115,6 @@
     <string name="recording_error_title">错误：录音遇到问题</string>
     <string name="recording_error_folder_missing">选择的输出目录被删除、无效或者权限被撤销。请在App中重新指定输出目录。</string>
     <string name="recording_error_file_creation">保存录音文件失败，请检查输出目录的读写权限，或者尝试换一个目录后重试。</string>
-    <string name="recording_error_start_failed">无法启动录音。连接到ShellService出错。</string>
     <string name="recording_shizuku_permission_denied">Shizuku权限被拒绝，请重新授权。</string>
     <string name="recording_shizuku_auth_key_missing">未填写Shizuku的Intent密钥，请在填写完成后重试。</string>
     <string name="recording_unexpected_error">出现了意外情况，请直接向我们反馈此错误，并说明操作流程和调试日志。</string>
@@ -126,14 +123,8 @@
     <string name="permission_shizuku_description">Shizuku权限用于经由scrcpy启动录音（ShellService）进程。</string>
     <string name="settings_shizuku_start_on_record_desc">仅在手动开始录音，或者自动录音的规则被触发时启动Shizuku服务</string>
     <string name="audio_source_voice_comm_description">麦克风音频源（本意是面向语音通话的系统接口），内置降噪功能。</string>
-    <string name="audio_source_playback_description">对第三方通话App录音（限制录音的App除外）（尊重第三方App自身的限制）。</string>
-    <string name="audio_source_output_description">按原样录制混合好的原始音频（即传输到您扬声器的音频）。</string>
-    <string name="audio_source_mic_camcorder_description">此选项面向视频录制，将尽可能从拍摄的方向来录取音频。</string>
-    <string name="audio_source_mic_voice_recognition_description">处理过的麦克风音频（本是为了语音助手识别优化而留的系统接口）（含降噪）。</string>
-    <string name="audio_source_voice_performance_description">高速麦克风模式（此选项专为Live音乐和实时音频而设）。</string>
     <string name="settings_debug_logging_steps">1、请先确认一下，您想提的问题是否已经有人反馈过了（包括Closed Issues）。如果确认没有，请继续。\n2、打开日志记录功能，然后尝试重现要反馈的错误。\n3、点击下方的“生成日志文件”按钮，将日志保存至您的设备。\n4、点击“反馈到GitHub”按钮，创建新的 Issue，填写相关的信息并上传日志文件。</string>
     <string name="recording_toast_standby">即将录制通话：%1$s。</string>
-    <string name="recording_error_server_missing">Scrcpy-server二进制文件缺失，或者SHA256安全校验失败。如果看到此消息，请直接反馈此问题。</string>
     <string name="settings_shizuku_keep_alive_desc">结束通话时保持Shizuku继续运行（仅在开始通话时触发自启动）</string>
     <string name="settings_shizuku_keep_alive">保持Shizuku进程常驻</string>
     <string name="sponsor_days_used">ShizuCallRecorder已陪伴您走过 %1$d 天！</string>
