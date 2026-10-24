@@ -88,16 +88,9 @@
     <string name="settings_audio_bitrate">Taxa de bits de áudio</string>
     <string name="settings_audio_source">Fonte de áudio</string>
     <string name="audio_source_voice_comm_description">Fonte de áudio de microfone ajustada para comunicações de voz. Cancelamento de eco integrado.</string>
-    <string name="audio_source_mic_description">Captura áudio diretamente do microfone principal do dispositivo. Pequena redução de ruído.</string>
     <string name="audio_source_voice_call_description">Grava ambos os lados de uma chamada telefônica. O áudio bruto, com tons de telefone.</string>
-    <string name="audio_source_playback_description">Capture áudio de outros aplicativos, exceto aqueles que restringem a gravação (respeita os sinalizadores de desativação do aplicativo).</string>
-    <string name="audio_source_output_description">Captura o áudio final combinado exatamente como é enviado aos alto-falantes.</string>
-    <string name="audio_source_mic_unprocessed_description">Captura áudio de microfone natural e bruto, sem qualquer filtragem ou aprimoramento automático.</string>
-    <string name="audio_source_mic_camcorder_description">Ajustado para gravação de vídeo, focando no áudio vindo da direção da câmera.</string>
-    <string name="audio_source_mic_voice_recognition_description">Microfone com processamento ajustado para reconhecimento de fala (ruído reduzido).</string>
     <string name="audio_source_voice_call_uplink_description">Grava apenas o seu lado de uma chamada telefônica (uplink).</string>
     <string name="audio_source_voice_call_downlink_description">Registra apenas a outra pessoa de uma chamada telefônica (downlink).</string>
-    <string name="audio_source_voice_performance_description">Modo de microfone de alta velocidade projetado para música ao vivo e aplicativos de áudio em tempo real.</string>
     <string name="settings_debug_logging_enabled">Habilitar gravação de log</string>
     <string name="settings_debug_logging_enabled_description">Para relatar um bug, habilite-o, reinicie o aplicativo e reproduza o problema.</string>
     <string name="settings_debug_logging_title">Etapas de relatório de bugs</string>
@@ -128,9 +121,7 @@
     <string name="recording_started">A gravação começou.</string>
     <string name="recording_error_title">Erro de gravação</string>
     <string name="recording_error_folder_missing">A pasta de saída selecionada está ausente, é inválida ou não temos permissão para gravar nela. Selecione um nas configurações do aplicativo.</string>
-    <string name="recording_error_server_missing">O binário Scrcpy-server está ausente ou a verificação de segurança SHA256 falhou. Isso não deveria acontecer, por favor denuncie.</string>
     <string name="recording_error_file_creation">Falha ao criar arquivo de gravação. Verifique as permissões de armazenamento e/ou selecione uma nova pasta de gravação nas configurações do aplicativo.</string>
-    <string name="recording_error_start_failed">Falha ao iniciar a gravação. Ocorreu um erro ao chamar o método do fichário ShellService.</string>
     <string name="recording_unexpected_error">Ocorreu um erro inesperado durante a gravação. Por favor, informe isso com as etapas de reprodução e os logs do aplicativo.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku se desconectou inesperadamente, fazendo com que o processo de gravação fosse interrompido. (O processo do servidor Shizuku morreu)</string>
     <string name="recording_shizuku_not_started">O processo do Shizuku-Server foi interrompido. Inicie o Shizuku e certifique-se de que ele sempre possa ser executado quando o aplicativo desejar gravar áudio.</string>
