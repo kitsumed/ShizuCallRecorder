@@ -81,7 +81,7 @@
     <string name="settings_shizuku_keep_alive_desc">Nezasielať príkaz na zastavenie</string>
     <string name="settings_call_detection_method">Metóda detekcie hovoru</string>
     <string name="settings_call_detection_method_warning_title">Oznámenie o obmedzenej podpore</string>
-    <string name="call_detection_mode_phonestate_description">Používa staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie k zaseknutiu a poskytuje veľmi málo informácií.</string>
+    <string name="call_detection_mode_phonestate_description">Používa staršie rozhranie telefónu so zastaranými údajmi. Tento režim je veľmi náchylný na situácie vedúce k zaseknutiu a poskytuje obmedzené množstvo informácií.</string>
     <string name="call_detection_mode_phonestate_limited_support">Táto metóda detekcie hovorov je nespoľahlivá. Pri prijímaní aktualizácií stavu telefónu získavame zastarané hodnoty a detekčná logika je náchylná na zaseknutia. Okrem toho nedokážeme rozlíšiť hovory od operátora a hovory od tretích strán. Toto obmedzenie však môžete obísť ignorovaním anonymných hovorov.</string>
     <string name="call_detection_mode_incallservice_description">Používa moderné rozhranie API InCallService. Tento režim je efektívnejší a mal by zabezpečiť lepšiu detekciu s množstvom informácií.</string>
     <string name="settings_record_third_party_calls">Zaznamenávanie aplikácií tretích strán</string>&gt;
@@ -132,16 +132,9 @@
     <string name="settings_audio_bitrate">Bitrate zvuku</string>
     <string name="settings_audio_source">Zvukový zdroj</string>
     <string name="audio_source_voice_comm_description">Zvukový zdroj mikrofónu je prispôsobený na hlasovú komunikáciu. Vstavaná funkcia potlačenia ozveny.</string>
-    <string name="audio_source_mic_description">Zaznamenáva zvuk priamo z hlavného mikrofónu zariadenia. Mierne potlačenie šumu.</string>
     <string name="audio_source_voice_call_description">Nahráva obidve strany telefonického hovoru. Surový zvukový záznam vrátane telefónnych tónov.</string>
-    <string name="audio_source_playback_description">Zaznamenáva zvuk z iných aplikácií, s výnimkou tých, ktoré nahrávanie obmedzujú (rešpektuje nastavenia aplikácií, ktoré nahrávanie zakazujú).</string>
-    <string name="audio_source_output_description">Zachytáva konečný, zosúladený zvuk presne tak, ako sa odosiela do vašich reproduktorov.</string>
-    <string name="audio_source_mic_unprocessed_description">Zachytáva surový, prirodzený zvuk z mikrofónu bez akéhokoľvek automatického filtrovania alebo vylepšovania.</string>
-    <string name="audio_source_mic_camcorder_description">Nastavené na nahrávanie videa so zameraním na zvuk prichádzajúci zo smeru kamery.</string>
-    <string name="audio_source_mic_voice_recognition_description">Mikrofón s nastavením spracovania signálu optimalizovaným pre rozpoznávanie reči (sníženie šumu).</string>
     <string name="audio_source_voice_call_uplink_description">Nahráva iba vašu časť telefonického hovoru (vstupný signál).</string>
     <string name="audio_source_voice_call_downlink_description">Nahráva iba to, čo hovorí druhá strana počas telefonátu (prichádzajúci hovor).</string>
-    <string name="audio_source_voice_performance_description">Režim vysokorýchlostného mikrofónu určený pre živú hudbu a aplikácie spracúvajúce zvuk v reálnom čase.</string>
     <string name="settings_debug_logging_enabled">Zapnúť zaznamenávanie protokolov</string>
     <string name="settings_debug_logging_enabled_description">Ak chcete nahlásiť chybu, aktivujte túto funkciu, reštartujte aplikáciu a pokúste sa problém zopakovať.</string>
     <string name="settings_debug_logging_title">Postup pri hlásení chýb</string>
@@ -178,9 +171,7 @@
     <string name="delete_recording_confirmation_failed">Odstránenie záznamu sa nepodarilo. Skontrolujte prosím protokoly aplikácií.</string>
     <string name="recording_error_title">Chyba záznamu</string>
     <string name="recording_error_folder_missing">Zvolená výstupná zložka chýba, je neplatná alebo nemáte oprávnenie do nej zapisovať. Vyberte ju v nastaveniach aplikácie.</string>
-    <string name="recording_error_server_missing">Chýba binárny súbor Scrcpy-server alebo zlyhala bezpečnostná kontrola SHA256. K tomu by nemalo dochádzať, prosím, nahláste tento problém.</string>
     <string name="recording_error_file_creation">Vytvorenie súboru so záznamom sa nepodarilo. Skontrolujte oprávnenia na prístup k úložisku a/alebo v nastaveniach aplikácie vyberte nový priečinok na ukladanie záznamov.</string>
-    <string name="recording_error_start_failed">Spustenie nahrávania sa nepodarilo. Pri volaní metódy binder služby ShellService došlo k chybe.</string>
     <string name="recording_unexpected_error">Počas nahrávania došlo k neočakávanej chybe. Nahlaste prosím túto chybu spolu s postupom na jej reprodukovanie a protokolmi aplikácie.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku sa neočakávane odpojila, čo spôsobilo zastavenie nahrávania. (Proces Shizuku-Server sa ukončil)</string>
     <string name="recording_shizuku_not_started">Proces Shizuku-Server je zastavený. Spustite prosím aplikáciu Shizuku a uistite sa, že je vždy pripravená na spustenie, keď aplikácia chce nahrávať zvuk.</string>
@@ -196,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Pripravený na nahrávanie</string>
     <string name="a11y_overlay_drag_handle">Potiahnutím za okno dlhým stlačením a ťahaním presuniete plávajúce ovládanie</string>
     <string name="a11y_contact_photo">Fotografia %1$s</string>
+    <string name="settings_audio_allow_playback_api">Povoliť zachytávanie cez Playback API</string>
+    <string name="settings_audio_allow_playback_api_desc">Keď sa zistí VoIP alebo volanie cez Wi‑Fi, prepíše vybrané zdroje odchádzajúci/prichádzajúci zdrojom na zachytávanie prehrávaného zvuku alebo akýmkoľvek iným ekvivalentným zdrojom, aby sa pokúsil zachytiť zvuk.</string>
+    <string name="settings_audio_channel_split">Rozdeliť odchádzajúci a prichádzajúci zvuk</string>
+    <string name="settings_audio_channel_split_desc">Rozdeliť odchádzajúci zvuk do ľavého kanála a prichádzajúci do pravého.</string>
+    <string name="audio_source_voice_recognition_description">Zdroj zvuku mikrofónu optimalizovaný na rozpoznávanie reči.</string>
+    <string name="audio_source_remote_submix_description">Zachytáva zvuk presne tak, ako sa posiela do reproduktorov. Zariadenie prestane vydávať zvuk.</string>
+    <string name="audio_source_uplink_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava odchádzajúci aj prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava zvuk z mikrofónu hlasovej komunikácie a prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava zvuk z mikrofónu optimalizovaného na rozpoznávanie reči a prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
+    <string name="recording_error_cannot_reach_binder">Nahrávanie sa nepodarilo spustiť. Pri volaní binder metódy služby ShellService došlo k chybe.</string>
+    <string name="recording_failure_capture_start_failed">Pri spustení zachytávania zvuku sa vyskytla chyba.</string>
+    <string name="recording_failure_capture_read_failed">Pri čítaní a spracovaní zachyteného zvuku sa vyskytla chyba.</string>
 </resources>
