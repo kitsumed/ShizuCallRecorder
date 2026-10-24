@@ -86,16 +86,9 @@
     <string name="settings_audio_bitrate">Tốc độ bit âm thanh</string>
     <string name="settings_audio_source">Nguồn âm thanh</string>
     <string name="audio_source_voice_comm_description">Nguồn âm thanh micro được tinh chỉnh cho giao tiếp bằng giọng nói. Tích hợp chức năng khử tiếng vọng.</string>
-    <string name="audio_source_mic_description">Thu âm trực tiếp từ micro chính của thiết bị. Giảm nhiễu nhẹ.</string>
     <string name="audio_source_voice_call_description">Ghi lại cả hai phía của cuộc gọi điện thoại. Âm thanh thô, bao gồm cả tiếng chuông điện thoại.</string>
-    <string name="audio_source_playback_description">Ghi âm từ các ứng dụng khác, ngoại trừ những ứng dụng hạn chế ghi âm (tuân thủ cài đặt tùy chọn không tham gia của ứng dụng).</string>
-    <string name="audio_source_output_description">Ghi lại âm thanh cuối cùng, đã được kết hợp, chính xác như âm thanh được gửi đến loa của bạn.</string>
-    <string name="audio_source_mic_unprocessed_description">Thu âm thanh thô, tự nhiên từ micro mà không qua bất kỳ bộ lọc hoặc hiệu chỉnh tự động nào.</string>
-    <string name="audio_source_mic_camcorder_description">Được tinh chỉnh để quay video, tập trung vào âm thanh từ hướng máy quay.</string>
-    <string name="audio_source_mic_voice_recognition_description">Microphone với bộ xử lý được tinh chỉnh cho nhận dạng giọng nói (giảm nhiễu).</string>
     <string name="audio_source_voice_call_uplink_description">Chỉ ghi âm phần cuộc gọi từ phía bạn (đường truyền lên).</string>
     <string name="audio_source_voice_call_downlink_description">Chỉ ghi lại phía người nhận cuộc gọi (đường truyền xuống).</string>
-    <string name="audio_source_voice_performance_description">Chế độ micro tốc độ cao được thiết kế cho nhạc sống và các ứng dụng âm thanh thời gian thực.</string>
     <string name="settings_debug_logging_enabled">Bật ghi nhật ký</string>
     <string name="settings_debug_logging_enabled_description">Để báo cáo lỗi, hãy bật chức năng này, khởi động lại ứng dụng và tái hiện lỗi.</string>
     <string name="settings_debug_logging_title">Các bước báo cáo lỗi</string>
@@ -126,9 +119,7 @@
     <string name="recording_started">Quá trình ghi lại tiếp tục.</string>
     <string name="recording_error_title">Lỗi ghi âm</string>
     <string name="recording_error_folder_missing">Thư mục đầu ra đã chọn bị thiếu, không hợp lệ hoặc chúng tôi không có quyền ghi vào đó. Vui lòng chọn một thư mục trong cài đặt ứng dụng.</string>
-    <string name="recording_error_server_missing">Tệp nhị phân Scrcpy-server bị thiếu hoặc quá trình kiểm tra bảo mật SHA256 thất bại. Điều này không nên xảy ra, vui lòng báo cáo lại.</string>
     <string name="recording_error_file_creation">Không thể tạo tệp ghi âm. Vui lòng kiểm tra quyền truy cập bộ nhớ và/hoặc chọn thư mục ghi âm mới trong cài đặt ứng dụng.</string>
-    <string name="recording_error_start_failed">Không thể bắt đầu ghi âm. Đã xảy ra lỗi khi gọi phương thức liên kết ShellService.</string>
     <string name="recording_unexpected_error">Đã xảy ra lỗi không mong muốn trong quá trình ghi âm. Vui lòng báo cáo lỗi này kèm theo các bước để tái hiện lỗi và nhật ký ứng dụng.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Mất kết nối Shizuku đột ngột, tiến trình ghi âm đã dừng. (Tiến trình Shizuku-Server bị tắt)</string>
     <string name="recording_shizuku_not_started">Tiến trình Shizuku-Server đã dừng. Vui lòng khởi động Shizuku và đảm bảo nó luôn hoạt động khi ứng dụng cần ghi âm.</string>
