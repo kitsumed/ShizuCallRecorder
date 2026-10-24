@@ -76,16 +76,9 @@
     <string name="settings_audio_bitrate">Débit binaire audio</string>
     <string name="settings_audio_source">Source audio</string>
     <string name="audio_source_voice_comm_description">Source Microphone optimisée pour les communications vocales. Annulation d\'écho intégrée.</string>
-    <string name="audio_source_mic_description">Capture audio directement depuis le microphone principal de l\'appareil. Légère réduction du bruit.</string>
     <string name="audio_source_voice_call_description">Enregistre les deux côtés d\'un appel téléphonique. L\'audio brut, avec la tonalité du téléphone.</string>
-    <string name="audio_source_playback_description">Capturez l\'audio provenant d\'autres applications, à l\'exception de celles qui restreignent l\'enregistrement (respectez les opt-out flags).</string>
-    <string name="audio_source_output_description">Capture le signal audio final combiné exactement tel qu\'il est envoyé à vos haut-parleurs.</string>
-    <string name="audio_source_mic_unprocessed_description">Capture l\'audio brut et naturel du microphone sans aucun filtrage ni amélioration automatique.</string>
-    <string name="audio_source_mic_camcorder_description">Optimisé pour l\'enregistrement vidéo, avec une focalisation sur le son provenant de la direction de la caméra.</string>
-    <string name="audio_source_mic_voice_recognition_description">Microphone avec traitement optimisé pour la reconnaissance vocale (bruit réduit).</string>
     <string name="audio_source_voice_call_uplink_description">Enregistre uniquement votre partie de l\'appel téléphonique (uplink).</string>
     <string name="audio_source_voice_call_downlink_description">Enregistre uniquement l\'autre interlocuteur lors d\'un appel téléphonique (downlink).</string>
-    <string name="audio_source_voice_performance_description">Mode microphone haute vitesse conçu pour la musique en direct et les applications audio en temps réel.</string>
     <string name="settings_debug_logging_enabled">Activer l\'enregistrement des journaux</string>
     <string name="settings_debug_logging_enabled_description">Pour signaler un bug, activez cette option, redémarrez l\'application et reproduisez le problème.</string>
     <string name="settings_debug_logging_title">Étapes de signalement des bogues</string>
@@ -114,9 +107,7 @@
     <string name="recording_started">L\'enregistrement a commencé.</string>
     <string name="recording_error_title">Erreur d\'enregistrement</string>
     <string name="recording_error_folder_missing">Le dossier de sortie sélectionné est manquant, invalide ou nous n\'avons pas l\'autorisation d\'y écrire. Veuillez en sélectionner un dans les paramètres de l\'application.</string>
-    <string name="recording_error_server_missing">Le fichier du serveur Scrcpy est manquant ou la vérification de sécurité SHA256 a échoué. Ceci ne devrait pas se produire, veuillez le signaler.</string>
     <string name="recording_error_file_creation">Impossible de créer le fichier d\'enregistrement. Veuillez vérifier les autorisations de stockage et/ou sélectionner un nouveau dossier d\'enregistrement dans les paramètres de l\'application.</string>
-    <string name="recording_error_start_failed">L\'enregistrement n\'a pas pu démarrer. Une erreur s\'est produite lors de l\'appel de ShellService binder method.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku s\'est déconnecté de manière inattendue, interrompant l\'enregistrement. (Le processus Shizuku-Server s\'est arrêté.)</string>
     <string name="recording_shizuku_not_started">Le processus Shizuku-Server est arrêté. Veuillez démarrer Shizuku et vous assurer qu\'il est toujours en cours d\'exécution lorsque l\'application souhaite enregistrer de l\'audio.</string>
     <string name="recording_shizuku_permission_denied">Veuillez autoriser l\'application à utiliser Shizuku. L\'autorisation a été refusée.</string>
@@ -196,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Prêt à commencer l\'enregistrement</string>
     <string name="a11y_overlay_drag_handle">Poignée de déplacement, appuyez longuement puis faites glisser pour déplacer la fenêtre superposer</string>
     <string name="a11y_contact_photo">Image d\'%1$s</string>
+    <string name="settings_audio_allow_playback_api">Autoriser la capture via la Playback API</string>
+    <string name="settings_audio_allow_playback_api_desc">Lorsqu\'un appel VoIP ou via Wi-Fi est détecté, le système remplace les sources montante/descendante sélectionnées par la capture de l\'API playback ou toute autre source équivalente afin de tenter de capturer le son.</string>
+    <string name="settings_audio_channel_split">Séparer l\'audio Montants/Descendants</string>
+    <string name="settings_audio_channel_split_desc">Séparer le signal audio montant sur le canal gauche et le signal descendant sur le canal droit.</string>
+    <string name="audio_source_voice_recognition_description">Source audio du microphone optimisée pour la reconnaissance vocale.</string>
+    <string name="audio_source_remote_submix_description">Enregistre le son exactement tel qu\'il est transmis aux haut-parleurs. L\'appareil cessera d\'émettre du son.</string>
+    <string name="audio_source_uplink_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant l\'audio uplink et la downlink), sans tonalité téléphonique.</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant le son du voice communication mic et celui du downlink), sans tonalité téléphonique.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant le voice recognition mic et le downlink), sans tonalité téléphonique.</string>
+    <string name="recording_error_cannot_reach_binder">Impossible de lancer l\'enregistrement. Une erreur s\'est produite lors de l\'appel de la méthode binder de ShellService.</string>
+    <string name="recording_failure_capture_start_failed">Une erreur s\'est produite au démarrage de l\'enregistrement audio.</string>
+    <string name="recording_failure_capture_read_failed">Une erreur s\'est produite lors de la lecture et du traitement de l\'audio capturée.</string>
 </resources>
