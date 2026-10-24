@@ -125,16 +125,9 @@
     <string name="settings_audio_bitrate">音訊位元率</string>
     <string name="settings_audio_source">音訊來源</string>
     <string name="audio_source_voice_comm_description">針對語音通訊調校的麥克風音訊來源，內建回音消除功能。</string>
-    <string name="audio_source_mic_description">直接從裝置的主要麥克風擷取音訊，並套用輕度降噪。</string>
     <string name="audio_source_voice_call_description">錄製電話通話雙方的原始音訊，包含電話提示音。</string>
-    <string name="audio_source_playback_description">擷取其他應用程式的音訊，但不包括禁止錄音的應用程式（會遵守應用程式的拒絕錄製旗標）。</string>
-    <string name="audio_source_output_description">擷取傳送至喇叭前最終合成的完整音訊。</string>
-    <string name="audio_source_mic_unprocessed_description">擷取未經任何自動篩選或強化的原始自然麥克風音訊。</string>
-    <string name="audio_source_mic_camcorder_description">針對影片錄製調校，著重擷取相機朝向的音訊。</string>
-    <string name="audio_source_mic_voice_recognition_description">針對語音辨識調校處理的麥克風，可減少雜訊。</string>
     <string name="audio_source_voice_call_uplink_description">僅錄製電話通話中您的聲音（上行）。</string>
     <string name="audio_source_voice_call_downlink_description">僅錄製電話通話中對方的聲音（下行）。</string>
-    <string name="audio_source_voice_performance_description">專為現場音樂及即時音訊應用程式設計的低延遲麥克風模式。</string>
     <string name="settings_debug_logging_enabled">啟用日誌記錄</string>
     <string name="settings_debug_logging_enabled_description">若要回報錯誤，請啟用此選項、重新啟動應用程式，然後重現問題。</string>
     <string name="settings_debug_logging_title">錯誤回報步驟</string>
@@ -166,9 +159,7 @@
     <string name="recording_started">錄音已開始。</string>
     <string name="recording_error_title">錄音錯誤</string>
     <string name="recording_error_folder_missing">所選的輸出資料夾不存在、無效，或應用程式沒有寫入權限。請在應用程式設定中選擇其他資料夾。</string>
-    <string name="recording_error_server_missing">缺少 scrcpy-server 二進位檔，或 SHA-256 安全性驗證失敗。這不應該發生，請回報此問題。</string>
     <string name="recording_error_file_creation">無法建立錄音檔。請檢查儲存空間權限，及／或在應用程式設定中選擇新的錄音資料夾。</string>
-    <string name="recording_error_start_failed">無法開始錄音。呼叫 ShellService Binder 方法時發生錯誤。</string>
     <string name="recording_unexpected_error">錄音期間發生非預期錯誤。請回報此問題，並附上重現步驟及應用程式日誌。</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku 意外中斷連線，導致錄音程序停止。（Shizuku-Server 程序已終止）</string>
     <string name="recording_shizuku_not_started">Shizuku-Server 程序已停止。請啟動 Shizuku，並確保應用程式需要錄製音訊時，Shizuku 隨時都能執行。</string>
