@@ -132,16 +132,9 @@
     <string name="settings_audio_bitrate">Bitrate zvuku</string>
     <string name="settings_audio_source">Zdroj zvuku</string>
     <string name="audio_source_voice_comm_description">Zdroj zvuku z mikrofonu optimalizovaný pro hlasovou komunikaci. Obsahuje vestavěné potlačení ozvěny.</string>
-    <string name="audio_source_mic_description">Zachycuje zvuk přímo z hlavního mikrofonu zařízení a používá mírné potlačení šumu.</string>
     <string name="audio_source_voice_call_description">Nahrává obě strany telefonního hovoru. Jde o surový zvuk včetně telefonních tónů.</string>
-    <string name="audio_source_playback_description">Zachycuje zvuk z jiných aplikací, s výjimkou těch, které nahrávání zakazují. Respektuje jejich příznaky pro zákaz nahrávání.</string>
-    <string name="audio_source_output_description">Zachycuje výsledný smíchaný zvuk přesně v podobě, v jaké je posílán do reproduktorů.</string>
-    <string name="audio_source_mic_unprocessed_description">Zachycuje přirozený zvuk z mikrofonu bez automatického filtrování nebo vylepšování.</string>
-    <string name="audio_source_mic_camcorder_description">Optimalizováno pro nahrávání videa a zachycení zvuku ze směru kamery.</string>
-    <string name="audio_source_mic_voice_recognition_description">Mikrofon se zpracováním optimalizovaným pro rozpoznávání řeči a potlačení šumu.</string>
     <string name="audio_source_voice_call_uplink_description">Nahrává pouze vaši stranu telefonního hovoru (odchozí zvuk).</string>
     <string name="audio_source_voice_call_downlink_description">Nahrává pouze druhou stranu telefonního hovoru (příchozí zvuk).</string>
-    <string name="audio_source_voice_performance_description">Režim mikrofonu s nízkou latencí určený pro živou hudbu a zvukové aplikace v reálném čase.</string>
     <string name="settings_debug_logging_enabled">Zapnout protokolování</string>
     <string name="settings_debug_logging_enabled_description">Pro nahlášení chyby tuto možnost zapněte, restartujte aplikaci a reprodukujte problém.</string>
     <string name="settings_debug_logging_title">Jak nahlásit chybu</string>
@@ -178,9 +171,7 @@
     <string name="delete_recording_confirmation_failed">Nepodařilo se smazat nahrávku. Zkontrolujte prosím logy aplikace.</string>
     <string name="recording_error_title">Chyba nahrávání</string>
     <string name="recording_error_folder_missing">Vybraná výstupní složka chybí, je neplatná nebo do ní aplikace nemá oprávnění zapisovat. Vyberte složku v nastavení aplikace.</string>
-    <string name="recording_error_server_missing">Binární soubor scrcpy-server chybí nebo selhala bezpečnostní kontrola SHA256. To by se nemělo stát, prosím nahlaste tento problém.</string>
     <string name="recording_error_file_creation">Nepodařilo se vytvořit soubor nahrávky. Zkontrolujte prosím oprávnění k úložišti nebo v nastavení aplikace vyberte novou složku pro nahrávky.</string>
-    <string name="recording_error_start_failed">Nepodařilo se spustit nahrávání. Při volání metody binderu služby ShellService došlo k chybě.</string>
     <string name="recording_unexpected_error">Během nahrávání došlo k neočekávané chybě. Nahlaste prosím tento problém včetně kroků k jeho zopakování a logů aplikace.</string>
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku se neočekávaně odpojilo, což způsobilo zastavení nahrávání. Proces Shizuku-Server byl ukončen</string>
     <string name="recording_shizuku_not_started">Proces Shizuku-Server je zastavený. Spusťte prosím Shizuku a ujistěte se, že může běžet vždy, když aplikace potřebuje nahrávat zvuk.</string>
