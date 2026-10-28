@@ -187,4 +187,16 @@
     <string name="recording_shizuku_not_started">فرایند Shizuku-Server متوقف است. لطفاً Shizuku را اجرا کنید و مطمئن شوید هر زمان برنامه قصد ضبط صدا دارد، امکان اجرای آن وجود دارد.</string>
     <string name="recording_shizuku_permission_denied">لطفاً به برنامه اجازه استفاده از Shizuku را بدهید. دسترسی رد شد.</string>
     <string name="recording_shizuku_auth_key_missing">کلید احراز هویت Intentهای Shizuku وجود ندارد. لطفاً آن را در تنظیمات برنامه وارد کنید.</string>
+    <string name="settings_audio_allow_playback_api">امکان ضبط از طریق Playback API را فراهم کنید</string>
+    <string name="settings_audio_allow_playback_api_desc">وقتی VoIP یا Wi-Fi Calling تشخیص داده شود، منابع انتخاب‌شده برای uplink/downlink (مسیر ارسال/دریافت صدا) را با «ضبط پخش صدا» یا هر منبع معادل دیگری جایگزین می‌کند تا تلاش کند صدا را ضبط کند.</string>
+    <string name="settings_audio_channel_split">تفکیک صدای Uplink (صدای مسیر ارسال) / Downlink (صدای مسیر دریافت)</string>
+    <string name="settings_audio_channel_split_desc">صدای Uplink (مسیر ارسال) را به کانال چپ و صدای Downlink (مسیر دریافت) را به کانال راست جدا کن.</string>
+    <string name="audio_source_voice_recognition_description">منبع صدای میکروفون که برای تشخیص گفتار (بازشناسی گفتار) تنظیم شده است.</string>
+    <string name="audio_source_remote_submix_description">صدا را دقیقاً همان‌طور که به بلندگوها ارسال می‌شود، ضبط می‌کند. دستگاه دیگر صدایی پخش نخواهد کرد.</string>
+    <string name="audio_source_uplink_downlink_description">هر دو طرف یک تماس تلفنی را ضبط می‌کند (با ترکیب Uplink + Downlink) بدون هیچ‌گونه بوق/صدای تلفنی.</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">هر دو طرف یک تماس تلفنی را ضبط می‌کند (با ترکیب میکروفون ارتباط صوتی/مکالمه + مسیر دریافت یا Downlink) بدون هیچ‌گونه بوق یا صدای تلفنی.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">هر دو طرف یک تماس تلفنی را ضبط می‌کند (با ترکیب میکروفون مخصوص تشخیص گفتار + مسیر دریافت/Downlink) بدون هیچ‌گونه بوق یا صدای تلفنی.</string>
+    <string name="recording_error_cannot_reach_binder">شروع ضبط ناموفق بود. هنگام فراخوانی متد binder مربوط به ShellService خطایی رخ داد.</string>
+    <string name="recording_failure_capture_start_failed">هنگام شروع ضبط (برداشت) صدا، خطایی رخ داد.</string>
+    <string name="recording_failure_capture_read_failed">هنگام خواندن و پردازش صدای ضبط‌شده، خطایی رخ داد.</string>
 </resources>
