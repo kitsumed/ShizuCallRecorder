@@ -173,7 +173,7 @@ class InCallService : InCallService() {
                 direction = direction,
                 osProvidedCallerName = osCallerName,
                 packageName = packageName,
-                isCallAudioVoIpBased = isVoip,
+                isCallAudioVoIpBased = isVoip || isWifiCall, // Wi-Fi call also uses the same audio logic as VoIP. issue #136
             )
 
             serviceScope.launch {

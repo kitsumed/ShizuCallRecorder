@@ -11,6 +11,12 @@ package com.kitsumed.shizucallrecorder.system.audio
 import android.content.Context
 import android.media.AudioManager
 import android.os.Build
+import com.kitsumed.shizucallrecorder.utils.AppLogger
+import kotlinx.coroutines.delay
+import java.lang.reflect.Method
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeSource
 
 /**
  * Resolves the current audio mode of the phone and returns results based on it.
@@ -24,13 +30,39 @@ class AudioModeResolver(val context: Context) {
     }
 
     /**
-     * Checks if the phone current audio mode to attempt to detect if the ongoing call is using VoIP audio routing.
-     * **This must be called when the call is ongoing to reflect the current audio mode of the phone.**
+     *  Checks if the phone current audio mode to attempt to detect if the ongoing call is using VoIP audio routing.
+     *  **This must be called when the call is ongoing to reflect the current audio mode of the phone.**
      *
+     *  This method will retry checking until the maxTimeoutMs is reached. This is because sometimes the device is slow to switch the audio mode
+     *  if we call it too quickly after the call has started. See: https://github.com/kitsumed/ShizuCallRecorder/issues/136
+     *
+     *  @param maxTimeoutMs The maximum time to wait before giving up. Defaults to 700ms.
+     *  @param pollIntervalMs The interval between checks. Defaults to 40ms.
+     *  @return true if the current audio mode is a VoIP audio mode, false otherwise.
+     */
+    suspend fun isVoipAudioModeWithRetry(
+        maxTimeoutMs: Duration = 700.milliseconds,
+        pollIntervalMs: Duration = 40.milliseconds
+    ): Boolean {
+        val startTime = TimeSource.Monotonic.markNow()
+
+        while (startTime.elapsedNow() < maxTimeoutMs) {
+            if (isVoipAudioMode()) return true
+            delay(pollIntervalMs)
+        }
+
+        return isVoipAudioMode()
+    }
+
+
+    /**
+     * Checks if the phone current audio mode to attempt to detect if the ongoing call is using VoIP audio routing.
      * @return true if the current audio mode is a VoIP audio mode, false otherwise.
      */
-    fun isVoipAudioMode(): Boolean {
+
+    private fun isVoipAudioMode(): Boolean {
         val mode = audioManager.mode
+
         // Docs at https://developer.android.com/reference/android/media/AudioManager
 
         // MODE_IN_COMMUNICATION is supported since API 11

@@ -25,6 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * PhoneStateSessionManager role is to receive telephony state changes, determine call session information (like its direction and metadata),
@@ -243,7 +244,7 @@ class PhoneStateSessionManager private constructor(context: Context) {
             // Handle anonymous and blank numbers (due to double broadcast behavior with one having no number)
             if (normalizedNumber.isEmpty()) {
                 AppLogger.d( "Number is blank. May be a anonymous call. Starting 500ms verification window.")
-                delay(500)
+                delay(500.milliseconds)
                 // If rawNumber is still blank after delay, we continue as anonymous. If we receive another broadcast, cancel is called and stop this logic here.
                 // Meaning we would restart a new 500ms window.
             }
@@ -260,7 +261,7 @@ class PhoneStateSessionManager private constructor(context: Context) {
                 // Now that we know the call is active, we can check if the audio mode is VoIP-based and update the metadata accordingly.
                 // This is the only way with PhoneState to determine if the call is VoIP-based, since we don't have access to the actual call data.
                 val updatedMetadata = currentMetadata.copy(
-                    isCallAudioVoIpBased = audioModeResolver.isVoipAudioMode()
+                    isCallAudioVoIpBased = audioModeResolver.isVoipAudioModeWithRetry()
                 )
 
                 // Execute pipeline asynchronously; only lock the state if it actually succeeded
