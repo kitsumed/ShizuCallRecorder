@@ -616,7 +616,7 @@ private fun RecordingSection(
                         message = stringResource(R.string.call_detection_mode_phonestate_limited_support)
                     )
                 }
-                CallDetectionMode.NotificationListener -> {} // TODO: Add comment?
+                //CallDetectionMode.NotificationListener -> {} // TODO: Add comment?
             }
         }
 
