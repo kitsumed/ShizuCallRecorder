@@ -77,7 +77,7 @@
     <string name="settings_language">Dil</string>
     <string name="settings_language_system">Sistem varsayılanı</string>
     <string name="settings_theme_mode">Tema modu</string>
-    <string name="settings_dynamic_color">Dinamik tema rengi</string>
+    <string name="settings_dynamic_color">Dinamik Tema Rengi</string>
     <string name="settings_show_toasts">Anlık bildirimleri göster</string>
     <string name="settings_vibration_enabled">Başlayınca/durunca titret</string>
     <string name="settings_theme_mode_system">Sistem varsayılanı</string>
@@ -187,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Kayda hazır</string>
     <string name="a11y_overlay_drag_handle">Sürükleme aracı; yüzen kayıt düğmesini taşımak için uzun basılı tutun ve sürükleyin</string>
     <string name="a11y_contact_photo">%1$s fotoğrafı</string>
+    <string name="settings_audio_allow_playback_api">Playback API’si aracılığıyla yakalamaya izin ver</string>
+    <string name="settings_audio_allow_playback_api_desc">VoIP veya Wi-Fi Araması algılandığında, sesi yakalamayı denemek için seçili uplink/downlink kaynaklarını ses oynatma yakalaması veya eşdeğer başka bir kaynakla geçersiz kılar.</string>
+    <string name="settings_audio_channel_split">Uplink/Downlink sesini ayır</string>
+    <string name="settings_audio_channel_split_desc">Uplink sesini sol kanala, downlink sesini sağ kanala ayır.</string>
+    <string name="audio_source_voice_recognition_description">Ses tanıma için ayarlanmış mikrofon kaynağı.</string>
+    <string name="audio_source_remote_submix_description">Sesi hoparlörlere gönderildiği şekliyle yakalar. Cihaz ses çıkarmayı durduracaktır.</string>
+    <string name="audio_source_uplink_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (uplink + downlink karıştırılarak).</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (sesli iletişim mikrofonu + downlink karıştırılarak).</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (ses tanıma mikrofonu + downlink karıştırılarak).</string>
+    <string name="recording_error_cannot_reach_binder">Kayıt başlatılamadı. ShellService binder yöntemi çağrılırken bir hata oluştu.</string>
+    <string name="recording_failure_capture_start_failed">Ses yakalama başlatılırken bir hata oluştu.</string>
+    <string name="recording_failure_capture_read_failed">Yakalanan ses okunurken ve işlenirken bir hata oluştu.</string>
 </resources>
