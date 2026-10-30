@@ -55,6 +55,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 private val GithubPink = Color(0xFFDB61A2)
 private val GithubGold = Color(0xFFE3B341)
@@ -88,7 +91,7 @@ fun SponsorScreen(
 
     // Fallback trigger just in case the screen is unscrollable
     LaunchedEffect(Unit) {
-        delay(4500) // Wait 4.5 seconds
+        delay(4.5.seconds)
         showFooter = true
     }
 
@@ -410,7 +413,7 @@ fun BioCard() {
     val flashColorGlobal = MaterialTheme.colorScheme.secondary.copy(alpha = 0.28f)
 
     LaunchedEffect(Unit) {
-        delay(800L) // Initial delay before the first shine starts
+        delay(800.milliseconds) // Initial delay before the first shine starts
         while (true) {
             // Instantly reset to the start
             shineProgress.snapTo(0f)
@@ -424,7 +427,7 @@ fun BioCard() {
                 )
             )
 
-            delay(14000L) // Pause for 14 seconds before the next shine
+            delay(14.seconds) // Pause before next shine
         }
     }
 
@@ -485,7 +488,7 @@ private fun StaggeredExpandAndSlideUp(
     index: Int,
     showTrigger: Boolean,
     modifier: Modifier = Modifier,
-    delayPerItem: Int = 140,
+    delayPerItem: Duration = 140.milliseconds,
     content: @Composable () -> Unit
 ) {
     val isPreview = LocalInspectionMode.current
@@ -494,7 +497,7 @@ private fun StaggeredExpandAndSlideUp(
     // Listens for the parent trigger to flip to true
     LaunchedEffect(showTrigger) {
         if (showTrigger && !isPreview && !isVisible) {
-            delay((index * delayPerItem).toLong())
+            delay(delayPerItem * index)
             isVisible = true
         }
     }
@@ -519,7 +522,7 @@ private fun StaggeredExpandAndSlideUp(
 @Composable
 private fun StaggeredFadePop(
     index: Int,
-    delayPerItem: Int = 80, // Milliseconds between every card animation
+    delayPerItem: Duration = 80.milliseconds,
     content: @Composable () -> Unit
 ) {
     val isPreview = LocalInspectionMode.current
@@ -532,7 +535,7 @@ private fun StaggeredFadePop(
     LaunchedEffect(Unit) {
         if (!isPreview) {
             // Wait for this item specific turn in the queue
-            delay((index * delayPerItem).toLong())
+            delay(delayPerItem * index)
 
             // Launch all animations in parallel
             launch {

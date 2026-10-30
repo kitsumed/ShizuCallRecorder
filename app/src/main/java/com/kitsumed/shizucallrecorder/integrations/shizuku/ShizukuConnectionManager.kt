@@ -30,6 +30,10 @@ import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuProvider
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 /**
  * This class is responsible for managing the general interactions with the Shizuku manager app and its server process.
@@ -207,19 +211,21 @@ class ShizukuConnectionManager(
          * Suspends and waits for the Shizuku server to become available, up to a specified timeout.
          * Useful after starting the server via broadcast.
          *
-         * @param timeoutMillis Maximum time to wait in milliseconds. Defaults to 30000ms (30 seconds).
-         * @param pollIntervalMillis Interval between checks in milliseconds. Defaults to 250ms.
+         * @param timeout Maximum time to wait. Defaults to 30 seconds.
+         * @param pollInterval Interval between checks. Defaults to 250 milliseconds.
          * @return True if the server became available within the timeout, false otherwise.
          */
-        suspend fun waitForServer(timeoutMillis: Long = 30000, pollIntervalMillis: Long = 250): Boolean {
-            val startTime = System.currentTimeMillis()
-            while (System.currentTimeMillis() - startTime < timeoutMillis) {
+        suspend fun waitForServer(timeout: Duration = 30.seconds, pollInterval: Duration = 250.milliseconds): Boolean {
+            val startTime = TimeSource.Monotonic.markNow()
+
+            while (startTime.elapsedNow() < timeout) {
                 if (isAvailable()) {
                     return true
                 }
-                delay(pollIntervalMillis)
+                delay(pollInterval)
             }
-            AppLogger.w( "Timed out waiting for Shizuku server after ${timeoutMillis}ms")
+
+            AppLogger.w("Timed out waiting for Shizuku server after $timeout")
             return false
         }
     }

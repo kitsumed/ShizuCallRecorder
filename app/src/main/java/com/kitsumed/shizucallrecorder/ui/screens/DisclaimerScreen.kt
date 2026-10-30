@@ -65,6 +65,8 @@ import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.ui.theme.ShizuCallRecorderTheme
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 
 /**
@@ -98,7 +100,7 @@ fun DisclaimerScreen(onContinue: () -> Unit, modifier: Modifier = Modifier) {
     // Countdown timer: decrements timeLeft once per second until it reaches 0.
     LaunchedEffect(Unit) {
         while (timeLeft > 0) {
-            delay(1000L)
+            delay(1.seconds)
             timeLeft--
         }
     }

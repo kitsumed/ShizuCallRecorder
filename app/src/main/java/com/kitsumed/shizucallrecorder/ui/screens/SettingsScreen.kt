@@ -93,6 +93,7 @@ import com.mikepenz.aboutlibraries.ui.compose.style.LibraryActionBadges
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibrariesVariant
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryActionMode
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Stateful wrapper for the Settings screen that connects [SettingsViewModel] to [SettingsContent].
@@ -475,7 +476,7 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
                 // Listen for textState updates
                 LaunchedEffect(textState) {
                     // LaunchedEffect cancels the previous block and restarts when updating too quickly.
-                    delay(100)
+                    delay(100.milliseconds)
                     if (textState != shizukuAuthKey) {
                         actions.setShizukuAuthKey(textState)
                     }
@@ -615,6 +616,7 @@ private fun RecordingSection(
                         message = stringResource(R.string.call_detection_mode_phonestate_limited_support)
                     )
                 }
+                CallDetectionMode.NotificationListener -> {} // TODO: Add comment?
             }
         }
 
@@ -1013,7 +1015,7 @@ private fun DebugSection(preferences: AppPreferences, updateTrigger: Int, action
                 val allowedChars = "^[0-9+-]*$".toRegex()
 
                 LaunchedEffect(textState) {
-                    delay(100) // Cancel current if new textState comes in within x time
+                    delay(100.milliseconds) // Cancel current if new textState comes in within x time
                     if (textState != debugCallerNumber) {
                         actions.setDebugCallerNumber(textState)
                     }
