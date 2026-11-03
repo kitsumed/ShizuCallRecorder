@@ -9,7 +9,7 @@ export default defineConfig({
   base: "/ShizuCallRecorder/", // We overwrite the root "/" base for "/repo-name/" due to how github pages work. CASE SENSITIVE
   sitemap: { // Optional, create a sitemap.xml file
     hostname: "https://kitsumed.github.io/ShizuCallRecorder/",
-    lastmodDateOnly: true,
+    lastmodDateOnly: false,
   },
   head: [
 
