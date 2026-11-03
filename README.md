@@ -55,7 +55,7 @@ The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder
 ## Installation
 ⚠️⚠️⬇️**YOU WILL NEED TO DO SOME INITIAL CONFIGURATIONS**.⬇️⚠️⚠️
 
-**Please follow the installation instructions in the [SUPPORT documentation](./docs/SUPPORT.md)** under **Installation & Configuration**. 
+**Please follow the installation instructions in the [SUPPORT documentation](https://kitsumed.github.io/ShizuCallRecorder/SUPPORT)** under **Installation & Configuration**. 
 
 You can download the latest version [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
 
