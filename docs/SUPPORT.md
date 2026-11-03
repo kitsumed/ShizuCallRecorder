@@ -12,4 +12,4 @@ If you are new to ShizuCallRecorder, please check the [configuration documentati
 
 ## Troubleshooting
 
-Please check the [troubleshooting documentation](./troubleshooting.md) with frequents issues and questions.
+Please check the troubleshooting documentation with frequents issues and questions. You can find it in the [`/docs/troubleshooting`](./troubleshooting.md) directory on Github, or via our [website](https://kitsumed.github.io/ShizuCallRecorder/troubleshooting).

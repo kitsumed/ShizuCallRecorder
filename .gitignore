@@ -39,3 +39,10 @@ render.experimental.xml
 
 # Idk but I don't want to commit theses
 .kotlin/sessions/*
+
+# VitePress
+docs/.vitepress/dist
+docs/.vitepress/cache
+
+# Dependency directories
+node_modules/
