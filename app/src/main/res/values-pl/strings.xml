@@ -169,7 +169,7 @@
     <string name="general_share">Udostępnij</string>
     <string name="general_delete">Usuń</string>
     <string name="general_deleted">Usunięto</string>
-    <string name="general_permission_escalation_exhausted">Nie udało się uzyskać uprawnienia \'%2$s\' dla \'%1$s\'.\nWyczerpano wszystkie dostępne metody (%3$d).\n\nUpewnij się, że Shizuku jest obecnie uruchomione, ponieważ to może być przyczyną tego błędu.\n\nProducent Twojego urządzenia (OEM) może również aktywnie blokować lub cofać wszystkie wprowadzane przez nas zmiany uprawnień. Przejrzyj ustawienia swojego telefonu, aby sprawdzić, czy istnieje możliwość wyłączenia tego zachowania.\n\nUrządzenia marek Vivo, Oppo, Xiaomi oraz innych chińskich producentów często zawierają agresywne ograniczenia systemowe, które mogą całkowicie zablokować dostęp do tego uprawnienia.\n\nJeśli znajdziesz sposób na samodzielne, ręczne przyznanie wymaganego uprawnienia za pomocą ADB, zgłoś nam to, tworząc zgłoszenie (issue) w serwisie GitHub!</string>
+    <string name="general_permission_escalation_exhausted">Nie udało się uzyskać uprawnienia \'%2$s\' dla \'%1$s\'.\nWyczerpano wszystkie dostępne metody (%3$d).\n\nUpewnij się że Shizuku jest obecnie uruchomione ponieważ to może być przyczyną tego błędu.\n\nProducent Twojego urządzenia (OEM) może również aktywnie blokować lub cofać wszystkie wprowadzane przez nas zmiany uprawnień. Przejrzyj ustawienia swojego telefonu aby sprawdzić czy istnieje możliwość wyłączenia tego zachowania.\n\nUrządzenia marek Vivo, Oppo, Xiaomi oraz innych chińskich producentów często zawierają agresywne ograniczenia systemowe które mogą całkowicie zablokować dostęp do tego uprawnienia.\n\nJeśli znajdziesz sposób na samodzielne, ręczne przyznanie wymaganego uprawnienia za pomocą ADB, zgłoś nam to tworząc zgłoszenie (issue) w serwisie GitHub!</string>
     <string name="settings_post_recording_notification">Powiadomienie o zakończeniu nagrania</string>
     <string name="settings_post_recording_notification_description">Wyświetla powiadomienie po zakończeniu nagrania z szybkimi akcjami, takimi jak odtworzenie i usunięcie.</string>
     <string name="post_recording_notification_title">Zarządzanie nagraniami</string>
@@ -187,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Gotowy do nagrywania</string>
     <string name="a11y_overlay_drag_handle">Naciśnij i przytrzymaj a następnie przeciągnij aby przesunąć nakładkę</string>
     <string name="a11y_contact_photo">Zdjęcie %1$s</string>
+    <string name="settings_audio_allow_playback_api">Zezwalaj na przechwytywanie za pośrednictwem interfejsu Playback API</string>
+    <string name="settings_audio_allow_playback_api_desc">W przypadku wykrycia połączenia VoIP lub Wi-Fi Calling, wybrane źródła sygnału przychodzącego/wychodzącego są zastępowane przechwytywaniem odtwarzanego dźwięku lub innym równoważnym źródłem co pozwala na próbę zarejestrowania dźwięku.</string>
+    <string name="audio_source_voice_recognition_description">Źródło dźwięku z mikrofonu dostrojone pod kątem rozpoznawania głosu.</string>
+    <string name="audio_source_remote_submix_description">Rejestruje dźwięk dokładnie w takiej postac w jakiej jest on przesyłany do głośników. Urządzenie przestanie wydawać dźwięki.</string>
+    <string name="audio_source_uplink_downlink_description">Rejestruje obie strony rozmowy telefonicznej (łącząc sygnał wychodzący i przychodzący) bez żadnych dźwięków sygnalizacyjnych.</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Rejestruje obie strony rozmowy telefonicznej (łącząc sygnał z mikrofonu oraz sygnał przychodzący) bez żadnych dodatkowych dźwięków telefonicznych.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Rejestruje obie strony rozmowy telefonicznej (łącząc sygnał z mikrofonu oraz sygnał przychodzący) bez żadnych dźwięków sygnalizacyjnych.</string>
+    <string name="recording_error_cannot_reach_binder">Nie udało się rozpocząć nagrywania. Wystąpił błąd podczas wywoływania ShellService.</string>
+    <string name="recording_failure_capture_start_failed">Podczas rozpoczynania rejestracji dźwięku wystąpił błąd.</string>
+    <string name="recording_failure_capture_read_failed">Wystąpił błąd podczas odczytu i przetwarzania zarejestrowanego dźwięku.</string>
+    <string name="settings_audio_channel_split_desc">Rozdziel dźwięk wychodzący na lewy kanał a dźwięk przychodzący na prawy kanał.</string>
+    <string name="settings_audio_channel_split">Rozdziel dźwięk wychodzący/przychodzący</string>
 </resources>
