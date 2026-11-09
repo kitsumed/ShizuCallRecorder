@@ -12,7 +12,8 @@ head:
         background call recorder, android 14 call recorder, android 15 call recorder
         android 13 call recorder, android 16 call recorder, android 12 call recorder
         android 11+ call recorder, free android call recorder, safe call recorder android,
-        clear audio call recorder, third-party app call recorder, voip call recorder android
+        clear audio call recorder, third-party app call recorder, voip call recorder android,
+        open source, foss
 
 hero:
   name: "ShizuCallRecorder"
@@ -28,7 +29,6 @@ hero:
     - theme: alt
       text: 📥 Download via Github
       link: https://github.com/kitsumed/ShizuCallRecorder/releases/latest
-      
     - theme: alt
       text: 📦 Download via F-Droid
       link: https://f-droid.org/packages/com.kitsumed.shizucallrecorder/
@@ -58,9 +58,11 @@ features:
 
   - icon: 🔒
     title: Privacy First & Secure
-    details: 100% open-source (GPL-3.0), with immutable and attested releases. Built-in security toggles to manage the Shizuku and minimize possible attack surfaces.
+    details: 100% open-source (GPL-3.0), with GPG signing, immutable and attested releases. Built-in security toggles to manage the Shizuku and minimize possible attack surfaces.
     linkText: Verify Attestations
     link: https://github.com/kitsumed/ShizuCallRecorder/attestations
+    rel: external noopener
+    target: _blank
 ---
 
 <script setup>

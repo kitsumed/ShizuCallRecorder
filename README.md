@@ -1,14 +1,18 @@
 # ShizuCallRecorder
 [![GitHub Repo stars](https://img.shields.io/github/stars/kitsumed/ShizuCallRecorder?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHRpdGxlPnN0YXI8L3RpdGxlPjxwYXRoIGQ9Ik0xMiwxNy4yN0wxOC4xOCwyMUwxNi41NCwxMy45N0wyMiw5LjI0TDE0LjgxLDguNjJMMTIsMkw5LjE5LDguNjJMMiw5LjI0TDcuNDUsMTMuOTdMNS44MiwyMUwxMiwxNy4yN1oiIGZpbGw9IndoaXRlIiAvPjwvc3ZnPg%3D%3D&labelColor=gray&color=gold)](https://github.com/kitsumed/ShizuCallRecorder/graphs/traffic)
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/kitsumed/ShizuCallRecorder/total?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHRpdGxlPmRvd25sb2FkPC90aXRsZT48cGF0aCBkPSJNNSwyMEgxOVYxOEg1TTE5LDlIMTVWM0g5VjlINUwxMiwxNkwxOSw5WiIgZmlsbD0id2hpdGUiIC8%2BPC9zdmc%2B&label=Downloads&labelColor=gray&color=gold&)](https://github.com/kitsumed/ShizuCallRecorder/releases/)
+[![Download ShizuCallRecorder on Github - All Downloads Stats](https://img.shields.io/github/downloads/kitsumed/ShizuCallRecorder/total?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHRpdGxlPmRvd25sb2FkPC90aXRsZT48cGF0aCBkPSJNNSwyMEgxOVYxOEg1TTE5LDlIMTVWM0g5VjlINUwxMiwxNkwxOSw5WiIgZmlsbD0id2hpdGUiIC8%2BPC9zdmc%2B&label=Downloads&labelColor=gray&color=gold&)](https://github.com/kitsumed/ShizuCallRecorder/releases/)
 [![GitHub Release](https://img.shields.io/github/v/release/kitsumed/ShizuCallRecorder?sort=semver&display_name=tag&style=for-the-badge&logo=testcafe&logoColor=white&label=Latest%20Release&labelColor=gray&color=blue)](https://github.com/kitsumed/ShizuCallRecorder/releases/latest)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/kitsumed/ShizuCallRecorder/build-app.yml?style=for-the-badge&label=Build%20Workflow)](https://github.com/kitsumed/ShizuCallRecorder/actions/workflows/build-app.yml)
 
-[![F-Droid All Downloads Public Stats](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2Fkitswas%2Ffdroid-metrics-dashboard%2Fraw%2Frefs%2Fheads%2Fmain%2Fprocessed%2Ftotal%2Fcom.kitsumed.shizucallrecorder.json&query=%24.total_downloads&logo=fdroid&label=Downloads%20(F-Droid)&color=gold&style=for-the-badge
+[![Download ShizuCallRecorder on F-Droid - All Time Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2Fkitswas%2Ffdroid-metrics-dashboard%2Fraw%2Frefs%2Fheads%2Fmain%2Fprocessed%2Ftotal%2Fcom.kitsumed.shizucallrecorder.json&query=%24.total_downloads&logo=fdroid&label=Downloads%20(F-Droid)&color=gold&style=for-the-badge
 )](https://f-droid.org/packages/com.kitsumed.shizucallrecorder/)
-[![IzzyOnDroid Yearly Downloads](https://img.shields.io/badge/dynamic/json?url=https://dlstats.izzyondroid.org/iod-stats-collector/stats/basic/yearly/rolling.json&query=$.['com.kitsumed.shizucallrecorder']&logo=android&style=for-the-badge&label=Yearly%20downloads%20(IzzyOnDroid)&color=gold)](https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder)
+[![Download ShizuCallRecorder on IzzyOnDroid - Yearly Downloads](https://img.shields.io/badge/dynamic/json?url=https://dlstats.izzyondroid.org/iod-stats-collector/stats/basic/yearly/rolling.json&query=$.['com.kitsumed.shizucallrecorder']&logo=android&style=for-the-badge&label=Yearly%20downloads%20(IzzyOnDroid)&color=gold)](https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder)
 
-The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml).
+The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml). It is free, respect your privacy, and try to apply the best security practices.
+
+> [!TIP]
+> **Official Resources:** [Troubleshooting Guide](https://kitsumed.github.io/ShizuCallRecorder/troubleshooting) | [Project Creation History](https://kitsumed.github.io/ShizuCallRecorder/introduction)
+
 
 **This app main focus are Cellular/VoLTE calls, however, we do attempt to support Wifi-Calling and VoIP when possible**. Third-party app support ***is not guaranteed***, they may work provided they use Android Telecom.
 
@@ -53,9 +57,8 @@ The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder
 > This application makes use of hidden internal Android APIs. As such, it is prone to breaking in new Android releases or due to specific OEM modifications to the source code.
 
 ## Installation
-⚠️⚠️⬇️**YOU WILL NEED TO DO SOME INITIAL CONFIGURATIONS**.⬇️⚠️⚠️
 
-**Please follow the installation instructions in the [SUPPORT documentation](https://kitsumed.github.io/ShizuCallRecorder/SUPPORT)** under **Installation & Configuration**. 
+**Please follow the installation and configuration instructions in the our [documentation](https://kitsumed.github.io/ShizuCallRecorder/configuration)** under **Installation & Configuration**. 
 
 You can download the latest version [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
 
@@ -78,7 +81,7 @@ The software is licensed under the [GNU General Public License, version 3 (GPL-3
  - This License does not grant any rights in the trademarks, service marks, or logos of any Contributor.
  - *As example, the name "`ShizuCallRecorder`" and `com.kitsumed.shizucallrecorder` are the property of the copyright holder **kitsumed***.
 
-I decided to use the **GPL-3.0** license, as no other FOSS call recording app for non-root devices exists yet, and I want to ensure that any potential future alternatives derived from this project remain FOSS.
+I decided to use the **GPL-3.0** license, as no other open-source/FOSS call recording app for non-rooted devices on Android 11+ exists yet, and I want to ensure that any potential future alternatives derived from this project remain FOSS.
 
 ## Disclaimer
 **Recording phone calls may be subject to complex and varying laws in different countries and jurisdictions.** For example, you may need to **ensure you have consent** from all parties before recording conversations. The **developers and contributors are not responsible** for any misuse or legal consequences arising from the use of this application.

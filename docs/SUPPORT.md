@@ -3,6 +3,7 @@ Welcome to the main page of the documentation. (SUPPORT.md)
 This guide contains installation, configuration, and support informations.
 
 Please note that ShizuCallRecorder is a free, FOSS, project. It may work, but it may also not (you should look at existing issues and make a detailed issue if none exists!)
+You can learn more about the origins of this project [here](./introduction.md).
 
 ## Installation / Configuration
 If you are new to ShizuCallRecorder, please check the [configuration documentation](./configuration.md).

@@ -5,7 +5,7 @@ export default defineConfig({
   title: "ShizuCallRecorder",
   lang: "en-ca",
   cleanUrls: true,
-  description: "Free, FOSS and privacy friendly Android call recording. Empowers ADB to record phone calls on non-rooted device!",
+  description: "Free, open-source, FOSS and privacy friendly Android call recording. Empowers ADB to record phone calls on non-rooted device!",
   base: "/ShizuCallRecorder/", // We overwrite the root "/" base for "/repo-name/" due to how github pages work. CASE SENSITIVE
   sitemap: { // Optional, create a sitemap.xml file
     hostname: "https://kitsumed.github.io/ShizuCallRecorder/",
@@ -33,6 +33,7 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/png', href: 'favicon-96x96.png' }]
   ],
   themeConfig: {
+    logo: 'favicon-96x96.png',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -49,14 +50,15 @@ export default defineConfig({
           { text: 'Introduction', link: '/introduction' },
           { text: 'Installation & Configuration', link: '/configuration' },
           {
-            text: 'Troubleshooting',
+            text: 'Troubleshooting & FAQ',
             collapsed: false,
-            link: '/troubleshooting/',
+            link: '/troubleshooting',
             items: [
               { text: 'Permissions Granting Issues', link: '/troubleshooting/permissions-granting-issues' },
               { text: 'Background Application Startup Failures', link: '/troubleshooting/background-application-startup-failures' },
               { text: 'Silent Recording or Missing One Side', link: '/troubleshooting/silent-recording-or-missing-one-side' },
               { text: 'Integration Into Native OEM Dialer', link: '/troubleshooting/integration-into-native-oem-dialer' },
+              { text: 'How to Hide The Recording Notification', link: '/troubleshooting/how-to-hide-the-recording-notification' },
             ]
           }
         ]

@@ -5,6 +5,6 @@
 
 If you are on the Website, look at the left ⬅️ of your screen under **Troubleshooting** or use the search box at the top left of your screen.
 
-
+You can also try searching your issue on any search engine, or asking a LLM about it.
 
 If you can't find a response to your issue here and need help using, or configuring Shizuku and/or ShizuCallRecorder. Please use the correct community support forum. [Shizuku](https://github.com/thedjchi/Shizuku/discussions/categories/q-a) or [ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder/discussions).
