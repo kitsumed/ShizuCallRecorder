@@ -1,5 +1,7 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Troubleshooting Guide and FAQ
+    url: https://kitsumed.github.io/ShizuCallRecorder/troubleshooting
   - name: Community Support for ShizuCallRecorder
     url: https://github.com/kitsumed/ShizuCallRecorder/discussions
     about: Please ask and answer other users questions here. THIS IS NOT FOR BUG REPORTS.
