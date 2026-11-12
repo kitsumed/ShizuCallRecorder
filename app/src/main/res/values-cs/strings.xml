@@ -187,4 +187,16 @@
     <string name="a11y_overlay_recording_stopped">Připraveno k nahrávání</string>
     <string name="a11y_overlay_drag_handle">Úchyt pro přesunutí. Dlouhým stisknutím a tažením přesunete plovoucí ovládání</string>
     <string name="a11y_contact_photo">Fotka kontaktu %1$s</string>
+    <string name="settings_audio_allow_playback_api">Povolit záznam prostřednictvím rozhraní Playback API</string>
+    <string name="settings_audio_allow_playback_api_desc">Je-li detekováno volání přes VoIP nebo Wi-Fi, nahradí vybrané zdroje pro odchozí/příchozí přenos (uplink/downlink) záznamem přehrávaného zvuku nebo jiným ekvivalentním zdrojem, aby bylo možné zvuk zachytit.</string>
+    <string name="settings_audio_channel_split">Oddělit odchozí a příchozí zvuk</string>
+    <string name="settings_audio_channel_split_desc">Oddělí zvuk obou stran hovoru do samostatných kanálů. Váš hlas (uplink) bude v levém kanálu a hlas druhé strany (downlink) v pravém.</string>
+    <string name="audio_source_voice_recognition_description">Zdroj zvuku z mikrofonu optimalizovaný pro rozpoznávání hlasu.</string>
+    <string name="audio_source_remote_submix_description">Zachycuje zvuk přesně v podobě, v jaké je odesílán do reproduktorů. Zařízení přestane přehrávat zvuk.</string>
+    <string name="audio_source_uplink_downlink_description">Nahrává obě strany telefonního hovoru (směšuje odchozí a příchozí zvuk) bez telefonních tónů.</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Nahrává obě strany telefonního hovoru (směšuje zvuk z mikrofonu optimalizovaného pro hlasovou komunikaci s příchozím zvukem) bez telefonních tónů.</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Nahrává obě strany telefonního hovoru (směšuje zvuk z mikrofonu optimalizovaného pro rozpoznávání řeči s příchozím zvukem) bez telefonních tónů.</string>
+    <string name="recording_error_cannot_reach_binder">Nepodařilo se spustit nahrávání. Při volání metody binderu služby ShellService došlo k chybě.</string>
+    <string name="recording_failure_capture_start_failed">Při zahájení záznamu zvuku došlo k chybě.</string>
+    <string name="recording_failure_capture_read_failed">Při čtení a zpracování zachyceného zvuku došlo k chybě.</string>
 </resources>
