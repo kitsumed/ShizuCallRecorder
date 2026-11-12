@@ -37,13 +37,11 @@ export default defineConfig({
       ['script', {
         src: '/ShizuCallRecorder/analytics.js',
         defer: '',
-        integrity: 'sha256-Vw5FtChMxYH9CV8SoQCvjmPktc6n82iLeJgx6ImFTrc=',
         'data-goatcounter': goatcounterUrl}
       ],
       ['script', {
         src: '/ShizuCallRecorder/analytics-SPA.js',
-        defer: '',
-        integrity: 'sha256-5AkraedsntKgp2Q4qW0UtCqEd1dgEFcry+kKG18QC5A='}
+        defer: ''}
       ],
   ],
   themeConfig: {
