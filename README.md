@@ -8,7 +8,7 @@
 )](https://f-droid.org/packages/com.kitsumed.shizucallrecorder/)
 [![Download ShizuCallRecorder on IzzyOnDroid - Yearly Downloads](https://img.shields.io/badge/dynamic/json?url=https://dlstats.izzyondroid.org/iod-stats-collector/stats/basic/yearly/rolling.json&query=$.['com.kitsumed.shizucallrecorder']&logo=android&style=for-the-badge&label=Yearly%20downloads%20(IzzyOnDroid)&color=gold)](https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder)
 
-The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml). It is free, respect your privacy, and try to apply the best security practices.
+The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder empowers ADB through Shizuku to use an [advanced list of permissions given to the shell application](https://cs.android.com/search?q=com.android.shell%20file:%2Fpackages%2FShell%2FAndroidManifest.xml). It is free, without ads, respect your privacy, and try to apply the best security practices.
 
 > [!TIP]
 > **Official Resources:** [Troubleshooting Guide](https://kitsumed.github.io/ShizuCallRecorder/troubleshooting) | [Project Creation History](https://kitsumed.github.io/ShizuCallRecorder/introduction)

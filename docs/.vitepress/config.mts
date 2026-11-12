@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 
+const goatcounterUrl = 'https://kitsumed.goatcounter.com/count';
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "ShizuCallRecorder",
@@ -30,7 +32,19 @@ export default defineConfig({
     ['meta', { name: 'twitter:creator', content: '@kitsumed' }],
 
     ['meta', { name: 'robots', content: 'index, follow' }],
-    ['link', { rel: 'icon', type: 'image/png', href: 'favicon-96x96.png' }]
+    ['link', { rel: 'icon', type: 'image/png', href: 'favicon-96x96.png' }],
+    // GoatCounter Analytics (Privacy Friendly)
+      ['script', {
+        src: '/ShizuCallRecorder/analytics.js',
+        defer: '',
+        integrity: 'sha256-Vw5FtChMxYH9CV8SoQCvjmPktc6n82iLeJgx6ImFTrc=',
+        'data-goatcounter': goatcounterUrl}
+      ],
+      ['script', {
+        src: '/ShizuCallRecorder/analytics-SPA.js',
+        defer: '',
+        integrity: 'sha256-5AkraedsntKgp2Q4qW0UtCqEd1dgEFcry+kKG18QC5A='}
+      ],
   ],
   themeConfig: {
     logo: 'favicon-96x96.png',
@@ -90,4 +104,31 @@ export default defineConfig({
     lineNumbers: true,
   },
   lastUpdated: true,
+  
+  // Transform the head to include GoatCounter noscript tag via pixel tracking
+  transformHead({ page, pageData, siteData, title }) {
+    const base = siteData.base || '/'
+    const routePath = page
+      .replace(/(^|\/)index\.md$/, '$1')
+      .replace(/\.md$/, '')
+    const cleanPath = base + routePath
+
+    const rawTitle = pageData.frontmatter?.title || pageData.title || title
+    const pageTitle = rawTitle && rawTitle !== siteData.title
+      ? `${rawTitle} | ${siteData.title}`
+      : siteData.title
+
+    const params = new URLSearchParams({
+      p: cleanPath,
+      t: pageTitle
+    })
+
+    return [
+      [
+        'noscript',
+        {},
+        `<img src="${goatcounterUrl}?${params.toString()}" alt="">`
+      ]
+    ]
+  }
 })
