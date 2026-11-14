@@ -9,9 +9,27 @@ if (typeof window !== 'undefined') {
     }
   };
 
+  const isErrorPage = () => {
+    // Check for a specific .code element inside VPContent showing a 4xx or 5xx HTTP status code message
+    const codeEl = document.querySelector('#VPContent .code, .VPContent .code');
+    if (codeEl) {
+      const codeText = codeEl.textContent.trim();
+      if (/^[45][0-9]{2}$/.test(codeText)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const sendHit = (label) => {
     if (!window.goatcounter || typeof window.goatcounter.count !== 'function') {
       logDebug(`Skipped (${label}): goatcounter not loaded yet`);
+      return;
+    }
+
+    if (isErrorPage()) {
+      logDebug(`Skipped (${label}): Error page layout detected (${location.pathname})`);
       return;
     }
 
