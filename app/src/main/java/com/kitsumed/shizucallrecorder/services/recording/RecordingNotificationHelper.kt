@@ -195,7 +195,8 @@ class RecordingNotificationHelper(private val context: Context) {
 
         when (newState) {
             is RecordingServiceState.Standby  -> {
-                if (newState.metadata == null) {
+                // A recording that stops while the call continues goes back to standby with metadata.
+                if (newState.metadata == null || oldState.isRecordingActive) {
                     showToast(context.getString(R.string.recording_toast_ended))
                     vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300), intArrayOf(0, 64, 0, 128), -1))
                 } else {
