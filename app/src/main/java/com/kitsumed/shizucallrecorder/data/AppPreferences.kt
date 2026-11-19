@@ -46,6 +46,7 @@ class AppPreferences(context: Context) {
         const val VIBRATION_ENABLED = true
         val CALL_DETECTION_MODE = CallDetectionMode.getDefaultModeForDevice().key
         const val RECORD_THIRD_PARTY_CALLS = false
+        const val DETECT_OUTGOING_CALLS_ON_DIALING = false
 
         const val POST_RECORDING_FILE_ACTIONS_NOTIFICATION_ENABLED = false
         const val AUTO_RECORD_INCOMING = false
@@ -131,7 +132,8 @@ class AppPreferences(context: Context) {
         SHIZUKU_KEEP_ALIVE("shizuku_keep_alive"),
         SHIZUKU_AUTH_KEY("shizuku_auth_key"),
         CALL_DETECTION_MODE("call_detection_mode"),
-        RECORD_THIRD_PARTY_CALLS("record_third_party_calls");
+        RECORD_THIRD_PARTY_CALLS("record_third_party_calls"),
+        DETECT_OUTGOING_CALLS_ON_DIALING("detect_outgoing_calls_on_dialing");
     }
 
     // -------- Nested enums
@@ -286,6 +288,11 @@ class AppPreferences(context: Context) {
     fun isRecordThirdPartyCallsEnabled() = getBoolean(Key.RECORD_THIRD_PARTY_CALLS, DefaultsValue.RECORD_THIRD_PARTY_CALLS)
     /** Sets whether recording of calls from third-party apps is enabled. */
     fun setRecordThirdPartyCallsEnabled(enabled: Boolean) = setBoolean(Key.RECORD_THIRD_PARTY_CALLS, enabled)
+
+    /** Checks if outgoing calls should be detected while dialing (before becoming active), useful for IVR and toll-free endpoints. */
+    fun isDetectOutgoingCallsOnDialingEnabled() = getBoolean(Key.DETECT_OUTGOING_CALLS_ON_DIALING, DefaultsValue.DETECT_OUTGOING_CALLS_ON_DIALING)
+    /** Sets whether outgoing calls should be detected while dialing. */
+    fun setDetectOutgoingCallsOnDialingEnabled(enabled: Boolean) = setBoolean(Key.DETECT_OUTGOING_CALLS_ON_DIALING, enabled)
 
     // -------- Automation --------
 

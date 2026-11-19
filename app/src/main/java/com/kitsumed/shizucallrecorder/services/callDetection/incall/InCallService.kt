@@ -87,10 +87,11 @@ class InCallService : InCallService() {
         call.registerCallback(callCallback)
         AppLogger.i( "Primary call session detected and tracking initialized. Current state is: ${callStateToString(call.details.state)} (${call.details.state})")
 
-        // Edge Case: If the call is already active when we receive it
-        if (call.details.state == Call.STATE_ACTIVE) {
-            AppLogger.d( "Received call in already ACTIVE state. Triggering handleCallStateChanged directly.")
-            handleCallStateChanged(call, Call.STATE_ACTIVE)
+        // Edge Case: If the call is already in a triggerable state when Telecom binds to us
+        val initialState = call.details.state
+        if (shouldTriggerPipelineForState(call, initialState)) {
+            AppLogger.d( "Received call in already triggerable state ${callStateToString(initialState)} ($initialState). Triggering handleCallStateChanged directly.")
+            handleCallStateChanged(call, initialState)
         }
     }
 
@@ -112,7 +113,8 @@ class InCallService : InCallService() {
     }
 
     /**
-     * Handles the state change of the tracked call. If the call becomes active, it triggers the [RecordingDecisionEngine] pipeline to determine if recording should start.
+     * Handles the state change of the tracked call. If the call enters a triggerable state (see [shouldTriggerPipelineForState]),
+     * it triggers the [RecordingDecisionEngine] pipeline to determine if recording should start.
      * @param call The [Call] object whose state has changed.
      * @param state A duplicate of `call.details.state`, provided for convenience. This is here to match the signature of the [Call.Callback.onStateChanged] method.
      */
@@ -124,13 +126,15 @@ class InCallService : InCallService() {
 
 
         // https://github.com/kitsumed/ShizuCallRecorder/issues/81 Dual-SIM users may have null AccountHandle due to OEM bug, causing crash.
-        if (call.details.state == Call.STATE_SELECT_PHONE_ACCOUNT) {
-            AppLogger.d( "Call is in STATE_SELECT_PHONE_ACCOUNT. This state may not include a AccountHandle. Ignoring.")
+        // Pre-dialing states (e.g. STATE_CONNECTING) may also not include a populated AccountHandle yet.
+        val accountHandle = call.details.accountHandle
+        if (state == Call.STATE_SELECT_PHONE_ACCOUNT || call.details.state == Call.STATE_SELECT_PHONE_ACCOUNT || accountHandle == null) {
+            AppLogger.d( "Call is in STATE_SELECT_PHONE_ACCOUNT or missing AccountHandle. Ignoring.")
             return
         }
         val telecomManager = this.getSystemService(TELECOM_SERVICE) as? TelecomManager
         // Name of the app package responsible for this call (e.g. system dialer, default dialer, or a third-party app)
-        val packageName = call.details.accountHandle.componentName.packageName
+        val packageName = accountHandle.componentName.packageName
         val isCallFromSystemDialer = packageName == telecomManager?.systemDialerPackage ||
                 packageName == telecomManager?.defaultDialerPackage || // Could be a third-party dialer, but it also means it handle carriers calls.
                 packageName == "com.android.phone"
@@ -142,12 +146,12 @@ class InCallService : InCallService() {
             return
         }
 
-        if (state == Call.STATE_ACTIVE) {
+        if (shouldTriggerPipelineForState(call, state)) {
             // Stop here if we've already executed the RecordingDecision pipeline (so it started the foreground service)
-            // This prevents multiple triggers if the state changes during the call session.
+            // This prevents multiple triggers if the state changes during the call session (e.g. DIALING -> ACTIVE).
             if (isPipelineExecuted) return
             isPipelineExecuted = true
-            AppLogger.i( "Primary call became ACTIVE. Triggering Decision Engine Pipeline.")
+            AppLogger.i( "Primary call entered ${callStateToString(state)} state. Triggering Decision Engine Pipeline.")
 
             val details = call.details
             val rawNumber = details.handle?.schemeSpecificPart ?: ""
@@ -189,6 +193,30 @@ class InCallService : InCallService() {
     }
 
     /**
+     * Checks whether the given call [state] should trigger the [RecordingDecisionEngine] pipeline.
+     *
+     * By default, only [Call.STATE_ACTIVE] (https://developer.android.com/reference/android/telecom/Call#STATE_ACTIVE)
+     * triggers the pipeline. However, some IVR and toll-free endpoints stream audio over SIP 183 Session Progress
+     * (Early Media) without sending SIP 200 OK, keeping the call in [Call.STATE_DIALING]
+     * (https://developer.android.com/reference/android/telecom/Call#STATE_DIALING) for its entire duration
+     * (https://github.com/kitsumed/ShizuCallRecorder/issues/153).
+     *
+     * When [AppPreferences.isDetectOutgoingCallsOnDialingEnabled] is enabled, outgoing calls also trigger on
+     * [Call.STATE_DIALING]. We deliberately wait for `STATE_DIALING` instead of [Call.STATE_CONNECTING]
+     * (https://developer.android.com/reference/android/telecom/Call#STATE_CONNECTING) because `STATE_CONNECTING`
+     * precedes `ConnectionService` connection creation, where `accountHandle` and call properties
+     * (`PROPERTY_WIFI`, `PROPERTY_VOIP_AUDIO_MODE`) may not yet be populated.
+     */
+    private fun shouldTriggerPipelineForState(call: Call, state: Int): Boolean {
+        if (state == Call.STATE_ACTIVE) {
+            return true
+        }
+        return state == Call.STATE_DIALING &&
+                call.details.callDirection == Call.Details.DIRECTION_OUTGOING &&
+                appPreferences.isDetectOutgoingCallsOnDialingEnabled()
+    }
+
+    /**
      * Releases the currently tracked primary call, unregistering its callback and ending any active recording session if necessary.
      */
     private fun releasePrimaryTrackedCall() {
@@ -221,6 +249,8 @@ class InCallService : InCallService() {
             Call.STATE_ACTIVE -> "ACTIVE"
             Call.STATE_DISCONNECTED -> "DISCONNECTED"
             Call.STATE_SELECT_PHONE_ACCOUNT -> "SELECT_PHONE_ACCOUNT"
+            Call.STATE_CONNECTING -> "CONNECTING"
+            Call.STATE_DISCONNECTING -> "DISCONNECTING"
             else -> "UNKNOWN_STATE($state)"
         }
     }

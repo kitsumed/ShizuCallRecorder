@@ -77,6 +77,7 @@ interface SettingsActions {
     fun setFileNameTemplate(template: String)
     fun setCallDetectionMode(mode: CallDetectionMode)
     fun setRecordThirdPartyCalls(enabled: Boolean)
+    fun setDetectOutgoingCallsOnDialing(enabled: Boolean)
     fun setPostRecordingFileNotification(enabled: Boolean)
     fun setOverlayEnabled(enabled: Boolean)
     fun setPlaybackCaptureAllowed(enabled: Boolean)
@@ -431,6 +432,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setRecordThirdPartyCalls(enabled: Boolean) {
         preferences.setRecordThirdPartyCallsEnabled(enabled)
+        refresh()
+    }
+
+    /**
+     * Enables or disables detecting outgoing calls in the dialing state before they become active.
+     */
+    override fun setDetectOutgoingCallsOnDialing(enabled: Boolean) {
+        preferences.setDetectOutgoingCallsOnDialingEnabled(enabled)
         refresh()
     }
 

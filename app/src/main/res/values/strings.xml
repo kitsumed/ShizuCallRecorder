@@ -172,6 +172,8 @@
 
     <string name="settings_record_third_party_calls">Record third-party apps</string>>
     <string name="settings_record_third_party_calls_description">Record calls from third-party that integrate with Android telecom system. May result in silent or one-sided recordings.</string>
+    <string name="settings_detect_outgoing_calls_on_dialing">Detect outgoing calls while dialing</string>
+    <string name="settings_detect_outgoing_calls_on_dialing_description">Trigger call detection before an outgoing call is answered. Useful for automated menus (IVR) and toll-free numbers that play audio without marking the call as active.</string>
 
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>

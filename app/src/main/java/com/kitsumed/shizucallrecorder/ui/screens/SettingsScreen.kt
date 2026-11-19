@@ -553,6 +553,7 @@ private fun RecordingSection(
     val recordingFolderLabel = remember(updateTrigger) { SafHelper.getFolderDisplayNameOrNull(context, preferences.getRecordingFolderUri()) }
     val callDetectionMode = remember(updateTrigger) { preferences.getCallDetectionMode() }
     val recordThirdPartyCalls = remember(updateTrigger) { preferences.isRecordThirdPartyCallsEnabled() }
+    val detectOutgoingCallsOnDialing = remember(updateTrigger) { preferences.isDetectOutgoingCallsOnDialingEnabled() }
     val fileNameFormat = remember(updateTrigger) { preferences.getFileNameTemplate() }
     val postRecordingFileNotifications = remember(updateTrigger) { preferences.isPostRecordingFileActionsNotificationEnabled() }
     val isVibrationEnabled = remember(updateTrigger) { preferences.isVibrationEnabled() }
@@ -602,12 +603,20 @@ private fun RecordingSection(
         ) { targetMode ->
             when (targetMode) {
                 CallDetectionMode.InCallService -> {
-                    ToggleListItem(
-                        label           = stringResource(R.string.settings_record_third_party_calls),
-                        description     = stringResource(R.string.settings_record_third_party_calls_description),
-                        checked         = recordThirdPartyCalls,
-                        onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
-                    )
+                    Column {
+                        ToggleListItem(
+                            label           = stringResource(R.string.settings_record_third_party_calls),
+                            description     = stringResource(R.string.settings_record_third_party_calls_description),
+                            checked         = recordThirdPartyCalls,
+                            onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
+                        )
+                        ToggleListItem(
+                            label           = stringResource(R.string.settings_detect_outgoing_calls_on_dialing),
+                            description     = stringResource(R.string.settings_detect_outgoing_calls_on_dialing_description),
+                            checked         = detectOutgoingCallsOnDialing,
+                            onCheckedChange = { actions.setDetectOutgoingCallsOnDialing(it) }
+                        )
+                    }
                 }
                 CallDetectionMode.PhoneState -> {
                     WarningCard(
@@ -1276,6 +1285,7 @@ private fun SettingsScreenPreview() {
             override fun setFileNameTemplate(template: String) {}
             override fun setCallDetectionMode(mode: CallDetectionMode) {}
             override fun setRecordThirdPartyCalls(enabled: Boolean) {}
+            override fun setDetectOutgoingCallsOnDialing(enabled: Boolean) {}
             override fun setPostRecordingFileNotification(enabled: Boolean) {}
             override fun setOverlayEnabled(enabled: Boolean) {}
             override fun setPlaybackCaptureAllowed(enabled: Boolean) {}
