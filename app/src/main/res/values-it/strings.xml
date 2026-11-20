@@ -119,4 +119,8 @@
     <string name="permission_manage_ongoing_calls_label">Gestisci le Chiamate in Corso</string>
     <string name="permission_manage_ongoing_calls_description">Permessi AppOps concessi automaticamente tramite Shizuku. Richiesti per individuare chiamate con InCallSrrvice.</string>
     <string name="settings_shizuku_keep_alive_desc">Non inviare l\'intento di stop</string>
+    <string name="general_play">Riproduci</string>
+    <string name="general_share">Condivisione</string>
+    <string name="general_delete">Elimina</string>
+    <string name="general_deleted">eliminato</string>
 </resources>
