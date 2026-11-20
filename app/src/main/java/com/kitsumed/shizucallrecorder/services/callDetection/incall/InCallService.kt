@@ -34,8 +34,8 @@ import kotlinx.coroutines.launch
  * We would first need to rework the whole recording logic.
  *
  * -- Support Guide for Maintainers --
- * This services works because Android 12+ added a single OR statement that checks for MANAGE_ONGOING_CALLS AppOps when InCallController
- * devices if it binds to our InCallService or not. We are binding as a companion/system-non-ui app, "IN_CALL_SERVICE_TYPE_NON_UI".
+ * This services works because Android 12+ added a single OR statement that checks for MANAGE_ONGOING_CALLS AppOps inside InCallController.
+ * We are binding as a companion/system-non-ui app, "IN_CALL_SERVICE_TYPE_NON_UI".
  * To ensure in future Android releases that they did not change this logic, we must check InCallController source code.
  * Android 11 (no AppOps, impossible to use): https://cs.android.com/android/platform/superproject/+/android11-release:packages/services/Telecomm/src/com/android/server/telecom/InCallController.java;l=1476-1486
  * Android 12 (works) : https://cs.android.com/android/platform/superproject/+/android12-release:packages/services/Telecomm/src/com/android/server/telecom/InCallController.java;l=1818-1829

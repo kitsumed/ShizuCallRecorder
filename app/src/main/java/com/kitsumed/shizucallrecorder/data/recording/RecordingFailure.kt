@@ -27,4 +27,6 @@ enum class RecordingFailure(
     CAPTURE_START_FAILED(R.string.recording_failure_capture_start_failed),
     /** Fatal error while reading, processing, and writing to disk audio data in the capture loop. */
     CAPTURE_READ_FAILED(R.string.recording_failure_capture_read_failed),
+    /** Fatal error when all captured audio sources are silent */
+    CAPTURE_IS_SILENT(R.string.recording_failure_capture_is_silent),
 }

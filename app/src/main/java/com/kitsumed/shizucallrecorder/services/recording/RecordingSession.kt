@@ -10,8 +10,8 @@ package com.kitsumed.shizucallrecorder.services.recording
 
 import android.app.Service
 import android.net.Uri
+import android.os.DeadObjectException
 import android.os.ParcelFileDescriptor
-import android.os.RemoteException
 import androidx.documentfile.provider.DocumentFile
 import com.kitsumed.shizucallrecorder.IRecordingCallback
 import com.kitsumed.shizucallrecorder.IShellService
@@ -97,7 +97,16 @@ class RecordingSession(
         override fun onRecordingFailure(error: RecordingFailure) {
             AppLogger.e("Remote recording engine reported failure with error: $error")
             // Release resources and notify listener about failure
-            release()
+            when (error) {
+                RecordingFailure.CAPTURE_IS_SILENT -> {
+                    // Delete silent capture
+                    cancel(context)
+                }
+                else -> {
+                    // Keep file since it may still contain data
+                    release()
+                }
+            }
             listener.onSessionFailed(error)
         }
     }
@@ -134,14 +143,20 @@ class RecordingSession(
         try {
             remoteService.startRecording(outputPfd!!, plan, recordingCallback)
             AppLogger.i("Recording session initialized the remote recording engine successfully.")
-        } catch (e: RemoteException) {
-            // Since this is a RemoteException, recording never started, so we can delete the file and cleanup.
+        } catch (e: Exception) {
             cancel(context)
-            throw InitializationException(
-                userFriendlyMessage = e.localizedMessage ?: context.getString(R.string.recording_error_cannot_reach_binder),
-                technicalLogMessage = "Failed to communicate with remote recording engine via Binder.",
-                cause = e
-            )
+            when (e) {
+                is DeadObjectException -> throw InitializationException(
+                    userFriendlyMessage = context.getString(R.string.recording_error_shell_service_dead ),
+                    technicalLogMessage = "Remote recording engine process died (already dead or hard native crash during startRecording execution).",
+                    cause = e
+                )
+                else -> throw InitializationException(
+                    userFriendlyMessage = context.getString(R.string.recording_error_binder_call_failed ),
+                    technicalLogMessage = "Binder IPC failure (${e.javaClass.simpleName}) while calling startRecording().",
+                    cause = e
+                )
+            }
         }
     }
 
@@ -188,6 +203,7 @@ class RecordingSession(
      */
     fun cancel(context: Service) {
         release()
+        AppLogger.i("Recording session canceled. Deleting incomplete recording file.")
         currentRecordingUri?.let { uri ->
             try {
                 DocumentFile.fromSingleUri(context, uri)?.delete()

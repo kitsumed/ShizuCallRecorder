@@ -25,6 +25,8 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
+import kotlin.math.abs
+
 /**
  * Owns the lifetime of one recording session, manage the recording state, and run the capture logic.
  *
@@ -175,8 +177,11 @@ class ShellRecordingEngine {
         val trashPrimaryBuffer = ByteBuffer.allocateDirect(AudioConfig.BLOCK_SIZE_BYTES).order(ByteOrder.nativeOrder())
         val trashSecondaryBuffer = secondary?.let { ByteBuffer.allocateDirect(AudioConfig.BLOCK_SIZE_BYTES).order(ByteOrder.nativeOrder()) }
 
-        var consecutivePrimaryZeroReads = 0L
-        var consecutiveSecondaryZeroReads = 0L
+        var consecutivePrimarySilentBlocks = 0L
+        var consecutiveSecondarySilentBlocks = 0L
+        var primarySilenceWarned = false
+        var secondarySilenceWarned = false
+        var hasCapturedNonSilentAudio = false
         var droppedFrames = 0L
 
         try {
@@ -193,17 +198,25 @@ class ShellRecordingEngine {
                 val primaryRead = primary.read(pBuffer, AudioConfig.BLOCK_SIZE_BYTES)
                 if (primaryRead < 0) throw IllegalStateException("Primary audio capture failed: ${parseAudioRecordError(primaryRead)}")
 
-                if (primaryRead == 0) {
-                    consecutivePrimaryZeroReads++
-                    if (consecutivePrimaryZeroReads % AudioConfig.ZERO_READ_WARNING_INTERVAL == 0L) {
-                        AppLogger.w("Primary audio capture is returning 0 bytes ($consecutivePrimaryZeroReads consecutive zero-byte reads). Was reported as silenced by Android? --> ${primaryCapture!!.isCaptureSilenced()}")
-                    }
-                } else consecutivePrimaryZeroReads = 0
-
                 // We set the limit of the buffer to the number of bytes read, and reset the position to 0 so that the processor can read from the start of the buffer.
                 if (primaryRead > 0) {
                     pBuffer.limit(primaryRead)
                     pBuffer.position(0)
+
+                    if (isBufferSilent(pBuffer, primaryRead)) {
+                        consecutivePrimarySilentBlocks++
+                        if (consecutivePrimarySilentBlocks % AudioConfig.SILENCE_WARNING_INTERVAL_BLOCKS == 0L && !primarySilenceWarned) {
+                            primarySilenceWarned = true
+                            AppLogger.w("Primary capture (${primary.plan}) has been silent for the last $consecutivePrimarySilentBlocks blocks. Was Silenced By Android? --> ${primary.isCaptureSilenced()}")
+                        }
+                    } else {
+                        hasCapturedNonSilentAudio = true
+                        if (primarySilenceWarned) {
+                            AppLogger.i("Primary capture (${primary.plan}) resumed audio after $consecutivePrimarySilentBlocks silent blocks.")
+                            primarySilenceWarned = false
+                        }
+                        consecutivePrimarySilentBlocks = 0L
+                    }
                 }
 
                 // [Secondary capture]
@@ -214,16 +227,36 @@ class ShellRecordingEngine {
 
                     if (secondaryRead < 0) throw IllegalStateException("Secondary audio capture failed: ${parseAudioRecordError(secondaryRead)}")
 
-                    if (secondaryRead == 0) {
-                        consecutiveSecondaryZeroReads++
-                        if (consecutiveSecondaryZeroReads % AudioConfig.ZERO_READ_WARNING_INTERVAL == 0L) {
-                            AppLogger.w("Secondary audio capture is returning 0 bytes ($consecutiveSecondaryZeroReads consecutive zero-byte reads). Was reported as silenced by Android? --> ${secondaryCapture?.isCaptureSilenced()}")
-                        }
-                    } else consecutiveSecondaryZeroReads = 0
-
                     if (secondaryRead > 0) {
                         sBuffer.limit(secondaryRead)
                         sBuffer.position(0)
+
+                        if (isBufferSilent(sBuffer, secondaryRead)) {
+                            consecutiveSecondarySilentBlocks++
+                            if (consecutiveSecondarySilentBlocks % AudioConfig.SILENCE_WARNING_INTERVAL_BLOCKS == 0L && !secondarySilenceWarned) {
+                                secondarySilenceWarned = true
+                                AppLogger.w("Secondary capture (${secondary.plan}) has been silent for the last $consecutiveSecondarySilentBlocks blocks. Was Silenced By Android? --> ${secondary.isCaptureSilenced()}")
+                            }
+                        } else {
+                            hasCapturedNonSilentAudio = true
+                            if (secondarySilenceWarned) {
+                                AppLogger.i("Secondary capture (${secondary.plan}) resumed audio after $consecutiveSecondarySilentBlocks silent blocks.")
+                                secondarySilenceWarned = false
+                            }
+                            consecutiveSecondarySilentBlocks = 0L
+                        }
+                    }
+                }
+
+                // If both capture have been silent for X amount of time, and we never captured any audio before they became silent, consider the session as failed.
+                if (!hasCapturedNonSilentAudio) {
+                    val primaryFailed = consecutivePrimarySilentBlocks >= AudioConfig.SILENCE_FAILURE_INTERVAL_BLOCKS
+                    val secondaryFailed = secondary == null || consecutiveSecondarySilentBlocks >= AudioConfig.SILENCE_FAILURE_INTERVAL_BLOCKS
+                    if (primaryFailed && secondaryFailed) {
+                        AppLogger.e("Both primary (${primary.plan}) and secondary (${secondary?.plan}) audio captures have been silent for over ${AudioConfig.SILENCE_FAILURE_INTERVAL_BLOCKS} blocks without ever capturing any audio. Stopping recording.")
+                        reportFailure(RecordingFailure.CAPTURE_IS_SILENT)
+                        stop()
+                        return
                     }
                 }
 
@@ -314,6 +347,24 @@ class ShellRecordingEngine {
             reportFailure(RecordingFailure.CAPTURE_READ_FAILED)
             stop()
         }
+    }
+
+    private fun isBufferSilent(buffer: ByteBuffer, byteCount: Int): Boolean {
+        val sampleCount = byteCount / AudioConfig.PCM_BYTES_PER_SAMPLE
+        if (sampleCount <= 0) return true
+
+        // Process each sample in the buffer / block.
+        val baseOffset = buffer.position()
+        for (i in 0 until sampleCount) {
+            // We read the sample as a short (16-bit PCM) and convert it to an int for comparison.
+            val sample = buffer.getShort(baseOffset + i * AudioConfig.PCM_BYTES_PER_SAMPLE).toInt()
+            val absSample = if (sample == Int.MIN_VALUE) Int.MAX_VALUE else abs(sample)
+            // As soon as we find audio in any sample, stop checking the block and return.
+            if (absSample > AudioConfig.SILENCE_FAILURE_AMPLITUDE) {
+                return false
+            }
+        }
+        return true
     }
 
     fun pause() {

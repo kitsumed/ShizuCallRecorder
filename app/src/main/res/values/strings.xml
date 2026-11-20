@@ -133,6 +133,9 @@
     <string name="permission_manage_ongoing_calls_label">Manage Ongoing Calls</string>
     <string name="permission_manage_ongoing_calls_description">AppOps permission automatically granted with Shizuku. Required to detect calls with InCallService.</string>
 
+    <string name="permission_notification_listener_label">Notification Access</string>
+    <string name="permission_notification_listener_description">Required to detect calls by listening for posted notifications.</string>
+
     <string name="permission_battery_label">Battery Optimization</string>
     <string name="permission_battery_description">Keeps the app alive when it needs and allow to bypass possible background startup limitations.</string>
 
@@ -165,13 +168,16 @@
     <string name="settings_call_detection_method">Call Detection Method</string>
     <string name="settings_call_detection_method_warning_title">Limited Support Notice</string>
     <string name="call_detection_mode_phonestate_title" translatable="false">Phone State</string>
-    <string name="call_detection_mode_phonestate_description">Use the legacy phone state broadcast with deprecated fields. This mode is a very prone to race conditions and give us a limited amount of informations.</string>
+    <string name="call_detection_mode_phonestate_description">Use the legacy phone state broadcast with deprecated fields. This mode is very prone to race conditions and gives us a limited amount of information.</string>
     <string name="call_detection_mode_phonestate_limited_support">This call detection method is unreliable. We retrieve a deprecated value when receiving phone state updates, and the detection logic is prone to race conditions. We also cannot differentiate between carrier calls and third-party calls. However, you can work around this limitation by ignoring anonymous calls.</string>
     <string name="call_detection_mode_incallservice_title" translatable="false">InCallService</string>
-    <string name="call_detection_mode_incallservice_description">Use the modern InCallService API. This mode is more efficient and should provide better detection with a lot of informations.</string>
+    <string name="call_detection_mode_incallservice_description">Use the modern InCallService API. This mode is more efficient and should provide better detection with a lot of information.</string>
+    <string name="call_detection_mode_notification_listener_title" translatable="false">Notification Listener</string>
+    <string name="call_detection_mode_notification_listener_description">Detect calls from the notifications posted by apps. Full support of the CallStyle template and best effort generic detection. No app-specific support.</string>
+    <string name="call_detection_mode_notification_listener_limited_support">It will work for all apps that use Android CallStyle notifications. Known contacts phone number will always be their primary phone number. For the package name, it will be valid for third-party apps that do self-managed calls, but will be your default dialer otherwise. Include a best-effort generic detection for third-party that do not use CallStyle.</string>
 
-    <string name="settings_record_third_party_calls">Record third-party apps</string>>
-    <string name="settings_record_third_party_calls_description">Record calls from third-party that integrate with Android telecom system. May result in silent or one-sided recordings.</string>
+    <string name="settings_record_third_party_calls">Record third-party apps</string>
+    <string name="settings_record_third_party_calls_description">Record calls from third-party apps. May result in silent or one-sided recordings.</string>
 
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>
@@ -326,10 +332,12 @@
     <string name="recording_error_title">Recording Error</string>
     <string name="recording_error_folder_missing">Selected output folder is missing, invalid, or we do not have permission to write to it. Select one in the app settings.</string>
     <string name="recording_error_file_creation">Failed to create recording file. Please check the storage permissions and/or select a new recording folder in the app settings.</string>
-    <string name="recording_error_cannot_reach_binder">Failed to start the recording. An error occurred when calling the ShellService binder method.</string>
+    <string name="recording_error_shell_service_dead">Failed to start the recording. The ShellService process was dead when called or suffered a hard failure during the initial execution.</string>
+    <string name="recording_error_binder_call_failed">Failed to start the recording. An error occurred when calling the ShellService binder method.</string>
     <string name="recording_unexpected_error">An unexpected error occurred during recording. Please report this with the steps to reproduce and the apps logs.</string>
     <string name="recording_failure_capture_start_failed">An error occurred when the audio capture started.</string>
     <string name="recording_failure_capture_read_failed">An error occurred when reading and processing the captured audio.</string>
+    <string name="recording_failure_capture_is_silent">The recording engine aborted recording as it detected silence from all audio sources. Try a different audio source or different capture settings. If the issue persists, check the troubleshooting docs.</string>
     <!-- Recording Service: Errors Shizuku -->
     <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku disconnected unexpectedly, causing the recording process to stop. (Shizuku-Server process died)</string>
     <string name="recording_shizuku_not_started">Shizuku-Server process is stopped. Please start Shizuku and ensure it is always able to run when the app wants to record audio.</string>
