@@ -10,6 +10,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--
+         Permission external apps (ex: a dialer) must request to control the recording, see docs/external-recording-api.md.
+         "dangerous" makes it a runtime permission: the user must explicitly grant it to each app from a system dialog.
+         See: https://developer.android.com/guide/topics/permissions/defining
+    -->
+    <permission
+        android:name="com.kitsumed.shizucallrecorder.permission.CONTROL_RECORDING"
+        android:label="@string/permission_control_recording_label"
+        android:description="@string/permission_control_recording_desc"
+        android:protectionLevel="dangerous" />
+
     <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -118,6 +129,21 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+            Public entry point for external apps to start/stop the recording.
+            Android only delivers broadcasts from apps the user granted the CONTROL_RECORDING permission.
+        -->
+        <receiver
+            android:name=".integrations.external.ExternalRecordingControlReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kitsumed.shizucallrecorder.permission.CONTROL_RECORDING">
+            <intent-filter>
+                <action android:name="com.kitsumed.shizucallrecorder.api.START_RECORDING" />
+                <action android:name="com.kitsumed.shizucallrecorder.api.STOP_RECORDING" />
             </intent-filter>
         </receiver>
 

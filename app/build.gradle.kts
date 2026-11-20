@@ -205,4 +205,7 @@ dependencies {
      * At runtime, the Android classloader prioritizes real framework classes of the OS, these stubs will not be part of the final APK.
      */
     compileOnly(project(":android-framework-hidden-stubs"))
+
+    // Unit tests (JVM only, not included in the APK)
+    testImplementation(libs.junit)
 }

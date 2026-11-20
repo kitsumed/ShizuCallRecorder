@@ -163,6 +163,12 @@
     <string name="settings_shizuku_start_on_record_desc">Shizuku will only start when you press record or an auto-recording rule matches</string>
     <string name="settings_shizuku_keep_alive">Keep Shizuku alive</string>
     <string name="settings_shizuku_keep_alive_desc">Do not send the stop intent</string>
+    <string name="settings_external_recording_control">External recording control</string>
+    <string name="settings_external_recording_control_desc">Allow apps you granted the \"Control call recording\" permission (ex: your dialer) to start and stop the recording of a detected call</string>
+
+    <!-- External recording control permission (shown by Android in the permission dialog) -->
+    <string name="permission_control_recording_label">Control call recording</string>
+    <string name="permission_control_recording_desc">start and stop ShizuCallRecorder call recordings during a call</string>
 
     <!-- Settings Screen: Recording Section -->
     <string name="settings_call_detection_method">Call Detection Method</string>

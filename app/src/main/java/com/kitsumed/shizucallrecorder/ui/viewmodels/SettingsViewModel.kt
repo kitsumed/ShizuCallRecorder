@@ -74,6 +74,7 @@ interface SettingsActions {
     fun setShizukuStartOnRecordEnabled(enabled: Boolean)
     fun setShizukuKeepAliveEnabled(enabled: Boolean)
     fun setShizukuAuthKey(key: String)
+    fun setExternalRecordingControlEnabled(enabled: Boolean)
     fun setFileNameTemplate(template: String)
     fun setCallDetectionMode(mode: CallDetectionMode)
     fun setRecordThirdPartyCalls(enabled: Boolean)
@@ -354,6 +355,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
      */
     override fun setShizukuAuthKey(key: String) {
         preferences.setShizukuAuthKey(key)
+        refresh()
+    }
+
+    /** Enables or disables the control of recordings by external applications granted the control permission. */
+    override fun setExternalRecordingControlEnabled(enabled: Boolean) {
+        preferences.setExternalRecordingControlEnabled(enabled)
         refresh()
     }
 

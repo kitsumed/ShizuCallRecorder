@@ -21,6 +21,8 @@ import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.data.recording.RecordingFailure
+import com.kitsumed.shizucallrecorder.integrations.external.ExternalRecordingApi
+import com.kitsumed.shizucallrecorder.integrations.external.ExternalRecordingStateNotifier
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +67,28 @@ class RecordingForegroundService : Service() {
 
         /** Intent action sent to this service when the user dismisses the notification (Android 14+). */
         const val ACTION_NOTIFICATION_DISMISSED = "com.kitsumed.shizucallrecorder.SERVICE_NOTIFICATION_DISMISSED"
+
+        /** Intent action sent to this service to stop the current recording while staying in standby for the current call. */
+        const val ACTION_STOP_CURRENT_RECORDING = "com.kitsumed.shizucallrecorder.STOP_CURRENT_RECORDING"
+
+        // -- Intent action for commands received from external applications. --
+
+        /**
+         * Intent action sent by [com.kitsumed.shizucallrecorder.integrations.external.ExternalRecordingControlReceiver]
+         * to forward a command received from an external application. The command is in [EXTRA_EXTERNAL_COMMAND].
+         */
+        const val ACTION_EXTERNAL_COMMAND = "com.kitsumed.shizucallrecorder.EXTERNAL_COMMAND"
+
+        /** String extra containing the external command action (see [ExternalRecordingApi]). */
+        const val EXTRA_EXTERNAL_COMMAND = "com.kitsumed.shizucallrecorder.extra.EXTERNAL_COMMAND"
+
+        /**
+         * True while the service is running for a call detected by the call detection (between STANDBY/START and STOP).
+         * Used by external commands to make sure they can never start the service, or record outside of a detected call.
+         */
+        @Volatile
+        var hasActiveCallSession: Boolean = false
+            private set
     }
 
     // ── Dependencies ──────────────────────────────────────────────────────────
@@ -76,6 +100,8 @@ class RecordingForegroundService : Service() {
     private lateinit var notificationHelper: RecordingNotificationHelper
 
     private lateinit var overlayController: RecordingOverlayController
+
+    private lateinit var externalStateNotifier: ExternalRecordingStateNotifier
 
     /** IPC stub to the privileged ShellService running in the shell process. */
     private var shellService: IShellService? = null
@@ -98,6 +124,7 @@ class RecordingForegroundService : Service() {
         notificationHelper = RecordingNotificationHelper(this)
         notificationHelper.createNotificationChannels()
         overlayController = RecordingOverlayController(this)
+        externalStateNotifier = ExternalRecordingStateNotifier(this)
 
         appPreferences = AppPreferences(this)
         recordingPlanResolver = RecordingPlanResolver(this)
@@ -110,6 +137,7 @@ class RecordingForegroundService : Service() {
                     updateNotification()
                     notificationHelper.handleStateChangeToasts(oldState, newState)
                     overlayController.showOverlay(newState)
+                    externalStateNotifier.onServiceStateChanged(oldState, newState)
                     oldState = newState
                 }
             }
@@ -119,7 +147,7 @@ class RecordingForegroundService : Service() {
             AppLogger.w( "Received callback from ShizukuConnectionManager: Shizuku disconnected unexpectedly. Stopping recording service...")
             // Handle cleanup if the service dies during recording
             if (_serviceState.value.isRecordingActive) {
-                notificationHelper.showErrorNotification(getString(R.string.recording_error_shizuku_disconnected_unexpectedly))
+                reportError(ExternalRecordingApi.ERROR_SHIZUKU_DISCONNECTED, getString(R.string.recording_error_shizuku_disconnected_unexpectedly))
                 stopRecordingSessionAndService()
             }
         }
@@ -142,8 +170,14 @@ class RecordingForegroundService : Service() {
      * @return [Service.START_NOT_STICKY].
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val action = intent?.action
         val state = _serviceState.value
+
+        // External commands are validated first, then translated to the matching internal action.
+        val action = if (intent?.action == ACTION_EXTERNAL_COMMAND) {
+            resolveExternalCommand(intent.getStringExtra(EXTRA_EXTERNAL_COMMAND), state) ?: return START_NOT_STICKY
+        } else {
+            intent?.action
+        }
 
         var currentMeta = state.metadata
 
@@ -165,6 +199,7 @@ class RecordingForegroundService : Service() {
 
         when (action) {
             ACTION_START_RECORDING, ACTION_MANUAL_START -> {
+                hasActiveCallSession = true
                 if (state.isRecordingActive) {
                     AppLogger.w( "Start request ignored. A session is already on-going.")
                     return START_NOT_STICKY
@@ -173,7 +208,7 @@ class RecordingForegroundService : Service() {
                 // At this point, we should already have the metadata from the intents, if it's missing, there's a logic error to be fixed.
                 if (currentMeta == null) {
                     AppLogger.e( "Start request received without metadata. Cannot start recording session.")
-                    notificationHelper.showErrorNotification(getString(R.string.recording_unexpected_error))
+                    reportError(ExternalRecordingApi.ERROR_INTERNAL, getString(R.string.recording_unexpected_error))
                     stopRecordingSessionAndService()
                     return START_NOT_STICKY // We won't reach this anyway.
                 }
@@ -192,14 +227,14 @@ class RecordingForegroundService : Service() {
                         startNewRecordingSession(service, currentMeta)
                     } catch (e: SecurityException) { // Shizuku permission not granted
                         AppLogger.e( "Shizuku permission was denied / not granted", e)
-                        notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_permission_denied))
+                        reportError(ExternalRecordingApi.ERROR_SHIZUKU_PERMISSION_DENIED, getString(R.string.recording_shizuku_permission_denied))
                         stopRecordingSessionAndService()
                     } catch (e: Exception) { // Shizuku not running or other binding connection errors
                         // Don't catch coroutine cancellations, they are used for cleanup. This creates a false error notification when everything's fine.
                         if (e is CancellationException) throw e
 
                         AppLogger.e( "Failed to perform ShellService binding with Shizuku. Ensure it is running, else look at error related to failed binding.", e)
-                        notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_not_started) + "\nLocalized: " + e.localizedMessage)
+                        reportError(ExternalRecordingApi.ERROR_SHIZUKU_UNAVAILABLE, getString(R.string.recording_shizuku_not_started) + "\nLocalized: " + e.localizedMessage)
                         stopRecordingSessionAndService()
                     } finally {
                         _serviceState.update { currentState ->
@@ -215,6 +250,7 @@ class RecordingForegroundService : Service() {
             }
 
             ACTION_STANDBY -> {
+                hasActiveCallSession = true
                 _serviceState.update { RecordingServiceState.Standby(currentMeta) }
                 serviceScope.launch {
                     // If enabled in the user preferences, we try to start the Shizuku server as early as possible (in the standby state, RINGING/OUTGOING),
@@ -249,6 +285,13 @@ class RecordingForegroundService : Service() {
             }
 
             ACTION_STOP_RECORDING -> stopRecordingSessionAndService()
+            ACTION_STOP_CURRENT_RECORDING -> {
+                // Go back to standby with the call metadata, so a new recording can be started during the same call.
+                val callMetadata = state.metadata
+                if (stopActiveRecordingSession()) {
+                    _serviceState.update { RecordingServiceState.Standby(callMetadata) }
+                }
+            }
             ACTION_NOTIFICATION_DISMISSED -> {
                 AppLogger.d( "Ongoing foreground service notification dismissed by user (Android 14+), reposting.")
                 updateNotification()
@@ -268,7 +311,7 @@ class RecordingForegroundService : Service() {
             if (authKey.isNotBlank()) {
                 ShizukuConnectionManager.startServer(this, authKey)
             } else {
-                notificationHelper.showErrorNotification(getString(R.string.recording_shizuku_auth_key_missing))
+                reportError(ExternalRecordingApi.ERROR_SHIZUKU_AUTH_KEY_MISSING, getString(R.string.recording_shizuku_auth_key_missing))
                 notificationHelper.showToast(getString(R.string.recording_shizuku_auth_key_missing))
                 stopRecordingSessionAndService()
             }
@@ -279,6 +322,7 @@ class RecordingForegroundService : Service() {
         // Always clean up, even if the OS kills the service mid-recording.
         // This is the guaranteed last callback before the service process is cleaned up.
         AppLogger.v( "RecordingForegroundService is destroying... Ensuring cleanup...")
+        hasActiveCallSession = false
         serviceScope.cancel()
         overlayController.hideOverlay()
         stopRecordingSessionAndService()
@@ -320,14 +364,14 @@ class RecordingForegroundService : Service() {
                     override fun onSessionFailed(failure: RecordingFailure) {
                         val userFriendlyMessage = getString(failure.descriptionResId)
                         AppLogger.w("Recording session was notified of a failure with error: $failure. Showing user-friendly message: $userFriendlyMessage")
-                        notificationHelper.showErrorNotification(userFriendlyMessage)
+                        reportError(ExternalRecordingApi.ERROR_RECORDING_ENGINE_FAILED, userFriendlyMessage)
                         stopRecordingSessionAndService()
                     }
                 }
             )
         } catch (e: RecordingSession.InitializationException) {
             AppLogger.e(e.message ?: "Empty Message.", "Remote recording engine reported: $e")
-            notificationHelper.showErrorNotification(e.userFriendlyMessage)
+            reportError(ExternalRecordingApi.ERROR_RECORDING_INIT_FAILED, e.userFriendlyMessage)
             stopRecordingSessionAndService()
             return
         }
@@ -347,16 +391,35 @@ class RecordingForegroundService : Service() {
      * Stops the current recording session (if any) and stops the foreground service.
      */
     private fun stopRecordingSessionAndService() {
-        val activeSession = (_serviceState.value as? RecordingServiceState.Active)?.session
+        hasActiveCallSession = false
 
-        if (activeSession == null) {
+        if (!stopActiveRecordingSession()) {
             AppLogger.d("No active session, exiting standby state, removing foreground notification and stopping service.")
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
 
-        AppLogger.i("Stopping active recording session, removing foreground notification and stopping service...")
+        _serviceState.update {
+            RecordingServiceState.Standby(null)
+        }
+
+        AppLogger.i("Recording session stopped and resources released. Stopping foreground service.")
+
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf() // Stop the service since the session is over
+    }
+
+    /**
+     * Stops and releases the current recording session (if any), **without changing the service state or stopping the service**.
+     *
+     * @return true if a recording session was active and has been stopped, false if there was nothing to stop.
+     */
+    private fun stopActiveRecordingSession(): Boolean {
+        val activeSession = (_serviceState.value as? RecordingServiceState.Active)?.session ?: return false
+
+        AppLogger.i("Stopping active recording session...")
+        externalStateNotifier.publishState(ExternalRecordingApi.STATE_STOPPING)
         activeSession.release()
 
         // If the user has enabled post-recording file actions, show a notification with options.
@@ -378,14 +441,48 @@ class RecordingForegroundService : Service() {
             }
         }
 
-        _serviceState.update {
-            RecordingServiceState.Standby(null)
+        externalStateNotifier.publishState(ExternalRecordingApi.STATE_STOPPED)
+        return true
+    }
+
+    /**
+     * Validates a command received from an external application and translates it to the matching internal action.
+     *
+     * If the command cannot be executed, the result is broadcasted to the external applications and null is returned.
+     * If no call is detected, the service is stopped since it was only started by this command.
+     *
+     * @param command The command action received from the external application (see [ExternalRecordingApi]).
+     * @param state The current [RecordingServiceState].
+     * @return The internal intent action to execute, or null if there is nothing to execute.
+     */
+    private fun resolveExternalCommand(command: String?, state: RecordingServiceState): String? {
+        val phase = if (hasActiveCallSession) ExternalRecordingStateNotifier.toPhase(state) else ExternalRecordingApi.ServicePhase.NO_CALL
+        val decision = ExternalRecordingApi.decideCommand(command, appPreferences.isExternalRecordingControlEnabled(), phase)
+
+        if (decision != ExternalRecordingApi.CommandDecision.Execute) {
+            AppLogger.i("External command $command not executed: $decision")
+            externalStateNotifier.publishDecision(decision, state.isRecordingPaused)
+            if (!hasActiveCallSession) stopSelf()
+            return null
         }
 
-        AppLogger.i("Recording session stopped and resources released. Stopping foreground service.")
+        AppLogger.i("Executing external command $command")
+        return when (command) {
+            ExternalRecordingApi.ACTION_START_RECORDING -> ACTION_START_RECORDING
+            ExternalRecordingApi.ACTION_STOP_RECORDING -> ACTION_STOP_CURRENT_RECORDING
+            else -> null
+        }
+    }
 
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf() // Stop the service since the session is over
+    /**
+     * Shows an error notification to the user and broadcasts the failure to authorized external applications.
+     *
+     * @param errorCode One of the `ExternalRecordingApi.ERROR_*` values.
+     * @param message Human-readable error description.
+     */
+    private fun reportError(errorCode: String, message: String) {
+        notificationHelper.showErrorNotification(message)
+        externalStateNotifier.publishFailure(errorCode, message)
     }
 
     /**
