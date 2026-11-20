@@ -196,7 +196,6 @@
     <string name="audio_source_uplink_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant l\'audio uplink et la downlink), sans tonalité téléphonique.</string>
     <string name="audio_source_mic_voice_communication_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant le son du voice communication mic et celui du downlink), sans tonalité téléphonique.</string>
     <string name="audio_source_mic_voice_recognition_downlink_description">Enregistre les deux côtés d\'un appel téléphonique (en combinant le voice recognition mic et le downlink), sans tonalité téléphonique.</string>
-    <string name="recording_error_cannot_reach_binder">Impossible de lancer l\'enregistrement. Une erreur s\'est produite lors de l\'appel de la méthode binder de ShellService.</string>
     <string name="recording_failure_capture_start_failed">Une erreur s\'est produite au démarrage de l\'enregistrement audio.</string>
     <string name="recording_failure_capture_read_failed">Une erreur s\'est produite lors de la lecture et du traitement de l\'audio capturée.</string>
 </resources>
