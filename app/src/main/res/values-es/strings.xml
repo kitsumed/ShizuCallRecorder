@@ -151,11 +151,11 @@
     <string name="permission_manage_ongoing_calls_description">Permiso de AppOps concedido automáticamente con Shizuku. Necesario para detectar llamadas mediante InCallService.</string>
     <string name="settings_call_detection_method">Método de detección de llamadas</string>
     <string name="settings_call_detection_method_warning_title">Aviso de soporte limitado</string>
-    <string name="call_detection_mode_phonestate_description">Utiliza la difusión heredada del estado del teléfono, que emplea campos obsoletos. Este método es muy susceptible a condiciones de carrera y nos proporciona una cantidad de información limitada.</string>
+    <string name="call_detection_mode_phonestate_description">Utiliza la difusión (broadcast) heredada del estado del teléfono con campos obsoletos. Este modo es muy propenso a condiciones de carrera y nos proporciona una cantidad limitada de información.</string>
     <string name="call_detection_mode_phonestate_limited_support">Este método de detección de llamadas es poco fiable. Obtenemos un valor obsoleto al recibir actualizaciones del estado del teléfono y la lógica de detección es propensa a condiciones de carrera. Tampoco podemos diferenciar entre llamadas del operador y llamadas de aplicaciones de terceros. Sin embargo, puedes solucionar esta limitación ignorando las llamadas anónimas.</string>
-    <string name="call_detection_mode_incallservice_description">Utiliza la API moderna de InCallService. Este modo es más eficiente y debería ofrecer una mejor detección con mucha más información.</string>
+    <string name="call_detection_mode_incallservice_description">Utiliza la moderna API InCallService. Este modo es más eficiente y debería proporcionar una mejor detección junto con una gran cantidad de información.</string>
     <string name="settings_record_third_party_calls">Grabar aplicaciones de terceros</string>&gt;
-    <string name="settings_record_third_party_calls_description">Graba las llamadas de aplicaciones de terceros que se integran con el sistema de telecomunicaciones de Android. Puede provocar grabaciones en silencio o grabar solo de un lado.</string>
+    <string name="settings_record_third_party_calls_description">Grabar llamadas de aplicaciones de terceros. Puede dar lugar a grabaciones silenciosas o en las que solo se escuche uno de los interlocutores.</string>
     <string name="placeholder_caller_name_desc">El nombre de la persona que llama; primero se consulta la lista de contactos y, si no aparece, recurre al identificador de llamadas de la operadora, si está disponible</string>
     <string name="placeholder_package_name_desc">El nombre o el nombre del paquete de la aplicación que inició la llamada.</string>
     <string name="settings_open_github_Wiki">Abrir Wiki</string>
@@ -189,7 +189,6 @@
     <string name="a11y_contact_photo">Foto de %1$s</string>
     <string name="recording_failure_capture_read_failed">Ocurrió un error al leer y procesar el audio capturado.</string>
     <string name="recording_failure_capture_start_failed">Ocurrió un error cuando comenzó la captura del audio.</string>
-    <string name="recording_error_cannot_reach_binder">Fallo al comenzar la grabación. Ocurrió un error al llamar al método del enlazador ShellService.</string>
     <string name="audio_source_mic_voice_recognition_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el micrófono de reconocimiento de voz y el canal de bajada) sin tonos telefónicos.</string>
     <string name="audio_source_uplink_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el canal de subida y el de bajada) sin tonos telefónicos.</string>
     <string name="audio_source_remote_submix_description">Captura el audio exactamente como se envía a los altavoces. El dispositivo dejará de emitir sonido.</string>
@@ -199,4 +198,11 @@
     <string name="audio_source_mic_voice_communication_downlink_description">Graba ambos lados de una llamada telefónica (mezclando el micrófono de comunicación de voz y el canal de bajada) sin tonos telefónicos.</string>
     <string name="settings_audio_allow_playback_api_desc">Cuando se detecta una llamada VoIP o Wi-Fi, se anulan las fuentes de enlace ascendente/descendente seleccionadas con la captura de reproducción de audio o cualquier otra fuente equivalente para intentar capturar el audio.</string>
     <string name="settings_audio_allow_playback_api">Permitir la captura a través de la API de reproducción</string>
+    <string name="permission_notification_listener_label">Acceso a las notificaciones</string>
+    <string name="permission_notification_listener_description">Necesario para detectar llamadas escuchando las notificaciones publicadas.</string>
+    <string name="call_detection_mode_notification_listener_description">Detecta llamadas a partir de las notificaciones publicadas por las aplicaciones. Compatibilidad completa con la plantilla CallStyle y detección genérica basada en el mejor esfuerzo. No incluye compatibilidad específica para aplicaciones concretas.</string>
+    <string name="call_detection_mode_notification_listener_limited_support">Funcionará con todas las aplicaciones que utilicen las notificaciones CallStyle de Android. El número de teléfono de los contactos conocidos será siempre su número principal. En cuanto al nombre del paquete, será válido para las aplicaciones de terceros que gestionen sus propias llamadas; en caso contrario, corresponderá a la aplicación de teléfono predeterminada. También incluye una detección genérica basada en el mejor esfuerzo para aplicaciones de terceros que no utilicen CallStyle.</string>
+    <string name="recording_error_shell_service_dead">No se pudo iniciar la grabación. El proceso ShellService estaba detenido cuando se intentó utilizar o sufrió un fallo crítico durante la ejecución inicial.</string>
+    <string name="recording_error_binder_call_failed">No se pudo iniciar la grabación. Se produjo un error al llamar al método binder de ShellService.</string>
+    <string name="recording_failure_capture_is_silent">El motor de grabación canceló la grabación al detectar silencio en todas las fuentes de audio. Pruebe con una fuente de audio diferente o con otros ajustes de captura. Si el problema persiste, consulte la documentación de solución de problemas.</string>
 </resources>
