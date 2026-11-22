@@ -86,7 +86,7 @@ object RecordingFileNameFormatter {
         val phoneStr = sanitizeFileNamePart(metadata.getBestNumber())
         var callerNameStr = ""
 
-        if (template.contains(FileNamePlaceholder.CALLER_NAME.tag) && phoneStr.isNotEmpty()) {
+        if (template.contains(FileNamePlaceholder.CALLER_NAME.tag)) {
             callerNameStr = sanitizeFileNamePart(metadata.callerName ?: "")
         }
 

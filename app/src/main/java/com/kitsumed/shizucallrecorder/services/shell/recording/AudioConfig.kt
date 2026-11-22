@@ -89,4 +89,26 @@ object AudioConfig {
      * This is used to avoid flooding the shell log with repeated warnings when the native AudioRecord capture returns zero bytes.
      */
     const val ZERO_READ_WARNING_INTERVAL = 50L
+
+    /**
+     * Number of consecutive silent blocks before printing a silence warning log.
+     *
+     * At 20 ms/block, 50 blocks correspond to 1 second of silence.
+     */
+    const val SILENCE_WARNING_INTERVAL_BLOCKS = 50L
+
+    /**
+     * Number of consecutive silent blocks before treating the recording session as failed due to silence,
+     * if no non-silent audio was ever captured.
+     *
+     * At 20 ms/block, 250 blocks correspond to 5 seconds of continuous silence at session start.
+     */
+    const val SILENCE_FAILURE_INTERVAL_BLOCKS = 250L
+
+    /**
+     * Maximum sample amplitude (abs PCM 16-bit value) to be considered silence.
+     *
+     * Samples with an absolute amplitude below or equal to this threshold are treated as silent.
+     */
+    const val SILENCE_FAILURE_AMPLITUDE = 100
 }
