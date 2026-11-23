@@ -1,0 +1,128 @@
+# Release On Main Workflow
+# Builds the APK on every push to main (or manually) and publishes it to GitHub Releases.
+#
+# Signing:
+#   - If the SIGNING_KEYSTORE / SIGNING_KEYSTORE_PASSWORD / SIGNING_KEY_ALIAS / SIGNING_KEY_PASSWORD secrets are set
+#     (see build-app.yml for how to create them), a signed RELEASE APK is built.
+#   - Otherwise a DEBUG-signed APK is built so the workflow still produces an installable file. The debug key is generated
+#     per runner, so each such build has a different signature (uninstall before installing a newer one). Add the secrets
+#     to get stable, updatable releases.
+
+name: Release On Main
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - 'fastlane/**'
+  workflow_dispatch:
+
+concurrency:
+  group: release-on-main
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Build APK & Publish Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # create releases / tags
+      id-token: write        # provenance attestation
+      attestations: write    # provenance attestation
+    env:
+      HAS_SIGNING: ${{ secrets.SIGNING_KEYSTORE != '' && secrets.SIGNING_KEYSTORE_PASSWORD != '' && secrets.SIGNING_KEY_ALIAS != '' }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+
+      - name: Setup Java 17
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad #v6.1.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 #v6.4.0
+        with:
+          validate-wrappers: true
+          cache-provider: basic # keep the FOSS caching variant (see build-app.yml)
+          gradle-version: '9.8.2'
+
+      - name: Generate Missing Gradle Wrapper Scripts
+        env:
+          SKIP_SIGNING: true
+        run: gradle wrapper --no-daemon
+
+      - name: Extract Version
+        id: get-version
+        env:
+          SKIP_SIGNING: true
+        run: |
+          ./gradlew writeVersionForCi --no-daemon
+          VERSION=$(cat app/build/outputs/version.txt)
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=v${VERSION}-build.${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Build Signed Release APK
+        if: env.HAS_SIGNING == 'true'
+        env:
+          KEYSTORE_FILE: release-keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+        run: |
+          echo "$SIGNING_KEYSTORE" | base64 -d > app/release-keystore.jks
+          ./gradlew assembleRelease --stacktrace --no-daemon
+          mkdir -p dist
+          mv app/build/outputs/apk/release/app-release.apk "dist/ShizuCallRecorder-${{ steps.get-version.outputs.VERSION }}-build.${GITHUB_RUN_NUMBER}.apk"
+
+      - name: Build Debug-Signed APK (no signing secrets configured)
+        if: env.HAS_SIGNING != 'true'
+        env:
+          SKIP_SIGNING: true # build.gradle.kts would otherwise require the release keystore env vars on CI
+        run: |
+          echo "::warning::Signing secrets not configured - publishing a debug-signed APK."
+          ./gradlew assembleDebug --stacktrace --no-daemon
+          mkdir -p dist
+          mv app/build/outputs/apk/debug/app-debug.apk "dist/ShizuCallRecorder-${{ steps.get-version.outputs.VERSION }}-build.${GITHUB_RUN_NUMBER}-debug.apk"
+
+      - name: Cleanup Signing Files
+        if: always()
+        run: rm -f app/release-keystore.jks
+
+      - name: Generate Build Provenance Attestation
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 #v4.2.2
+        with:
+          subject-path: dist/*.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 #v7.0.2
+        with:
+          name: apk-build-${{ github.run_number }}
+          path: dist/*.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.get-version.outputs.TAG }}
+          VERSION: ${{ steps.get-version.outputs.VERSION }}
+          SHORT_SHA: ${{ steps.get-version.outputs.SHORT_SHA }}
+        run: |
+          if [ "$HAS_SIGNING" = "true" ]; then
+            SIGN_NOTE="Signed release build."
+          else
+            SIGN_NOTE="Debug-signed build (no signing secrets configured). Uninstall any previous build with a different signature before installing."
+          fi
+          gh release create "$TAG" dist/*.apk \
+            --target "$GITHUB_SHA" \
+            --title "v${VERSION} (build ${GITHUB_RUN_NUMBER})" \
+            --notes "Automated build of \`main\` at ${SHORT_SHA}. ${SIGN_NOTE}" \
+            --latest
