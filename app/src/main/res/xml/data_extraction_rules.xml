@@ -13,15 +13,16 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
+        <!-- Keystore-encrypted credentials cannot be decrypted on another device, and the upload queue references device-local URIs. -->
+        <exclude domain="sharedpref" path="shizucallrecorder_secure_prefs.xml"/>
+        <exclude domain="file" path="upload_queue.json"/>
         <!-- TODO: Use <include> and <exclude> to control what is backed up.
         <include .../>
         <exclude .../>
         -->
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <exclude domain="sharedpref" path="shizucallrecorder_secure_prefs.xml"/>
+        <exclude domain="file" path="upload_queue.json"/>
     </device-transfer>
-    -->
 </data-extraction-rules>

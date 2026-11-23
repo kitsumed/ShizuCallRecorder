@@ -7,4 +7,7 @@
   ~  This software is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<resources></resources>
+<resources>
+    <!-- Background of the disguised "Calculator" launcher icon -->
+    <color name="calculator_icon_background">#FF263238</color>
+</resources>

@@ -199,6 +199,13 @@ dependencies {
     implementation(libs.shizukuApi)
     implementation(libs.shizukuProvider)
 
+    // Call metadata JSON, movement-rate location logger & FTP/FTPS/SFTP upload queue
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.play.services.location)
+    implementation(libs.commons.net)
+    implementation(libs.jsch)
+
     /*
      * Local Hidden Stubs for Android Framework (IContentProvider, etc)
      * This is a compile-time only dependency to satisfy the compiler for hidden Android framework types.

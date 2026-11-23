@@ -343,4 +343,6 @@
     <string name="recording_shizuku_not_started">Shizuku-Server process is stopped. Please start Shizuku and ensure it is always able to run when the app wants to record audio.</string>
     <string name="recording_shizuku_permission_denied">Please allow the application to use Shizuku. Permission was denied.</string>
     <string name="recording_shizuku_auth_key_missing">Shizuku Intents authentication key is missing. Please enter it in the app settings.</string>
+    <!-- Label of the disguised launcher entry (Settings > App Passcode / Calculator Lock) -->
+    <string name="calculator_disguise_label" translatable="false">Calculator</string>
 </resources>

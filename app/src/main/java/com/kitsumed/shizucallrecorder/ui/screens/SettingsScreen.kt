@@ -77,6 +77,7 @@ import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerState
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerType
 import com.kitsumed.shizucallrecorder.ui.viewmodels.ContactPickerViewModel
 import com.kitsumed.shizucallrecorder.ui.viewmodels.DebugAction
+import com.kitsumed.shizucallrecorder.ui.viewmodels.AddonSettingsViewModel
 import com.kitsumed.shizucallrecorder.ui.viewmodels.SettingsActions
 import com.kitsumed.shizucallrecorder.ui.viewmodels.SettingsViewModel
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
@@ -146,7 +147,17 @@ fun SettingsScreen(
         },
         onDismissContacts = { contactPickerViewModel.dismissContactPicker() },
         onExportLogs = { exportLogLauncher.launch("shizucallrecorder_bug_report.log") },
-        modifier = modifier
+        modifier = modifier,
+        addonSections = {
+            // Add-on settings: calculator lock, notification detail, call metadata/location, FTP/SFTP upload.
+            val addonViewModel: AddonSettingsViewModel = viewModel()
+            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                AppLockSettingsSection(addonViewModel)
+                DetailedNotificationsSettingsItem(addonViewModel)
+                CallMetadataSettingsSection()
+                RemoteUploadSettingsSection(addonViewModel)
+            }
+        }
     )
 }
 
@@ -164,6 +175,7 @@ fun SettingsScreen(
  * @param onDismissContacts      Called when we want to close the dialog without confirmation/saving.
  * @param onExportLogs           Called to export diagnostic logs using SAF.
  * @param modifier               Optional size/position modifier.
+ * @param addonSections          Optional add-on settings sections, rendered after the Security section.
  */
 @Composable
 fun SettingsContent(
@@ -177,7 +189,8 @@ fun SettingsContent(
     onConfirmContacts: (Set<String>) -> Unit,
     onDismissContacts: () -> Unit,
     onExportLogs: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    addonSections: (@Composable () -> Unit)? = null
 ) {
     Surface(
         modifier = modifier
@@ -213,6 +226,7 @@ fun SettingsContent(
             }
             item { AudioSection(preferences, updateTrigger, actions) }
             item { SecuritySection(preferences, updateTrigger, actions) }
+            if (addonSections != null) item { addonSections() }
             item { VisualSection(preferences, updateTrigger, actions) }
             item { DebugSection(preferences, updateTrigger, actions, onExportLogs) }
             item {  } // extra padding at bottom

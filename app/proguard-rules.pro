@@ -38,3 +38,21 @@
   v(...);
   java.lang.String getCallerTag(); # Needed because this is used as a parameter the v() method above
 }
+# ---- SFTP (JSch): algorithms are loaded by class name via reflection, keep them all. ----
+-keep class com.jcraft.jsch.** { *; }
+-dontwarn com.jcraft.jsch.**
+-dontwarn org.apache.logging.log4j.**
+-dontwarn org.slf4j.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.newsclub.net.unix.**
+-dontwarn com.sun.jna.**
+-dontwarn org.ietf.jgss.**
+
+# ---- FTP/FTPS (Apache Commons Net) ----
+-dontwarn org.apache.commons.net.**
+
+# ---- EncryptedSharedPreferences (Tink): compile-only annotations referenced by Tink ----
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn javax.annotation.**
+-dontwarn com.google.api.client.http.**
+-dontwarn org.joda.time.**

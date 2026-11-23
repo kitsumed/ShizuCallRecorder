@@ -41,6 +41,18 @@
     <!-- Required so Android OS accepts our InCallService, we will later get the permission with AppOps -->
     <uses-permission android:name="android.permission.MANAGE_ONGOING_CALLS" />
 
+    <!-- Remote FTP/FTPS/SFTP upload of recordings + call metadata JSON (WorkManager, no notifications) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--
+         Movement-rate location logger. Only used while a call recording is active, callbacks are removed as soon as the call ends.
+         Background location is required because the recording foreground service is not (and must not become) a "location" FGS type.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <application
         android:name=".ShizuApplication"
         android:allowBackup="true"
@@ -51,7 +63,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shizucallrecorder">
-        <!-- MainActivity must be run when Android want to show the application UI (with the app launcher) -->
+        <!--
+             MainActivity must be run when Android want to show the application UI.
+             The launcher entry points are the two <activity-alias> below so the app icon/name can be disguised as a "Calculator"
+             (see AppLockManager.setDisguiseEnabled). Exactly one alias is enabled at a time.
+        -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -60,9 +76,38 @@
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" /> <!-- Show "Additional settings in the app" button in Settings App Info -->
                 <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" /> <!-- Show "Additional settings in the app" button in Settings App Info -> notifications -->
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Default launcher entry (original icon & name). -->
+        <activity-alias
+            android:name=".LauncherDefault"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:label="@string/app_name"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Disguised launcher entry ("Calculator" icon & name), disabled by default. -->
+        <activity-alias
+            android:name=".LauncherCalculator"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_launcher"
+            android:roundIcon="@mipmap/ic_calculator_launcher"
+            android:label="@string/calculator_disguise_label"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- Activity to show the user a confirmation dialog before deleting a recording -->
         <activity

@@ -9,8 +9,10 @@
 package com.kitsumed.shizucallrecorder.services.recording
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
@@ -18,10 +20,12 @@ import androidx.core.content.IntentCompat
 import androidx.documentfile.provider.DocumentFile
 import com.kitsumed.shizucallrecorder.IShellService
 import com.kitsumed.shizucallrecorder.R
+import com.kitsumed.shizucallrecorder.data.AddonPreferences
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.data.recording.RecordingFailure
 import com.kitsumed.shizucallrecorder.integrations.shizuku.ShizukuConnectionManager
+import com.kitsumed.shizucallrecorder.services.callmeta.CallMetadataTracker
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -91,6 +95,27 @@ class RecordingForegroundService : Service() {
     /* Exposes the current state of the recording service (read-only) for external observation. */
     val serviceState = _serviceState.asStateFlow()
 
+    // ── Add-on hooks ───────────────────────────────────────────────────────────────────
+
+    private lateinit var addonPreferences: AddonPreferences
+
+    /**
+     * Updates the existing service notification in place (same ID, via NotificationManager.notify) when the
+     * "Detailed Call Notifications" toggle changes mid-call. Never posts a second notification.
+     */
+    private val detailedNotificationsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        val state = _serviceState.value
+        // Only while a call session is live (never re-post after the service removed its notification).
+        if (key == AddonPreferences.KEY_DETAILED_NOTIFICATIONS && (state.metadata != null || state.isRecordingActive)) {
+            runCatching {
+                getSystemService(NotificationManager::class.java).notify(
+                    RecordingNotificationHelper.SERVICE_NOTIFICATION_ID,
+                    notificationHelper.getServiceNotification(_serviceState.value)
+                )
+            }.onFailure { AppLogger.w("Failed to refresh service notification after detailed notification toggle.", it) }
+        }
+    }
+
     // ── Service lifecycle ──────────────────────────────────────────────────────────────
 
     override fun onCreate() {
@@ -101,6 +126,9 @@ class RecordingForegroundService : Service() {
 
         appPreferences = AppPreferences(this)
         recordingPlanResolver = RecordingPlanResolver(this)
+
+        addonPreferences = AddonPreferences(this)
+        addonPreferences.prefs.registerOnSharedPreferenceChangeListener(detailedNotificationsListener)
 
         // Launch a collector to do actions on the service state changes
         serviceScope.launch(Dispatchers.Main.immediate) { // Use immediate to ensure we get the initial (oldState) value on launch
@@ -279,6 +307,7 @@ class RecordingForegroundService : Service() {
         // Always clean up, even if the OS kills the service mid-recording.
         // This is the guaranteed last callback before the service process is cleaned up.
         AppLogger.v( "RecordingForegroundService is destroying... Ensuring cleanup...")
+        runCatching { addonPreferences.prefs.unregisterOnSharedPreferenceChangeListener(detailedNotificationsListener) }
         serviceScope.cancel()
         overlayController.hideOverlay()
         stopRecordingSessionAndService()
@@ -341,6 +370,9 @@ class RecordingForegroundService : Service() {
         }
 
         AppLogger.i("The recording session has been started successfully. Service state updated to Active.")
+
+        // Add-on: passively attach call metadata + start the movement-rate location logger for this recording. Never throws.
+        CallMetadataTracker.onRecordingStarted(applicationContext, activeSession, metadata)
     }
 
     /**
@@ -358,6 +390,10 @@ class RecordingForegroundService : Service() {
 
         AppLogger.i("Stopping active recording session, removing foreground notification and stopping service...")
         activeSession.release()
+
+        // Add-on: the audio file is now finalized and closed (stopRecording is synchronous). Write <audio_base_name>.json next to it
+        // and enqueue the single silent post-call upload attempt. Runs on a background coroutine, never throws.
+        CallMetadataTracker.onRecordingFinished(applicationContext, activeSession)
 
         // If the user has enabled post-recording file actions, show a notification with options.
         if (appPreferences.isPostRecordingFileActionsNotificationEnabled()) {

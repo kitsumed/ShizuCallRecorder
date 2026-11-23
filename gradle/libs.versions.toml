@@ -19,6 +19,13 @@ shizuku-provider = "13.1.5"
 aboutlibraries = "15.3.0"
 libphonenumber = "9.0.42"
 
+# Call metadata, location & remote upload add-ons
+work = "2.10.1"
+securityCrypto = "1.1.0"
+playServicesLocation = "21.3.0"
+commonsNet = "3.13.0"
+jsch = "2.28.8"
+
 [libraries]
 # AndroidX Core & Lifecycle
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +58,13 @@ aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3",
 
 # Libphonenumber
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
+
+# Call metadata, location & remote upload add-ons
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
+jsch = { module = "com.github.mwiede:jsch", version.ref = "jsch" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

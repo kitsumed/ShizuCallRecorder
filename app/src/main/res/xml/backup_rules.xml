@@ -14,6 +14,9 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
+    <!-- Keystore-encrypted credentials cannot be decrypted on another device, and the upload queue references device-local URIs. -->
+    <exclude domain="sharedpref" path="shizucallrecorder_secure_prefs.xml"/>
+    <exclude domain="file" path="upload_queue.json"/>
     <!--
    <include domain="sharedpref" path="."/>
    <exclude domain="sharedpref" path="device.xml"/>

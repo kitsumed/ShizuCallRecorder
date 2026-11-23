@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import com.kitsumed.shizucallrecorder.R
+import com.kitsumed.shizucallrecorder.data.AddonPreferences
 import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
@@ -38,6 +39,8 @@ class RecordingNotificationHelper(private val context: Context) {
         const val CHANNEL_ID_SERVICE = "recording_channel_service"
         const val CHANNEL_ID_ERROR = "recording_channel_error"
         const val CHANNEL_ID_POST_RECORDING_FILE_ACTIONS = "recording_channel_post_recording_file_actions"
+        /** Low-importance, silent channel used by the SAME service notification when "Detailed Call Notifications" is OFF. */
+        const val CHANNEL_ID_SERVICE_MINIMAL = "recording_channel_service_minimal"
 
         const val SERVICE_NOTIFICATION_ID = 1
         const val ERROR_NOTIFICATION_ID = 2
@@ -97,6 +100,49 @@ class RecordingNotificationHelper(private val context: Context) {
             lockscreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
         }
         manager.createNotificationChannel(postCallChannel)
+
+        // Minimal Service Channel ("Detailed Call Notifications" OFF). Only ever used for SERVICE_NOTIFICATION_ID, never for a second notification.
+        val minimalServiceChannel = NotificationChannel(
+            CHANNEL_ID_SERVICE_MINIMAL, "Call in progress", NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            this.group = groupId
+            setSound(null, null)
+            enableLights(false)
+            enableVibration(false)
+            setShowBadge(false)
+            lockscreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
+        }
+        manager.createNotificationChannel(minimalServiceChannel)
+    }
+
+    /**
+     * Minimal, generic content for the existing service notification when "Detailed Call Notifications" is OFF.
+     * Same notification ID / foreground lifecycle, only the content (and a silent low-importance channel) changes.
+     * No phone number, contact name, recording state, actions or app branding.
+     */
+    private fun getMinimalServiceNotification(): Notification {
+        val deletePendingIntent = PendingIntent.getService(
+            context, 99,
+            Intent(context, RecordingForegroundService::class.java).apply {
+                action = RecordingForegroundService.ACTION_NOTIFICATION_DISMISSED
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        return NotificationCompat.Builder(context, CHANNEL_ID_SERVICE_MINIMAL)
+            .setSmallIcon(R.drawable.ic_call_generic)
+            .setContentTitle("Call in progress")
+            .setContentText("Active call session")
+            .setOngoing(true)
+            .setDeleteIntent(deletePendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setAutoCancel(false)
+            .setOnlyAlertOnce(true)
+            .setSilent(true)
+            .setShowWhen(false)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .build()
     }
 
     /**
@@ -105,6 +151,9 @@ class RecordingNotificationHelper(private val context: Context) {
      * @return A Notification object that can be used to update the foreground service notification.
      */
     fun getServiceNotification(state: RecordingServiceState): Notification {
+        if (!AddonPreferences(context).isDetailedNotificationsEnabled()) {
+            return getMinimalServiceNotification()
+        }
         val titleRes: Int
         val contentRes: Int
         val actionIcon: Int?

@@ -11,7 +11,9 @@ package com.kitsumed.shizucallrecorder.services.callDetection.phoneState
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
+import com.kitsumed.shizucallrecorder.services.callmeta.CallMetadataTracker
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 
 /**
@@ -57,6 +59,8 @@ class PhoneStateReceiver : BroadcastReceiver() {
 
         // Forward the phone state and number to the session manager.
         // We now forward everything (including null) to let the PhoneStateSessionManager handle the Verification Window.
+        // Add-on: remember the SIM slot of this broadcast for the call metadata JSON (never throws).
+        CallMetadataTracker.notePhoneStateSlot(intent.getIntExtra(SubscriptionManager.EXTRA_SLOT_INDEX, -1))
         PhoneStateSessionManager.getInstance(context).handlePhoneState(state, number)
     }
 }

@@ -14,6 +14,7 @@ import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.RawCallData
 import com.kitsumed.shizucallrecorder.services.RecordingDecisionEngine
+import com.kitsumed.shizucallrecorder.services.callmeta.CallMetadataTracker
 import com.kitsumed.shizucallrecorder.services.recording.RecordingForegroundService
 import com.kitsumed.shizucallrecorder.system.audio.AudioModeResolver
 import com.kitsumed.shizucallrecorder.utils.AppLogger
@@ -188,6 +189,9 @@ class PhoneStateSessionManager private constructor(context: Context) {
         val normalizedNumber = PhoneNumberManager.normalisePhoneNumber(phoneNumber ?: "")
 
         AppLogger.i( "Received new phone state: $stateString (TelephonyManagerINT:$receivedCallState) | Number: ${normalizedNumber.ifEmpty { "ANONYMOUS/UNKNOWN" }}")
+
+        // Add-on: passive call metadata capture (lifecycle events / ended_at). Runs before the STOP intent below, never throws.
+        CallMetadataTracker.onPhoneState(stateString, normalizedNumber)
 
         // 1. Handle IDLE (Stop, no longer in a call)
         if (receivedCallState == TelephonyManager.CALL_STATE_IDLE) {

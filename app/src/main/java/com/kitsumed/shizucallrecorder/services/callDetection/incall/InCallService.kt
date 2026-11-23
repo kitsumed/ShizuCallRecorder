@@ -18,6 +18,7 @@ import com.kitsumed.shizucallrecorder.data.AppPreferences
 import com.kitsumed.shizucallrecorder.data.call.CallDirection
 import com.kitsumed.shizucallrecorder.data.call.RawCallData
 import com.kitsumed.shizucallrecorder.services.RecordingDecisionEngine
+import com.kitsumed.shizucallrecorder.services.callmeta.CallMetadataTracker
 import com.kitsumed.shizucallrecorder.utils.AppLogger
 import com.kitsumed.shizucallrecorder.utils.PhoneNumberManager
 import kotlinx.coroutines.CoroutineScope
@@ -86,6 +87,7 @@ class InCallService : InCallService() {
         activeTrackedCall = call
         call.registerCallback(callCallback)
         AppLogger.i( "Primary call session detected and tracking initialized. Current state is: ${callStateToString(call.details.state)} (${call.details.state})")
+        CallMetadataTracker.onTelecomCallAdded(this, call) // Add-on: passive call metadata capture (never throws)
 
         // Edge Case: If the call is already active when we receive it
         if (call.details.state == Call.STATE_ACTIVE) {
@@ -105,6 +107,7 @@ class InCallService : InCallService() {
         // Ensure we are tearing down the precise call that we were tracking
         if (call == activeTrackedCall) {
             AppLogger.i( "Primary call session disconnected. Releasing callbacks. Ending recording.")
+            CallMetadataTracker.onTelecomCallRemoved(call) // Add-on: mark call ended before the recording stops (never throws)
             releasePrimaryTrackedCall()
         } else {
             AppLogger.d( "Received onCallRemoved for non-primary call. Ignoring.")
@@ -121,6 +124,7 @@ class InCallService : InCallService() {
         // Restrict state change handling to the primary tracked call. This prevents issues with parallel calls (not supported in this implementation).
         if (call != activeTrackedCall) return
         AppLogger.d( "Primary call state changed to ${callStateToString(call.details.state)} (${call.details.state})")
+        CallMetadataTracker.onTelecomStateChanged(this, call, state) // Add-on: ringing/dialing/active/hold events (never throws)
 
 
         // https://github.com/kitsumed/ShizuCallRecorder/issues/81 Dual-SIM users may have null AccountHandle due to OEM bug, causing crash.
