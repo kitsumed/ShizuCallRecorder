@@ -11,6 +11,7 @@ package com.kitsumed.shizucallrecorder.services.shell.recording
 import android.media.AudioFormat
 import com.kitsumed.shizucallrecorder.BuildConfig
 import com.kitsumed.shizucallrecorder.data.recording.RecordingCodec
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Constants shared by the native audio capture and processing pipeline.
@@ -84,31 +85,22 @@ object AudioConfig {
     val LOG_INTERVAL_BLOCKS = if (BuildConfig.DEBUG) 50L else 500L
 
     /**
-     * Number of consecutive zero-byte reads between repeated zero-read warnings before printing.
-     *
-     * This is used to avoid flooding the shell log with repeated warnings when the native AudioRecord capture returns zero bytes.
+     * Peak sample amplitude threshold below which a block is treated as silent.
+     * Math: 20 * log10(3 / 32767) = -80.7 dBFS
+     * 32767 is the maximum amplitude for 16-bit PCM audio (Short.MAX_VALUE).
      */
-    const val ZERO_READ_WARNING_INTERVAL = 50L
+    const val SILENCE_FAILURE_AMPLITUDE = 3
 
     /**
-     * Number of consecutive silent blocks before printing a silence warning log.
-     *
-     * At 20 ms/block, 50 blocks correspond to 1 second of silence.
+     * Numbers of blocks of silence before a warning is logged.
+     * 5 seconds.
      */
-    const val SILENCE_WARNING_INTERVAL_BLOCKS = 50L
+    const val SILENCE_WARNING_INTERVAL_BLOCKS = 5_000L / BLOCK_DURATION_MS
 
     /**
-     * Number of consecutive silent blocks before treating the recording session as failed due to silence,
-     * if no non-silent audio was ever captured.
-     *
-     * At 20 ms/block, 250 blocks correspond to 5 seconds of continuous silence at session start.
+     * Number of blocks of silence before a failure can be triggered.
+     * NOTE: Failure should only happen when we never captured any audio prior to silence.
+     * 25 seconds.
      */
-    const val SILENCE_FAILURE_INTERVAL_BLOCKS = 250L
-
-    /**
-     * Maximum sample amplitude (abs PCM 16-bit value) to be considered silence.
-     *
-     * Samples with an absolute amplitude below or equal to this threshold are treated as silent.
-     */
-    const val SILENCE_FAILURE_AMPLITUDE = 100
+    const val SILENCE_FAILURE_INTERVAL_BLOCKS = 25_000L / BLOCK_DURATION_MS
 }
