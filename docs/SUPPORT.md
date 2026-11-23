@@ -1,3 +1,4 @@
+# Getting Started
 Welcome to the main page of the documentation. (SUPPORT.md)
 
 This guide contains installation, configuration, and support informations.

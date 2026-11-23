@@ -1,16 +1,19 @@
 import { defineConfig } from 'vitepress'
 
 const goatcounterUrl = 'https://kitsumed.goatcounter.com/count';
+const baseHostname = 'https://kitsumed.github.io'
+const basePath = '/ShizuCallRecorder/'
+const fullSiteUrl = `${baseHostname}${basePath}` // "https://kitsumed.github.io/ShizuCallRecorder/"
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "ShizuCallRecorder",
   lang: "en-ca",
   cleanUrls: true,
-  description: "Free, open-source, FOSS and privacy friendly Android call recording. Empowers ADB to record phone calls on non-rooted device!",
-  base: "/ShizuCallRecorder/", // We overwrite the root "/" base for "/repo-name/" due to how github pages work. CASE SENSITIVE
+  description: "Free, open-source, FOSS and privacy friendly Android call recording app with no ads or subscriptions. Empowers ADB to record phone calls on non-rooted device!",
+  base: basePath, // We overwrite the root "/" base for "/repo-name/" due to how github pages work. CASE SENSITIVE
   sitemap: { // Optional, create a sitemap.xml file
-    hostname: "https://kitsumed.github.io/ShizuCallRecorder/",
+    hostname: fullSiteUrl,
     lastmodDateOnly: false,
   },
   head: [
@@ -18,21 +21,16 @@ export default defineConfig({
     // Open Graph / Social Media Meta Tags
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'ShizuCallRecorder' }],
-    ['meta', { property: 'og:title', content: 'ShizuCallRecorder | Free and Open-Source Android Call Recorder' }],
-    ['meta', { property: 'og:description', content: 'Record calls securely and reliably on Android using ADB without root.' }],
-    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/kitsumed/ShizuCallRecorder/main/fastlane/metadata/android/en-US/images/featureGraphic.png' }], // Replace with your hosted banner
-    ['meta', { property: 'og:url', content: 'https://kitsumed.github.io/ShizuCallRecorder' }],
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/kitsumed/ShizuCallRecorder/main/fastlane/metadata/android/en-US/images/featureGraphic.png' }],
     ['meta', { property: 'og:locale', content: 'en_CA' }],
 
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { name: 'twitter:title', content: 'ShizuCallRecorder' }],
-    ['meta', { name: 'twitter:description', content: 'FOSS call recording app for Android using ADB.' }],
     ['meta', { name: 'twitter:image', content: 'https://raw.githubusercontent.com/kitsumed/ShizuCallRecorder/main/fastlane/metadata/android/en-US/images/featureGraphic.png' }],
     ['meta', { name: 'twitter:creator', content: '@kitsumed' }],
 
     ['meta', { name: 'robots', content: 'index, follow' }],
-    ['link', { rel: 'icon', type: 'image/png', href: 'favicon-96x96.png' }],
+    ['link', { rel: 'icon', type: 'image/png', href: `${basePath}favicon-96x96.png` }],
     // GoatCounter Analytics (Privacy Friendly)
       ['script', {
         src: '/ShizuCallRecorder/analytics.js',
@@ -45,7 +43,7 @@ export default defineConfig({
       ],
   ],
   themeConfig: {
-    logo: 'favicon-96x96.png',
+    logo: '/favicon-96x96.png',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -103,8 +101,9 @@ export default defineConfig({
   },
   lastUpdated: true,
   
-  // Transform the head to include GoatCounter noscript tag via pixel tracking
+  // Transform the head to include GoatCounter noscript tag via pixel tracking + per page metadata
   transformHead({ page, pageData, siteData, title }) {
+    const metas = []
     const base = siteData.base || '/'
     const routePath = page
       .replace(/(^|\/)index\.md$/, '$1')
@@ -116,17 +115,32 @@ export default defineConfig({
       ? `${rawTitle} | ${siteData.title}`
       : siteData.title
 
+    if (pageTitle) {
+      metas.push(['meta', { property: 'og:title', content: pageTitle }])
+      metas.push(['meta', { property: 'twitter:title', content: pageTitle }])
+    }
+
+    const description = pageData.frontmatter?.description || pageData.description || siteData.description
+    if (description) {
+      metas.push(['meta', { property: 'og:description', content: description }])
+      metas.push(['meta', { property: 'twitter:description', content: description }])
+    }
+
+    const pageUrl = `${baseHostname}${cleanPath}`
+    metas.push(['meta', { property: 'og:url', content: pageUrl }])
+
+    // GoatCounter noscript analytics
     const params = new URLSearchParams({
       p: cleanPath,
       t: pageTitle
     })
 
-    return [
-      [
-        'noscript',
-        {},
-        `<img src="${goatcounterUrl}?${params.toString()}" alt="">`
-      ]
-    ]
+    metas.push([
+      'noscript',
+      {},
+      `<img src="${goatcounterUrl}?${params.toString()}" alt="">`]
+    )
+
+    return metas
   }
 })

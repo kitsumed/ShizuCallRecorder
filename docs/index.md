@@ -1,6 +1,7 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: Free and Open-Source Android Call Recorder
 
 head:
   - - meta
@@ -14,6 +15,30 @@ head:
         android 11+ call recorder, free android call recorder, safe call recorder android,
         clear audio call recorder, third-party app call recorder, voip call recorder android,
         open source, foss
+  - - script
+    - type: application/ld+json
+    - |
+        {
+          "@context": "https://schema.org",
+          "@type": "MobileApplication",
+          "name": "ShizuCallRecorder",
+          "operatingSystem": "Android",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Free, open-source, FOSS and privacy friendly Android call recording app with no ads or subscriptions. Empowers ADB to record phone calls on non-rooted device!",
+          "url": "https://kitsumed.github.io/ShizuCallRecorder/",
+          "creator": {
+            "@type": "Person",
+            "name": "kitsumed"
+          },
+          "maintainer": {
+            "@type": "Person",
+            "name": "kitsumed"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": 0
+          }
+        }
 
 hero:
   name: "ShizuCallRecorder"
