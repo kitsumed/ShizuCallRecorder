@@ -33,9 +33,9 @@ The first **non-root FOSS call recorder app for Android 11+**! ShizuCallRecorder
 - The app runs only on phone event changes, no persistent background process and notifications
 
 ## Requirements
-- **Android 12** or more recent*.
+- **Android 11** or more recent.
     - **Look at the *Android Tested Versions* table** for more informations on limitations.
-- [Shizuku](https://github.com/thedjchi/Shizuku)* (we recommend [thedjchi](https://github.com/thedjchi) fork)
+- Shizuku (we recommend [thedjchi fork](https://github.com/thedjchi/Shizuku)) (currently looking for a new fork, [help us](https://github.com/kitsumed/ShizuCallRecorder/issues/155#issuecomment-6906024760)!)
 
 <details>
 <summary><b>Android Tested Versions</b></summary>
@@ -91,13 +91,25 @@ You can **learn more on Wikipedia at**: [Telephone call recording laws](https://
 In some cases, certain features, like automatic call recording, may not be legally allowed. It is your responsibility to ensure compliance with applicable laws. **This is not legal advice**. Please **consult a legal professional for guidance** regarding your specific situation.
 
 > [!CAUTION]
-> ### **APPLICATION BEHAVIOR**
-> Due to the evolving Android ecosystem and varying hardware (OEMs), this software is subject to **non-deterministic behavior**:
-> * **Concurrent Calls:** The app may fail to detect transitions (e.g., while in a call, a second incoming call arrives, or switching between held calls). In these scenarios, the application may **continue to record audio into a single continuous file** without separate notifications or new notifications prompts for subsequent callers.
-> * **Filter Logic Limitations**: **Due to Android privacy-driven restrictions on real-time phone number access**, the app may relies, depending on the call detection mode, on fetching deprecated or unstable values. Theses initial check could be used to decide whether to automatically record based on your settings. **In cases where we receive the value too late, receive invalid data, or receive no data, the application is likely to consider the call as "anonymous" in its decision process**.
-> * **Unforeseen Failures:** Future OS updates, bugs, design choices in the app, or undocumented system behaviors may cause the app to start and/or continue recording, or fail, in a unexpected manner.
->
-> ### **USER AWARENESS**
-> Because deterministic behavior of the application cannot be guaranteed, it is your responsibility to:
-> 1. Ensure the recording behavior and your application settings aligns with your intent and the specific requirements in your jurisdiction.
-> 2. **Monitor the app's behavior** on your specific device. If you observe any behavior that does not comply with your local laws, you **must immediately cease any activity that constitutes a legal infraction** (For example, hanging up the call, deleting the audio files, etc).
+> Due to the evolving Android ecosystem and varying hardware (OEMs), this software is subject to **non-deterministic behavior**. Expand below for specific limitations and user responsibilities.
+
+<details>
+<summary><b>Application Behavior & User Awareness Details</b></summary>
+    
+### **APPLICATION BEHAVIOR**
+* **Concurrent Calls:** The app may fail to detect transitions (e.g., while in a call, a second incoming call arrives, or switching between held calls). In these scenarios, the application may **continue to record audio into a single continuous file** without separate notifications or new notifications prompts for subsequent callers.
+* **Filter Logic Limitations**: **Due to Android privacy-driven restrictions on real-time phone number access**, the app may relies, depending on the call detection mode, on fetching deprecated or unstable values. Theses initial check could be used to decide whether to automatically record based on your settings. **In cases where we receive the value too late, receive invalid data, or receive no data, the application is likely to consider the call as "anonymous" in its decision process**.
+* **Unforeseen Failures:** Future OS updates, bugs, design choices in the app, or undocumented system behaviors may cause the app to start and/or continue recording, or fail, in a unexpected manner.
+
+### **USER AWARENESS**
+Because deterministic behavior of the application cannot be guaranteed, it is your responsibility to:
+1. Ensure the recording behavior and your application settings aligns with your intent and the specific requirements in your jurisdiction.
+2. **Monitor the app's behavior** on your specific device. If you observe any behavior that does not comply with your local laws, you **must immediately cease any activity that constitutes a legal infraction** (For example, hanging up the call, deleting the audio files, etc).
+</details>
+
+## Star History
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=kitsumed/ShizuCallRecorder&type=date&legend=top-left" />
+ </picture>
