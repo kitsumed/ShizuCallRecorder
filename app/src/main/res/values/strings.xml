@@ -10,7 +10,7 @@
     <!-- ========================================== -->
     <!-- GENERAL MESSAGES & APP LEVEL               -->
     <!-- ========================================== -->
-    <string name="app_name" translatable="false">ShizuCallRecorder</string>
+    <string name="app_name" translatable="false">Overseer</string>
     <string name="general_close">Close</string>
     <string name="general_continue">Continue</string>
     <string name="general_ok">OK</string>
