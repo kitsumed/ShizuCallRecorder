@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, type HeadConfig} from 'vitepress'
 
 const goatcounterUrl = 'https://kitsumed.goatcounter.com/count';
 const baseHostname = 'https://kitsumed.github.io'
@@ -103,12 +103,14 @@ export default defineConfig({
   
   // Transform the head to include GoatCounter noscript tag via pixel tracking + per page metadata
   transformHead({ page, pageData, siteData, title }) {
-    const metas = []
+    const metadataHeaders: HeadConfig[] = []
     const base = siteData.base || '/'
     const routePath = page
       .replace(/(^|\/)index\.md$/, '$1')
       .replace(/\.md$/, '')
     const cleanPath = base + routePath
+
+    metadataHeaders.push(['link', { rel: 'canonical', href: `${baseHostname}${cleanPath}` }])
 
     const rawTitle = pageData.frontmatter?.title || pageData.title || title
     const pageTitle = rawTitle && rawTitle !== siteData.title
@@ -116,18 +118,18 @@ export default defineConfig({
       : siteData.title
 
     if (pageTitle) {
-      metas.push(['meta', { property: 'og:title', content: pageTitle }])
-      metas.push(['meta', { property: 'twitter:title', content: pageTitle }])
+      metadataHeaders.push(['meta', { property: 'og:title', content: pageTitle }])
+      metadataHeaders.push(['meta', { property: 'twitter:title', content: pageTitle }])
     }
 
     const description = pageData.frontmatter?.description || pageData.description || siteData.description
     if (description) {
-      metas.push(['meta', { property: 'og:description', content: description }])
-      metas.push(['meta', { property: 'twitter:description', content: description }])
+      metadataHeaders.push(['meta', { property: 'og:description', content: description }])
+      metadataHeaders.push(['meta', { property: 'twitter:description', content: description }])
     }
 
     const pageUrl = `${baseHostname}${cleanPath}`
-    metas.push(['meta', { property: 'og:url', content: pageUrl }])
+    metadataHeaders.push(['meta', { property: 'og:url', content: pageUrl }])
 
     // GoatCounter noscript analytics
     const params = new URLSearchParams({
@@ -135,12 +137,12 @@ export default defineConfig({
       t: pageTitle
     })
 
-    metas.push([
+    metadataHeaders.push([
       'noscript',
       {},
       `<img src="${goatcounterUrl}?${params.toString()}" alt="">`]
     )
 
-    return metas
+    return metadataHeaders
   }
 })
