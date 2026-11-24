@@ -219,7 +219,12 @@ fun RemoteUploadSettingsSection(viewModel: AddonSettingsViewModel) {
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
         )
 
-        DebouncedTextField(label = "Host / Server", initial = remember(trigger) { prefs.getHost() }, onCommit = viewModel::setHost)
+        DebouncedTextField(
+            label = "Host / Server",
+            initial = remember(trigger) { prefs.getHost() },
+            onCommit = viewModel::setHost,
+            placeholder = "ftp.example.com (domain or IP only, no ftp:// or credentials)"
+        )
         DebouncedTextField(
             label = "Port",
             initial = remember(trigger, protocol) { prefs.getPort().toString() },

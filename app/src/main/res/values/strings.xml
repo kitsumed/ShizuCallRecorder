@@ -18,8 +18,8 @@
     <string name="general_settings">Settings</string>
     <string name="general_licenses">Licenses</string>
     <string name="general_record">Record</string>
-    <string name="general_pause">Pause</string>
-    <string name="general_resume">Resume</string>
+    <string name="general_pause">hold up</string>
+    <string name="general_resume">lets go</string>
     <string name="general_incoming">incoming</string>
     <string name="general_outgoing">outgoing</string>
     <string name="general_reset">Reset</string>
@@ -312,10 +312,10 @@
     <string name="recording_standby_notification_title">Call in progress</string>
     <string name="recording_notification_cross_country_tip">🌐Cross-Country</string>
     <string name="recording_notification_current_country_tip">🏠Home-Country</string>
-    <string name="recording_notification_title">Recording in progress</string>
+    <string name="recording_notification_title">Mic is active</string>
     <string name="recording_notification_press_to_start">Press to start recording</string>
     <string name="recording_notification_waiting_shizuku">Waiting for Shizuku Server to start...</string>
-    <string name="recording_notification_press_to_pause">Press to pause recording</string>
+    <string name="recording_notification_press_to_pause">null</string>
     <string name="recording_notification_press_to_resume">Press to resume recording</string>
     <string name="recording_toast_standby">Entering standby for %1$s call.</string>
     <string name="recording_toast_ended">Call ended. Recording stopped.</string>

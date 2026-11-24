@@ -59,8 +59,8 @@ object UploadProcessor {
                         c.newHostKeyPin?.let { prefs.setSftpHostKeyFingerprint(it) }
                     }
                 } catch (e: Exception) {
-                    val msg = "Connection failed: ${e.message ?: e.javaClass.simpleName}"
-                    AppLogger.w("UploadProcessor: $msg", e)
+                    val msg = UploadErrorMessages.describe(e, config)
+                    AppLogger.w("UploadProcessor: connection failed: $msg", e)
                     entries.forEach { store.markFailed(it.id, msg) }
                     return@withLock PassResult(0, entries.size, 0)
                 }
@@ -70,7 +70,7 @@ object UploadProcessor {
                 var skipped = 0
                 client.use { c ->
                     for (entry in entries) {
-                        when (uploadPair(appContext, c, entry, store)) {
+                        when (uploadPair(appContext, c, config, entry, store)) {
                             Outcome.UPLOADED -> uploaded++
                             Outcome.FAILED -> failed++
                             Outcome.DROPPED -> skipped++
@@ -84,7 +84,7 @@ object UploadProcessor {
 
     private enum class Outcome { UPLOADED, FAILED, DROPPED }
 
-    private fun uploadPair(context: Context, client: RemoteStorageClient, entry: UploadQueueStore.Entry, store: UploadQueueStore): Outcome {
+    private fun uploadPair(context: Context, client: RemoteStorageClient, config: RemoteConfig, entry: UploadQueueStore.Entry, store: UploadQueueStore): Outcome {
         val audioDoc = DocumentFile.fromSingleUri(context, entry.audioUri.toUri())
         val jsonDoc = DocumentFile.fromSingleUri(context, entry.jsonUri.toUri())
 
@@ -111,7 +111,7 @@ object UploadProcessor {
             Outcome.UPLOADED
         } catch (e: Exception) {
             // Keep BOTH local files untouched and stop for this pair. Next attempt: midnight job or manual retry.
-            val msg = e.message ?: e.javaClass.simpleName
+            val msg = UploadErrorMessages.describe(e, config)
             AppLogger.w("UploadProcessor: upload of ${entry.audioName} failed: $msg", e)
             store.markFailed(entry.id, msg)
             Outcome.FAILED
@@ -135,8 +135,9 @@ object UploadProcessor {
     suspend fun testConnection(context: Context): Result<String> = withContext(Dispatchers.IO) {
         val prefs = AddonPreferences(context.applicationContext)
         if (!prefs.isUploadConfigured()) return@withContext Result.failure(IOException("Host, username and credentials are required."))
+        val config = RemoteConfig.from(prefs)
         runCatching {
-            RemoteStorageClient.connect(RemoteConfig.from(prefs)).use { c ->
+            RemoteStorageClient.connect(config).use { c ->
                 c.ensureRemoteDir()
                 val pin = c.newHostKeyPin
                 if (pin != null) prefs.setSftpHostKeyFingerprint(pin)
@@ -145,6 +146,6 @@ object UploadProcessor {
                     if (pin != null) append("\nPinned host key: ${pin.substringAfter('|')}")
                 }
             }
-        }
+        }.recoverCatching { e -> throw IOException(UploadErrorMessages.describe(e, config), e) }
     }
 }

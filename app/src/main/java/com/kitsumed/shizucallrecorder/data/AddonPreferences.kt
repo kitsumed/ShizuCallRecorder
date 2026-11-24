@@ -56,6 +56,22 @@ class AddonPreferences(context: Context) {
 
         const val DEFAULT_REMOTE_DIR = "/call_logs/"
 
+        /**
+         * Normalizes a user-typed Host field so it can never carry a URL scheme, embedded credentials, a path or a port.
+         * This matters because a value like "ftp://user:password@host" typed into the Host field (a common mistake when
+         * copying an FTP address) would otherwise be used as a literal hostname, fail DNS resolution, and surface the
+         * whole string - including the password - in the resulting error message.
+         */
+        fun sanitizeHost(raw: String): String {
+            var host = raw.trim()
+            host = host.replaceFirst(Regex("^[a-zA-Z][a-zA-Z0-9+.-]*://"), "") // strip a scheme, e.g. "sftp://"
+            val lastAt = host.lastIndexOf('@')
+            if (lastAt >= 0) host = host.substring(lastAt + 1) // strip "user:password@"
+            host = host.substringBefore('/') // strip a path
+            if (!host.startsWith("[")) host = host.substringBefore(':') // strip a trailing ":port" (not an IPv6 literal)
+            return host.trim()
+        }
+
         @Volatile
         private var securePrefsInstance: SharedPreferences? = null
 
@@ -139,7 +155,7 @@ class AddonPreferences(context: Context) {
     fun setProtocol(protocol: Protocol) = prefs.edit { putString(KEY_FTP_PROTOCOL, protocol.key) }
 
     fun getHost() = prefs.getString(KEY_FTP_HOST, "") ?: ""
-    fun setHost(host: String) = prefs.edit { putString(KEY_FTP_HOST, host.trim()) }
+    fun setHost(host: String) = prefs.edit { putString(KEY_FTP_HOST, sanitizeHost(host)) }
 
     /** Returns the configured port, or the protocol default when unset/invalid. */
     fun getPort(): Int {
