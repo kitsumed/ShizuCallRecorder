@@ -36,6 +36,8 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
+    "embla-carousel-auto-scroll": "^8.6.0",
+    "embla-carousel-vue": "^8.6.0",
     "vitepress": "^1.6.4"
   }
 }

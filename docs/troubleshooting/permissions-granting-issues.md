@@ -1,3 +1,6 @@
+---
+description: How to fix ShizuCallRecorder permission errors and "steps exhausted" warnings on Xiaomi, Vivo, and other Chinese OEMs using ADB or alternative call detection.
+---
 # Permissions Granting Issues
 The behavior between Android versions, firmware, and OEMs is all different. Some manufacturers, as of writing, mostly Chinese ones (Xiaomi, Vivo, etc), also have very aggressive monitoring system applications that prevent you (and us) from doing a lot of things, which is bound to cause issues.
 Other OEMs may include some toggles you have to enable or disable in your Developer Settings or another area. **Search engines are your friend**.

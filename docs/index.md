@@ -92,7 +92,8 @@ features:
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
-import { VPTeamMembers } from 'vitepress/theme'
+import { VPTeamMembers, ReviewCarousel } from './.vitepress/theme'
+import { reviews } from './data/reviews'
 
 // Main team members
 const baseTeamMembers = [
@@ -251,6 +252,18 @@ onMounted(async () => {
   }
 })
 </script>
+
+<br>
+
+## What Users Are Saying
+
+<ReviewCarousel :reviews="reviews" />
+<p style="text-align: center; margin-top: 24px;">
+  Want to share your experience? 
+  <a href="https://github.com/kitsumed/ShizuCallRecorder/edit/main/docs/data/reviews.js" target="_blank" rel="noopener">
+    Post your own review and make a PR to add it!
+  </a>
+</p>
 
 <br>
 

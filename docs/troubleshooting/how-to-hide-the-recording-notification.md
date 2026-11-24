@@ -1,3 +1,6 @@
+---
+description: Step-by-step guide to hiding ShizuCallRecorder ongoing call recording notification in your Android apps settings.
+---
 # How to Hide The Recording Notification?
 
 We sometimes receive requests from users asking us to add a feature to hide the recording service notification while in a call. We cannot do that because Android would kill our application foreground process after a very short amount of time, which forces us to always send a notification.

@@ -1,3 +1,6 @@
+---
+description: Frequently asked questions and troubleshooting fixes for ShizuCallRecorder, including notification, audio issues, permissions, and device compatibility.
+---
 # Troubleshooting
 <small>This page exists mainly for the [website version](https://kitsumed.github.io/ShizuCallRecorder/troubleshooting/) of the documentation. If you are reading this inside the project source code, all documentation are available under the `./troubleshooting/` directory.</small>
 

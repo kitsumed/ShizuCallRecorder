@@ -1,3 +1,6 @@
+---
+description: Why ShizuCallRecorder was created. How Android restricted third-party call recording, why proprietary apps fall short, and how we solve it with ADB.
+---
 # Introduction
 ## Why was this project originally started?
 Ever release of Android 4.4 KitKat (API 19) / Android 6, native 3rd-party phone call recording apps have been [killed](https://issuetracker.google.com/issues/37127141) for valid [privacy](https://issuetracker.google.com/issues/137210607#comment8) reasons, with

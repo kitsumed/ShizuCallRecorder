@@ -1,3 +1,6 @@
+---
+description: Step-by-step installation and configuration guide for ShizuCallRecorder. Include recommended configuration to maintain your device security.
+---
 [Go back to the home documentation page](./SUPPORT.md)
 # Configuration Guide
 

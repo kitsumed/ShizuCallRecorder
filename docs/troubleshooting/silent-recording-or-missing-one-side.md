@@ -1,3 +1,6 @@
+---
+description: Fix silent call recordings or missing audio from a specific side in ShizuCallRecorder.
+---
 # Silent Recording or Missing One Side
 ### The recording of my calls only have silence or one side of the call audio!
 #### Also related: I can't record call from X third-party app!
