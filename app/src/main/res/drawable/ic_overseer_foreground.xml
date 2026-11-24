@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Foreground of the "Overseer" launcher icon (108dp adaptive canvas, artwork kept inside the 66dp safe zone). A watching eye. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Sclera (eye outline) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M24,54 C34,34 74,34 84,54 C74,74 34,74 24,54 Z" />
+    <!-- Iris -->
+    <path
+        android:fillColor="#FF26C6DA"
+        android:pathData="M54,54 m-14,0 a14,14 0,1 0,28 0 a14,14 0,1 0,-28 0" />
+    <!-- Pupil -->
+    <path
+        android:fillColor="#FF0D1B2A"
+        android:pathData="M54,54 m-6,0 a6,6 0,1 0,12 0 a6,6 0,1 0,-12 0" />
+    <!-- Highlight -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M51,49 m-2.4,0 a2.4,2.4 0,1 0,4.8 0 a2.4,2.4 0,1 0,-4.8 0" />
+</vector>

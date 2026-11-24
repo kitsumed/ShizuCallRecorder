@@ -8,6 +8,8 @@
   -->
 
 <resources>
+    <!-- Background of the main "Overseer" launcher icon -->
+    <color name="overseer_icon_background">#FF101823</color>
     <!-- Background of the disguised "Calculator" launcher icon -->
     <color name="calculator_icon_background">#FF263238</color>
 </resources>

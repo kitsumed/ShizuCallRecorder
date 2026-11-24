@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Monochrome (themed icon) layer of the "Overseer" launcher icon: eye silhouette with the pupil cut out as negative space. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M24,54 C34,34 74,34 84,54 C74,74 34,74 24,54 Z M54,54 m-9,0 a9,9 0,1 0,18 0 a9,9 0,1 0,-18 0" />
+</vector>
