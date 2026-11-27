@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_close">Затвори</string>
+    <string name="general_continue">Настави</string>
+    <string name="general_ok">ОК</string>
+    <string name="general_cancel">Откажи</string>
+    <string name="general_settings">Подешавања</string>
+    <string name="general_licenses">Лиценце</string>
+    <string name="general_record">Снимај</string>
+    <string name="general_pause">Паузирај</string>
+    <string name="general_resume">Настави</string>
+    <string name="general_incoming">надолазећи</string>
+    <string name="general_outgoing">одлазећи</string>
+    <string name="general_reset">Ресетуј</string>
+    <string name="general_play">Репродукуј</string>
+    <string name="general_share">Подели</string>
+    <string name="general_delete">Обриши</string>
+    <string name="general_deleted">Обрисано</string>
+    <string name="general_system_limitation">Системска ограничења</string>
+    <string name="general_system_limitation_message">ShizuCallRecorder неће радити на овом уређају јер Ваша апликација конзоле нема неопходне дозволе.\n\n%1$s\n\nНије могуће ништа урадити овим поводом, апликација неће функционисати и сада ће се затворити.</string>
+    <string name="general_permission_escalation_exhausted">Неуспешан покушај добијања %1$s дозволе %2$s!\nСви покушаји ескалације (%3$d) су искоришћени.\n\nМолимо Вас да се уверите да је Shizuku покренута јер би то можда могао бити узрок грешке.\n\nПроизвођач Вашег уређаја можда активно блокира или оповргњује све наше промене дозвола. Молимо Вас да погледате подешавања свог уређаја како бисте проверили да ли постоји нешто што би могло онемогућити овакво понашање.\n\nУређаји произвођача Vivo, Oppo, Xiaomi и других кинеских проиизвођача често практикују агресивна системска ограничења која могу у потпуности онемогућити приступ овој дозволи.\n\nУколико пронађете начин да доделите себи неопходну дозволу ручно преко ADB, молимо Вас да нам то пријавите прављењем issue на платформи GitHub!</string>
+    <string name="a11y_overlay_action_start">Започните снимање</string>
+    <string name="a11y_overlay_action_pause">Паузирајте снимање</string>
+    <string name="a11y_overlay_action_resume">Наставите снимање</string>
+    <string name="a11y_overlay_recording_active">Снимање у току</string>
+    <string name="a11y_overlay_recording_paused">Снимање заустављено</string>
+    <string name="a11y_overlay_recording_stopped">Спремно за снимање</string>
+    <string name="a11y_overlay_drag_handle">Превуците ручицу, дуго задржите и превуците ручицу да померите приказ</string>
+    <string name="a11y_contact_photo">Фотографија %1$s</string>
+</resources>
