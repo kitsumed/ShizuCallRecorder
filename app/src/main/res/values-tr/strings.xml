@@ -77,7 +77,7 @@
     <string name="settings_language">Dil</string>
     <string name="settings_language_system">Sistem varsayılanı</string>
     <string name="settings_theme_mode">Tema modu</string>
-    <string name="settings_dynamic_color">Dinamik tema rengi</string>
+    <string name="settings_dynamic_color">Dinamik Tema Rengi</string>
     <string name="settings_show_toasts">Anlık bildirimleri göster</string>
     <string name="settings_vibration_enabled">Başlayınca/durunca titret</string>
     <string name="settings_theme_mode_system">Sistem varsayılanı</string>
@@ -151,11 +151,11 @@
     <string name="permission_manage_ongoing_calls_description">Shizuku ile AppOps izni otomatik olarak verilir. InCallService aracılığıyla aramaları algılamak için gereklidir.</string>
     <string name="settings_call_detection_method">Arama algılama yöntemi</string>
     <string name="settings_call_detection_method_warning_title">Sınırlı destek bildirimi</string>
-    <string name="call_detection_mode_phonestate_description">Artık kullanılmayan (deprecated) alanları içeren eski telefon durumu yayınını kullanın. Bu mod, yarış koşullarına (race conditions) karşı oldukça savunmasızdır ve bize sınırlı miktarda bilgi sağlar.</string>
+    <string name="call_detection_mode_phonestate_description">Kullanımdan kaldırılmış alanlara sahip eski telefon durumu yayınını kullanır. Bu mod yarış durumlarına (race condition) çok açıktır ve yalnızca sınırlı bilgi sağlar.</string>
     <string name="call_detection_mode_phonestate_limited_support">Bu arama algılama yöntemi güvenilir değildir. Telefon durumu güncellemeleri alındığında kullanımdan kaldırılmış bir değer elde ediliyor ve algılama mantığı yarış koşullarına (race conditions) açık. Ayrıca, operatör üzerinden gelen çağrılar ile üçüncü taraf uygulamalardan gelen çağrılar arasında ayrım yapamıyoruz. Yine de, anonim çağrıları görmezden gelerek bu sınırlamayı aşabilirsiniz.</string>
-    <string name="call_detection_mode_incallservice_description">Modern InCallService API\'sini kullanın. Bu mod daha verimlidir ve bol miktarda bilgiyle daha iyi algılama sağlamalıdır.</string>
+    <string name="call_detection_mode_incallservice_description">Modern InCallService API\'sini kullanır. Bu mod daha verimlidir ve çok daha fazla bilgiyle daha iyi algılama sağlaması beklenir.</string>
     <string name="settings_record_third_party_calls">Üçüncü parti uygulamaları kaydedin</string>&gt;
-    <string name="settings_record_third_party_calls_description">Android telekom sistemiyle entegre olan üçüncü parti uygulamalar aracılığıyla yapılan aramaları kaydedin. Bu işlem, sessiz veya tek taraflı kayıtlara yol açabilir.</string>
+    <string name="settings_record_third_party_calls_description">Üçüncü taraf uygulamalardaki aramaları kaydeder. Sessiz veya tek taraflı kayıtlarla sonuçlanabilir.</string>
     <string name="placeholder_date_year_desc">Geçerli yıl (ör. 2026)</string>
     <string name="placeholder_date_month_desc">Geçerli ay, başına sıfır eklenmiş biçimde (01-12)</string>
     <string name="placeholder_date_day_desc">Ayın geçerli günü, başına sıfır eklenmiş biçimde (01-31)</string>
@@ -187,4 +187,22 @@
     <string name="a11y_overlay_recording_stopped">Kayda hazır</string>
     <string name="a11y_overlay_drag_handle">Sürükleme aracı; yüzen kayıt düğmesini taşımak için uzun basılı tutun ve sürükleyin</string>
     <string name="a11y_contact_photo">%1$s fotoğrafı</string>
+    <string name="settings_audio_allow_playback_api">Playback API’si aracılığıyla yakalamaya izin ver</string>
+    <string name="settings_audio_allow_playback_api_desc">VoIP veya Wi-Fi Araması algılandığında, sesi yakalamayı denemek için seçili uplink/downlink kaynaklarını ses oynatma yakalaması veya eşdeğer başka bir kaynakla geçersiz kılar.</string>
+    <string name="settings_audio_channel_split">Uplink/Downlink sesini ayır</string>
+    <string name="settings_audio_channel_split_desc">Uplink sesini sol kanala, downlink sesini sağ kanala ayır.</string>
+    <string name="audio_source_voice_recognition_description">Ses tanıma için ayarlanmış mikrofon kaynağı.</string>
+    <string name="audio_source_remote_submix_description">Sesi hoparlörlere gönderildiği şekliyle yakalar. Cihaz ses çıkarmayı durduracaktır.</string>
+    <string name="audio_source_uplink_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (uplink + downlink karıştırılarak).</string>
+    <string name="audio_source_mic_voice_communication_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (sesli iletişim mikrofonu + downlink karıştırılarak).</string>
+    <string name="audio_source_mic_voice_recognition_downlink_description">Aramanın her iki tarafını da telefon tonları olmadan kaydeder (ses tanıma mikrofonu + downlink karıştırılarak).</string>
+    <string name="recording_failure_capture_start_failed">Ses yakalama başlatılırken bir hata oluştu.</string>
+    <string name="recording_failure_capture_read_failed">Yakalanan ses okunurken ve işlenirken bir hata oluştu.</string>
+    <string name="permission_notification_listener_label">Bildirim erişimi</string>
+    <string name="permission_notification_listener_description">Yayınlanan bildirimleri dinleyerek aramaları algılamak için gereklidir.</string>
+    <string name="call_detection_mode_notification_listener_description">Aramaları uygulamaların yayınladığı bildirimlerden algılar. CallStyle şablonu tam desteklenir, genel algılama ise elinden geldiğince yapılır. Uygulamaya özel destek yoktur.</string>
+    <string name="call_detection_mode_notification_listener_limited_support">Android CallStyle bildirimlerini kullanan tüm uygulamalarda çalışır. Kayıtlı kişilerin telefon numarası her zaman birincil telefon numaraları olur. Paket adı, kendi kendini yöneten aramalar yapan üçüncü taraf uygulamalar için geçerli olur, aksi halde varsayılan arama uygulamanız kullanılır. CallStyle kullanmayan üçüncü taraf uygulamalar için elinden geldiğince yapılan genel bir algılama da içerir.</string>
+    <string name="recording_error_shell_service_dead">Kayıt başlatılamadı. ShellService işlemi çağrıldığında çalışmıyordu veya ilk çalıştırma sırasında ciddi bir hata yaşadı.</string>
+    <string name="recording_error_binder_call_failed">Kayıt başlatılamadı. ShellService binder yöntemi çağrılırken bir hata oluştu.</string>
+    <string name="recording_failure_capture_is_silent">Kayıt motoru, tüm ses kaynaklarında sessizlik algıladığı için kaydı iptal etti. Farklı bir ses kaynağı veya farklı yakalama ayarları deneyin. Sorun devam ederse sorun giderme belgelerine bakın.</string>
 </resources>
