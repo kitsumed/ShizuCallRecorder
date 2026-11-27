@@ -444,6 +444,7 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
     val shizukuStartOnRecord = remember(updateTrigger) { preferences.isShizukuStartOnRecordEnabled() }
     val shizukuKeepAlive = remember(updateTrigger) { preferences.isShizukuKeepAliveEnabled() }
     val shizukuAuthKey = remember(updateTrigger) { preferences.getShizukuAuthKey() }
+    val externalRecordingControl = remember(updateTrigger) { preferences.isExternalRecordingControlEnabled() }
 
     SettingsSection(title = stringResource(R.string.settings_section_security)) {
         ToggleListItem(
@@ -523,6 +524,13 @@ private fun SecuritySection(preferences: AppPreferences, updateTrigger: Int, act
                 )
             }
         }
+
+        ToggleListItem(
+            label           = stringResource(R.string.settings_external_recording_control),
+            checked         = externalRecordingControl,
+            onCheckedChange = { actions.setExternalRecordingControlEnabled(it) },
+            description     = stringResource(R.string.settings_external_recording_control_desc)
+        )
     }
 }
 
@@ -1273,6 +1281,7 @@ private fun SettingsScreenPreview() {
             override fun setShizukuStartOnRecordEnabled(enabled: Boolean) {}
             override fun setShizukuKeepAliveEnabled(enabled: Boolean) {}
             override fun setShizukuAuthKey(key: String) {}
+            override fun setExternalRecordingControlEnabled(enabled: Boolean) {}
             override fun setFileNameTemplate(template: String) {}
             override fun setCallDetectionMode(mode: CallDetectionMode) {}
             override fun setRecordThirdPartyCalls(enabled: Boolean) {}

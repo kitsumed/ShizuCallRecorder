@@ -59,6 +59,7 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/introduction' },
           { text: 'Installation & Configuration', link: '/configuration' },
+          { text: 'External Recording API', link: '/external-recording-api' },
           {
             text: 'Troubleshooting & FAQ',
             collapsed: false,

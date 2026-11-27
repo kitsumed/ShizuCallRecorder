@@ -12,6 +12,9 @@ If you are new to ShizuCallRecorder, please check the [configuration documentati
 >[!TIP]
 > This application only saves recording files. If you would like a visual interface to browse the files and see your contact names, you can use an application like [bcr-gui](https://github.com/nicorac/bcr-gui) (unrelated to this project). I made ShizuCallRecorder in a way that it replicates the [BCR](https://github.com/chenxiaolong/BCR) file name format. **I will not add a visual interface, I want to keep the app relatively simple**.
 
+## Third-party app integration
+Developers of third-party apps (ex: dialers) can start and stop the recording with the [external recording API](./external-recording-api.md).
+
 ## Troubleshooting
 
 Please check the troubleshooting documentation with frequents issues and questions. You can find it in the [`/docs/troubleshooting`](./troubleshooting.md) directory on Github, or via our [website](https://kitsumed.github.io/ShizuCallRecorder/troubleshooting).

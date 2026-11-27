@@ -87,6 +87,7 @@ class AppPreferences(context: Context) {
         const val SHIZUKU_START_ON_RECORD = false
         const val SHIZUKU_KEEP_ALIVE = false
         const val SHIZUKU_AUTH_KEY = ""
+        const val EXTERNAL_RECORDING_CONTROL = false
     }
 
     /**
@@ -130,6 +131,7 @@ class AppPreferences(context: Context) {
         SHIZUKU_START_ON_RECORD("shizuku_start_on_record"),
         SHIZUKU_KEEP_ALIVE("shizuku_keep_alive"),
         SHIZUKU_AUTH_KEY("shizuku_auth_key"),
+        EXTERNAL_RECORDING_CONTROL("external_recording_control"),
         CALL_DETECTION_MODE("call_detection_mode"),
         RECORD_THIRD_PARTY_CALLS("record_third_party_calls");
     }
@@ -470,4 +472,10 @@ class AppPreferences(context: Context) {
 
     /** Sets the Shizuku auth key. */
     fun setShizukuAuthKey(key: String) = setString(Key.SHIZUKU_AUTH_KEY, key)
+
+    /** Checks if external applications granted the control permission are allowed to start/stop recordings. */
+    fun isExternalRecordingControlEnabled() = getBoolean(Key.EXTERNAL_RECORDING_CONTROL, DefaultsValue.EXTERNAL_RECORDING_CONTROL)
+
+    /** Sets whether external applications granted the control permission are allowed to start/stop recordings. */
+    fun setExternalRecordingControlEnabled(enabled: Boolean) = setBoolean(Key.EXTERNAL_RECORDING_CONTROL, enabled)
 }
