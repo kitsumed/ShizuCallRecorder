@@ -196,7 +196,6 @@
     <string name="audio_source_uplink_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava odchádzajúci aj prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
     <string name="audio_source_mic_voice_communication_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava zvuk z mikrofónu hlasovej komunikácie a prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
     <string name="audio_source_mic_voice_recognition_downlink_description">Nahráva obe strany telefonického hovoru (zmiešava zvuk z mikrofónu optimalizovaného na rozpoznávanie reči a prichádzajúci zvuk) bez akýchkoľvek tónov telefónu.</string>
-    <string name="recording_error_cannot_reach_binder">Nahrávanie sa nepodarilo spustiť. Pri volaní binder metódy služby ShellService došlo k chybe.</string>
     <string name="recording_failure_capture_start_failed">Pri spustení zachytávania zvuku sa vyskytla chyba.</string>
     <string name="recording_failure_capture_read_failed">Pri čítaní a spracovaní zachyteného zvuku sa vyskytla chyba.</string>
 </resources>
