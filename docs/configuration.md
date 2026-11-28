@@ -24,19 +24,19 @@ You can also use the following **mirrors**, however **take note that we do not c
 
 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
   <a href="https://f-droid.org/packages/com.kitsumed.shizucallrecorder" target="_blank" rel="noopener noreferrer">
-    <img src="/ShizuCallRecorder/get-it-fdroid.svg" alt="Get it on F-Droid" style="height: 75px;">
+    <img src="/get-it-fdroid.svg" alt="Get it on F-Droid" style="height: 75px;">
   </a>
   <a href="https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder" target="_blank" rel="noopener noreferrer">
-    <img src="/ShizuCallRecorder/get-it-izzyondroid.svg" alt="Get it on IzzyOnDroid" style="height: 55px;">
+    <img src="/get-it-izzyondroid.svg" alt="Get it on IzzyOnDroid" style="height: 55px;">
   </a>
   <a href="https://sourceforge.net/projects/shizucallrecorder.mirror/" target="_blank" rel="noopener noreferrer">
-    <img src="/ShizuCallRecorder/get-it-sourceforge.svg" alt="Get it on SourceForge" style="height: 75px;">
+    <img src="/get-it-sourceforge.svg" alt="Get it on SourceForge" style="height: 75px;">
   </a>
   <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.kitsumed.shizucallrecorder%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fkitsumed%2Fshizucallrecorder%22%2C%22author%22%3A%22Kitsumed%22%2C%22name%22%3A%22ShizuCallRecorder%22%7D" target="_blank" rel="noopener noreferrer">
-    <img src="/ShizuCallRecorder/get-it-obtainium.svg" alt="Get it on Obtainium" style="height: 75px;">
+    <img src="/get-it-obtainium.svg" alt="Get it on Obtainium" style="height: 75px;">
   </a>
   <a href="https://www.openapk.net/shizucallrecorder/com.kitsumed.shizucallrecorder/" target="_blank" rel="noopener noreferrer">
-    <img src="/ShizuCallRecorder/get-it-openapk.svg" alt="Get it on OpenAPK" style="height: 75px;">
+    <img src="/get-it-openapk.svg" alt="Get it on OpenAPK" style="height: 75px;">
   </a>
 </div>
 
