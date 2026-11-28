@@ -1,8 +1,8 @@
 ---
-title: About Misleading, Malicious, and Non-Compliant Forkseeee
+title: About Misleading and Non-Compliant Forks
 description: Learn about the security risks of unreviewed, vibe-coded ShizuCallRecorder forks running with ADB shell privileges, stolen attribution, and how to identify non-compliant projects.
 ---
-# Misleading, Malicious, and Non-Compliant Forks
+# Misleading and Non-Compliant Forks
 ## The Beginning of ShizuCallRecorder
 
 As ShizuCallRecorder is becoming more popular, all sorts of people have started engaging with the project. In our early days, users would sometimes make a quick fork for personal use, make a couple of edits, maybe with AI agents, and use it for themselves. Now that we have passed **2.2K+ stars on GitHub**, we are facing a new kind of fork. They are often non-compliant, misleading in some way, and in general are acting outside of the FOSS/GPL spirit, actively trying to promote themselves.
@@ -39,7 +39,7 @@ Below are examples of forks that **violated our license and/or did misleading ac
 > **Please do not harass, or spam any developers mentioned below.** This page exists to show a list of examples of forks that were non-compliant or did misleading things. This page main goal is to inform users about them and the potential risks of using similar projects. 
 
 
-### CallVault (by madkongo)
+### CallVault
 Vibe-coded fork that removed parts of our copyright. They previously claimed to have made the application by themselves in donation prompts, and engaged in self-promotion on XDA and other platforms during that period.
 
 <details>
@@ -48,14 +48,14 @@ Vibe-coded fork that removed parts of our copyright. They previously claimed to 
 - **Details:**
   - Repo credits ShizuCallRecorder in the readme, but they **removed the copyright notices from all source files**. The in-app **disclaimer also only shows the fork author**, they removed us from it.
   - **Previously claimed to have built the entire application alone in their donation prompts**.
-  - There were two XDA accounts (`madkongo` and `sindo11`) used for the self-promotion. The second account was created later and only ever made two posts. Its only reaction came from `madkongo`. After reporting the message and accounts, XDA moderators removed the promotional posts and banned the second account.
+  - There were two XDA accounts (the main maintainer account and `sindo11`) used for the self-promotion. The second account was created later and only ever made two posts. Its only reaction came from the main maintainer account. After reporting the message and accounts, XDA moderators removed the promotional posts and banned the second account.
 - **Proof:**
   - <a href="https://web.archive.org/web/20261128000847/https://github.com/madkongo/CallVault/issues/66" target="_blank" rel="nofollow noopener noreferrer">Archived issue about license violation and misleading donation prompts</a>
   - <a href="https://web.archive.org/web/20261128002115/https://github.com/timschneeb/awesome-shizuku/issues/193" target="_blank" rel="nofollow noopener noreferrer">Archived Awesome-Shizuku unlisting request (with XDA screenshots)</a>
 
 </details>
 
-### AVault (by arpanjot-coding)
+### AVault
 Vibe-coded call recording app containing **~86-90% of ShizuCallRecorder source code** with removed attribution and MIT relicensing.
 
 <details>
@@ -63,7 +63,7 @@ Vibe-coded call recording app containing **~86-90% of ShizuCallRecorder source c
 
 - **Details:**
   - With a tool I matched around ~86-90% of ShizuCallRecorder source code. They also **removed all of our original copyright headers, licenses and attribution**.
-  - After I made a DMCA request to Github for the violation, I also saw rapid changes in star and fork counts (forks amount changing to 150 before dropping back to 26, and stars changing between ~500 and ~1K over a single week. This was a brand-new repository). I reported it to GitHub as I suspected some form of stats manipulation.
+  - After I made a DMCA request to Github for the violation, I also saw rapid changes in star and fork counts (forks amount changing to 150 before dropping back to 26, and stars changing between ~500 and ~1K over a single week. This was a brand-new repository). I reported my observations to GitHub in the same ticket.
   - After GitHub acknowledged the DMCA notice, a commit partially restored a minimal mention of the GPL license in text but not our notice itself or copyright. That commit was also *attempting to license new code under MIT*, which **violates the GPL-3.0 requirement** that derivative works remain licensed as a whole under GPL.
 - **Proof:**
   - <a href="https://web.archive.org/web/20261128005446/https://github.com/arpanjot-coding/AVault/tree/aceef7bddd8e6189a6650c273ef928e758d344bb" rel="nofollow noopener noreferrer" target="_blank">Archived GitHub Repo</a>

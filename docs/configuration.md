@@ -18,7 +18,7 @@ Once you're ready **to install Shizuku**, **follow the setup instructions on the
 > Shizuku **TCP Mode** allows you to start and keep alive Shizuku without a Wi-Fi connection, but it also comes with increased security risks. Please read the Shizuku wiki for more information. Additionally, some information is available in my [blog post about Shizuku](https://kitsumed.github.io/blog/posts/what-is-shizuku_how-does-it-work_security-implications/). You might also want to set another TCP port than the default `5555` one.
 
 ## Installing ShizuCallRecorder
-You can **download** the **latest version from Github** [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
+You can **download** the **latest version from GitHub** [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
 
 You can also use the following **mirrors**, however **take note that we do not control them**.
 
@@ -41,6 +41,8 @@ You can also use the following **mirrors**, however **take note that we do not c
 </div>
 
 **You can check your downloaded SHA256 against our GitHub-CI build [attestations](https://github.com/kitsumed/ShizuCallRecorder/attestations).**
+
+You may also want to read our [guidance on misleading forks](./untrusted-and-misleading-forks.md). We **do not officially endorse any forks**. Always **verify that third-party projects follow good security practices**.
 
 ## Configuring ShizuCallRecorder
 

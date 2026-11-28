@@ -59,7 +59,6 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/introduction' },
           { text: 'Installation & Configuration', link: '/configuration' },
-          { text: 'Misleading & Unsafe Forks', link: '/untrusted-and-misleading-forks' },
           {
             text: 'Troubleshooting & FAQ',
             collapsed: false,
@@ -71,7 +70,8 @@ export default defineConfig({
               { text: 'Integration Into Native OEM Dialer', link: '/troubleshooting/integration-into-native-oem-dialer' },
               { text: 'How to Hide The Recording Notification', link: '/troubleshooting/how-to-hide-the-recording-notification' },
             ]
-          }
+          },
+          { text: 'Misleading & Unsafe Forks', link: '/untrusted-and-misleading-forks' },
         ]
       }
     ],
