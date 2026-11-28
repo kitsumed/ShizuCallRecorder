@@ -17,9 +17,32 @@ Once you're ready **to install Shizuku**, **follow the setup instructions on the
 >[!WARNING]
 > Shizuku **TCP Mode** allows you to start and keep alive Shizuku without a Wi-Fi connection, but it also comes with increased security risks. Please read the Shizuku wiki for more information. Additionally, some information is available in my [blog post about Shizuku](https://kitsumed.github.io/blog/posts/what-is-shizuku_how-does-it-work_security-implications/). You might also want to set another TCP port than the default `5555` one.
 
+## Installing ShizuCallRecorder
+You can **download** the **latest version from Github** [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
+
+You can also use the following **mirrors**, however **take note that we do not control them**.
+
+<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+  <a href="https://f-droid.org/packages/com.kitsumed.shizucallrecorder" target="_blank" rel="noopener noreferrer">
+    <img src="/ShizuCallRecorder/get-it-fdroid.svg" alt="Get it on F-Droid" style="height: 75px;">
+  </a>
+  <a href="https://apt.izzysoft.de/packages/com.kitsumed.shizucallrecorder" target="_blank" rel="noopener noreferrer">
+    <img src="/ShizuCallRecorder/get-it-izzyondroid.svg" alt="Get it on IzzyOnDroid" style="height: 55px;">
+  </a>
+  <a href="https://sourceforge.net/projects/shizucallrecorder.mirror/" target="_blank" rel="noopener noreferrer">
+    <img src="/ShizuCallRecorder/get-it-sourceforge.svg" alt="Get it on SourceForge" style="height: 75px;">
+  </a>
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.kitsumed.shizucallrecorder%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fkitsumed%2Fshizucallrecorder%22%2C%22author%22%3A%22Kitsumed%22%2C%22name%22%3A%22ShizuCallRecorder%22%7D" target="_blank" rel="noopener noreferrer">
+    <img src="/ShizuCallRecorder/get-it-obtainium.svg" alt="Get it on Obtainium" style="height: 75px;">
+  </a>
+  <a href="https://www.openapk.net/shizucallrecorder/com.kitsumed.shizucallrecorder/" target="_blank" rel="noopener noreferrer">
+    <img src="/ShizuCallRecorder/get-it-openapk.svg" alt="Get it on OpenAPK" style="height: 75px;">
+  </a>
+</div>
+
+**You can check your downloaded SHA256 against our GitHub-CI build [attestations](https://github.com/kitsumed/ShizuCallRecorder/attestations).**
 
 ## Configuring ShizuCallRecorder
-You can download the latest version [here](https://github.com/kitsumed/ShizuCallRecorder/releases/latest).
 
 ### The Two Method
 There are two ways to run ShizuCallRecorder, both dependent on how you plan to use Shizuku:

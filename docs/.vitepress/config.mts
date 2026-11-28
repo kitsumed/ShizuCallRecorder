@@ -59,6 +59,7 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/introduction' },
           { text: 'Installation & Configuration', link: '/configuration' },
+          { text: 'Misleading & Unsafe Forks', link: '/untrusted-and-misleading-forks' },
           {
             text: 'Troubleshooting & FAQ',
             collapsed: false,

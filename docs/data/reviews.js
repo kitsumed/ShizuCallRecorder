@@ -48,18 +48,6 @@ export const reviews = [
     quote: "This is very much appreciated and glad to report that it does work for me so far. My other alternative before this, skvalex Call Recorder, works pretty well, but has some stability issues at times. Overall happy to report it works on my device(s): S25 Edge, Honor Magic 8 Pro [Global]."
   },
   {
-    author: "Ashtr0naughty",
-    platform: "Reddit",
-    url: "https://www.reddit.com/r/fossdroid/comments/1tgxi0e/comment/omjgteo/",
-    quote: "Very interesting. Will definitely try it. I had phone call recorder on my Xiaomi before, but it's gone since Google apps took control 👍"
-  },
-  {
-    author: "Salty_Expert_6847",
-    platform: "Reddit",
-    url: "https://www.reddit.com/r/droidappshowcase/comments/1v4lwls/comment/ozdbxil/",
-    quote: "Even though this [project] isn't gaining traction, this is really useful because only Google has the voice recording feature for now. Thank you!"
-  },
-  {
     author: "Voda_Smart_2",
     platform: "XDA Forums",
     url: "https://xdaforums.com/t/app-11-free-shizucallrecorder-foss-no-root-call-recorder.4808920/post-90820240",
